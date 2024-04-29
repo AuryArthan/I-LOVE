@@ -1,4 +1,23 @@
 
+-- libretro joypad buttons const
+RETRO_DEVICE_ID_JOYPAD_B        = 1
+RETRO_DEVICE_ID_JOYPAD_Y        = 2
+RETRO_DEVICE_ID_JOYPAD_SELECT   = 3
+RETRO_DEVICE_ID_JOYPAD_START    = 4
+RETRO_DEVICE_ID_JOYPAD_UP       = 5
+RETRO_DEVICE_ID_JOYPAD_DOWN     = 6
+RETRO_DEVICE_ID_JOYPAD_LEFT     = 7
+RETRO_DEVICE_ID_JOYPAD_RIGHT    = 8
+RETRO_DEVICE_ID_JOYPAD_A        = 9
+RETRO_DEVICE_ID_JOYPAD_X        = 10
+RETRO_DEVICE_ID_JOYPAD_L        = 11
+RETRO_DEVICE_ID_JOYPAD_R        = 12
+RETRO_DEVICE_ID_JOYPAD_L2       = 13
+RETRO_DEVICE_ID_JOYPAD_R2       = 14
+RETRO_DEVICE_ID_JOYPAD_L3       = 15
+RETRO_DEVICE_ID_JOYPAD_R3       = 16
+
+
 Board = {
 	Background = nil;
 	Highlighter = nil;
@@ -44,7 +63,7 @@ function Board:update()
     local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
     local CUR_B = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
 	
-	for d=0,4 do
+	for d=1,4 do
 		if CUR_DPAD[d] and not DPAD[d] then
 			Board:onEventStart(d)
 			DPAD[d] = true
@@ -59,14 +78,14 @@ end
 
 -- process key down event
 function Board:onEventStart(command)
-	if command == 0 then
-		self.HighSq[2] = self.HighSq[2]+1
-	elseif command == 1 then
-		self.HighSq[2] = self.HighSq[2]-1
+	if command == 1 then
+		self.HighSq[2] = self.HighSq[2]+1 -- up
 	elseif command == 2 then
-		self.HighSq[1] = self.HighSq[1]-1
+		self.HighSq[2] = self.HighSq[2]-1 -- down 
 	elseif command == 3 then
-		self.HighSq[1] = self.HighSq[1]+1
+		self.HighSq[1] = self.HighSq[1]-1 -- left
+	elseif command == 4 then
+		self.HighSq[1] = self.HighSq[1]+1 -- right
 	end
 end
 
