@@ -1,0 +1,5 @@
+Themes:
+	- OG matrix
+	- Spanish/Claw
+	- SMB
+	- Clean Japanese
