@@ -6,7 +6,7 @@ function love.conf(t)
 end
 
 function love.load()
-	font = love.graphics.newImageFont("assets/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
+	font = love.graphics.newImageFont("assets/font_basic.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()&#%\"")
 	love.graphics.setFont(font)
 	Board:init()
 end
@@ -17,6 +17,7 @@ end
 
 function love.draw()
 	Board:renderGame()
-	love.graphics.print("abcdefghijklmnoprs", 30, 50)
+	love.graphics.print(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()&#%\"", 0, 8)
+	love.graphics.print("Sean Arthan", 30, 60)
 end
 
