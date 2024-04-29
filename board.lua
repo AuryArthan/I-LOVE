@@ -35,6 +35,42 @@ function Board:init()
 	
 end
 
+
+local DPAD = {false,false,false,false} -- U,D,L,R
+local A  = false
+local B  = false
+function Board:update()
+	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
+    local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
+    local CUR_B = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
+	
+	for d=0,4 do
+		if CUR_DPAD[d] and not DPAD[d] then
+			Board:onEventStart(d)
+			DPAD[d] = true
+		end
+		if not CUR_DPAD[d] and DPAD[d] then
+			DPAD[d] = false
+		end
+	end
+
+end
+
+
+-- process key down event
+function Board:onEventStart(command)
+	if command == 0 then
+		self.HighSq[2] = self.HighSq[2]+1
+	elseif command == 1 then
+		self.HighSq[2] = self.HighSq[2]-1
+	elseif command == 2 then
+		self.HighSq[1] = self.HighSq[1]-1
+	elseif command == 3 then
+		self.HighSq[1] = self.HighSq[1]+1
+	end
+end
+
+
 function Board:renderGame()
 
 	-- draw background
