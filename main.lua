@@ -6,7 +6,7 @@ function love.conf(t)
 end
 
 function love.load()
-	font = love.graphics.newImageFont("assets/font_basic.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()&#%\"\'")
+	font = love.graphics.newImageFont("assets/font_basic.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()[]&#%\"\'")
 	love.graphics.setFont(font)
 	Board:init()
 end
@@ -17,9 +17,5 @@ end
 
 function love.draw()
 	Board:renderGame()
-	love.graphics.print(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()&#%\"\'", -5, 6)
-	love.graphics.print("Sean Arthan", 30, 60)
-	love.graphics.print("Sentence. Exlamation! Question? And then, the comma: Here; There; etc.", 30, 80)
-	love.graphics.print("Apostrophe\' and then quatations \"", 30, 100)
 end
 

@@ -1,4 +1,8 @@
 
+-- delayed autoshift initial delay and time between shifts
+local DAS_INIT_TIME = 12
+local DAS_MOVE_TIME = 3
+
 -- libretro joypad buttons const
 RETRO_DEVICE_ID_JOYPAD_B        = 1
 RETRO_DEVICE_ID_JOYPAD_Y        = 2
@@ -45,7 +49,7 @@ function Board:init()
 	-- load music and sounds
 	self.TicSound = love.audio.newSource("assets/tic.wav", "static")
 	self.BackMusic = love.audio.newSource("assets/background_music.wav", "stream")
-	self.BackMusic:setVolume(0.5)
+	self.BackMusic:setVolume(0.4)
 	self.BackMusic:play()
 	self.BackMusic:setLooping(true)
 	
@@ -59,7 +63,7 @@ function Board:init()
 	self.A1_pos = {133,221}
 	
 	-- set highlighted square (default A1)
-	self.HighSq = {3,6}
+	self.HighSq = {1,1}
 	
 end
 
@@ -67,36 +71,52 @@ end
 local DPAD = {false,false,false,false} -- U,D,L,R
 local A  = false
 local B  = false
+local ASDelay = {-1,-1,-1,-1} -- autoshift delay for up, down, left, right
 function Board:update()
 	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
     local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
     local CUR_B = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
 	
+	-- DPAD press-down/press-up events
 	for d=1,4 do
-		if CUR_DPAD[d] and not DPAD[d] then
-			Board:onEventStart(d)
+		if CUR_DPAD[d] and not DPAD[d] then -- press-down
+			Board:moveHighlighter(d)
 			DPAD[d] = true
+			ASDelay[d] = DAS_INIT_TIME
 		end
-		if not CUR_DPAD[d] and DPAD[d] then
+		if not CUR_DPAD[d] and DPAD[d] then -- press-up
 			DPAD[d] = false
+			ASDelay[d] = -1
 		end
 	end
-
+	
+	-- delayed autoshift
+	for d=1,4 do
+		if DPAD[d] then
+			if ASDelay[d] == 0 then
+				Board:moveHighlighter(d)
+				ASDelay[d] = DAS_MOVE_TIME
+			else
+				ASDelay[d] = ASDelay[d]-1
+			end
+		end
+	end
+	
 end
 
 
--- process key down event
-function Board:onEventStart(command)
-	if command == 1 then
+-- move highlighted square
+function Board:moveHighlighter(dir)
+	if dir == 1 and self.HighSq[2] < self.Gridsize then
 		self.HighSq[2] = self.HighSq[2]+1 -- up
 		self.TicSound:play()
-	elseif command == 2 then
+	elseif dir == 2 and self.HighSq[2] > 1 then
 		self.HighSq[2] = self.HighSq[2]-1 -- down 
 		self.TicSound:play()
-	elseif command == 3 then
+	elseif dir == 3 and self.HighSq[1] > 1 then
 		self.HighSq[1] = self.HighSq[1]-1 -- left
 		self.TicSound:play()
-	elseif command == 4 then
+	elseif dir == 4 and self.HighSq[1] < self.Gridsize then
 		self.HighSq[1] = self.HighSq[1]+1 -- right
 		self.TicSound:play()
 	end
@@ -113,5 +133,11 @@ function Board:renderGame()
 
 	-- draw highlighed square
 	love.graphics.draw(self.Highlighter, self.A1_pos[1]+(self.HighSq[1]-1)*self.SqSize, self.A1_pos[2]-(self.HighSq[2]-1)*self.SqSize)
+	
+	-- debug print
+	love.graphics.print("DEBUG PRINT ", 10, 50)
+	for d=1,4 do
+		love.graphics.print("ASDelay[" .. d .. "]: " .. ASDelay[d], 20, 55+10*d)
+	end
 	
 end
