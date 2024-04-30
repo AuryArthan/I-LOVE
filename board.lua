@@ -25,6 +25,8 @@ Board = {
 	SqSize = nil;
 	A1_pos = nil;
 	HighSq = nil;
+	BackMusic = nil;
+	TicSound = nil;
 }
 
 function Board:init()
@@ -39,6 +41,13 @@ function Board:init()
 	self.Grid7 = love.graphics.newImage("assets/grid7.png")
 	self.Grid9 = love.graphics.newImage("assets/grid9.png")
 	self.Grid11 = love.graphics.newImage("assets/grid11.png")
+	
+	-- load music and sounds
+	self.TicSound = love.audio.newSource("assets/tic.wav", "static")
+	self.BackMusic = love.audio.newSource("assets/background_music.wav", "stream")
+	self.BackMusic:setVolume(0.5)
+	self.BackMusic:play()
+	self.BackMusic:setLooping(true)
 	
 	-- set gridsize
 	self.Gridsize = 9
@@ -80,12 +89,16 @@ end
 function Board:onEventStart(command)
 	if command == 1 then
 		self.HighSq[2] = self.HighSq[2]+1 -- up
+		self.TicSound:play()
 	elseif command == 2 then
 		self.HighSq[2] = self.HighSq[2]-1 -- down 
+		self.TicSound:play()
 	elseif command == 3 then
 		self.HighSq[1] = self.HighSq[1]-1 -- left
+		self.TicSound:play()
 	elseif command == 4 then
 		self.HighSq[1] = self.HighSq[1]+1 -- right
+		self.TicSound:play()
 	end
 end
 
