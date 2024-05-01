@@ -1,3 +1,4 @@
+require("game")
 require("board")
 
 function love.conf(t)
@@ -8,14 +9,15 @@ end
 function love.load()
 	font = love.graphics.newImageFont("assets/font_basic.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()[]&#%\"\'")
 	love.graphics.setFont(font)
+	Game:init()
 	Board:init()
 end
 
 function love.update(dt)
-	Board:update()
+	Game:update()
 end
 
 function love.draw()
-	Board:renderGame()
+	Game:renderGame()
 end
 
