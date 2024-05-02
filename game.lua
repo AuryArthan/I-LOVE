@@ -147,8 +147,8 @@ function Game:renderGame()
 	end
 	
 	-- debug print
-	Utility:dpad_print(DPAD, 15, 30)
-	Utility:asdelays_print(ASDelay, 75, 30)
-	Utility:board_print(10, 70)
+	DebugPr:dpad_print(DPAD, 15, 30)
+	DebugPr:asdelays_print(ASDelay, 75, 30)
+	DebugPr:board_print(10, 70)
 	
 end

@@ -1,6 +1,7 @@
 require("game")
 require("board")
 require("utility")
+require("debug_print")
 
 function love.conf(t)
 	t.width = 480
