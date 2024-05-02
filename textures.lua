@@ -27,6 +27,10 @@ function Textures:init()
 	self.PieceD = love.graphics.newImage("assets/piece_d.png")
 	self.PieceL = love.graphics.newImage("assets/piece_l.png")
 	self.PieceR = love.graphics.newImage("assets/piece_r.png")
+	self.Player1 = love.graphics.newImage("assets/player1.png")
+	self.Player2 = love.graphics.newImage("assets/player2.png")
+	self.Player3 = love.graphics.newImage("assets/player3.png")
+	self.Player4 = love.graphics.newImage("assets/player4.png")
 	self.Goal = love.graphics.newImage("assets/goal.png")
 	
 	-- load grid

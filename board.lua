@@ -34,6 +34,11 @@ function Board:init()
 		self.Squares[i][Game.Gridsize+1-i] = 2
 		self.Squares[i][i] = 4
 	end
+	-- arrange player pieces
+	self.Squares[(Game.Gridsize+1)/2][1] = 5
+	self.Squares[(Game.Gridsize+1)/2][Game.Gridsize] = 6
+	self.Squares[1][(Game.Gridsize+1)/2] = 7
+	self.Squares[Game.Gridsize][(Game.Gridsize+1)/2] = 8
 	-- place the goal in the center
 	self.Squares[(Game.Gridsize+1)/2][(Game.Gridsize+1)/2] = 9
     
@@ -50,6 +55,14 @@ function Board:draw_pieces()
 				love.graphics.draw(Textures.PieceL, Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 4 then	-- right
 				love.graphics.draw(Textures.PieceR, Utility:sq_coordinates({i,j}))
+			elseif self.Squares[i][j] == 5 then	-- player1
+				love.graphics.draw(Textures.Player1, Utility:sq_coordinates({i,j}))
+			elseif self.Squares[i][j] == 6 then	-- player2
+				love.graphics.draw(Textures.Player2, Utility:sq_coordinates({i,j}))
+			elseif self.Squares[i][j] == 7 then	-- player3
+				love.graphics.draw(Textures.Player3, Utility:sq_coordinates({i,j}))
+			elseif self.Squares[i][j] == 8 then	-- player4
+				love.graphics.draw(Textures.Player4, Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 9 then	--goal
 				love.graphics.draw(Textures.Goal, Utility:sq_coordinates({i,j}))
 			end
