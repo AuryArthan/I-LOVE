@@ -147,9 +147,8 @@ function Game:renderGame()
 	end
 	
 	-- debug print
-	love.graphics.print("DEBUG PRINT ", 10, 50)
-	for d=1,4 do
-		love.graphics.print("ASDelay[" .. d .. "]: " .. ASDelay[d], 20, 55+10*d)
-	end
+	Utility:dpad_print(DPAD, 15, 30)
+	Utility:asdelays_print(ASDelay, 75, 30)
+	Utility:board_print(10, 70)
 	
 end
