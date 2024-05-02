@@ -23,38 +23,14 @@ RETRO_DEVICE_ID_JOYPAD_R3       = 16
 
 
 Game = {
-	Background = nil;
-	Highlighter = nil;
-	Piece = nil;
 	Gridsize = nil;
 	SqSize = nil;
 	A1_coord = nil;
 	HighSq = nil;
-	BackMusic = nil;
-	TicSound = nil;
 }
 
 
 function Game:init()
-
-	-- load background
-	self.Background = love.graphics.newImage("assets/back.png")
-	
-	-- load piece textures
-	self.Highlighter = love.graphics.newImage("assets/highlighter.png")
-	self.Piece = love.graphics.newImage("assets/piece.png")
-	
-	-- load grid
-	self.Grid7 = love.graphics.newImage("assets/grid7.png")
-	self.Grid9 = love.graphics.newImage("assets/grid9.png")
-	self.Grid11 = love.graphics.newImage("assets/grid11.png")
-	
-	-- load music and sounds
-	self.TicSound = love.audio.newSource("assets/tic.wav", "static")
-	self.BackMusic = love.audio.newSource("assets/background_music.wav", "stream")
-	self.BackMusic:setVolume(0.4)
-	self.BackMusic:play()
-	self.BackMusic:setLooping(true)
 
 	-- set gridsize
 	self.Gridsize = 9
@@ -112,16 +88,16 @@ end
 function Game:moveHighlighter(dir)
 	if dir == 1 and self.HighSq[2] < self.Gridsize then
 		self.HighSq[2] = self.HighSq[2]+1 -- up
-		self.TicSound:play()
+		Sounds.TicSound:play()
 	elseif dir == 2 and self.HighSq[2] > 1 then
 		self.HighSq[2] = self.HighSq[2]-1 -- down 
-		self.TicSound:play()
+		Sounds.TicSound:play()
 	elseif dir == 3 and self.HighSq[1] > 1 then
 		self.HighSq[1] = self.HighSq[1]-1 -- left
-		self.TicSound:play()
+		Sounds.TicSound:play()
 	elseif dir == 4 and self.HighSq[1] < self.Gridsize then
 		self.HighSq[1] = self.HighSq[1]+1 -- right
-		self.TicSound:play()
+		Sounds.TicSound:play()
 	end
 end
 
@@ -129,22 +105,16 @@ end
 function Game:renderGame()
 
 	-- draw background
-	love.graphics.draw(self.Background, 0, 0)
+	love.graphics.draw(Textures.Background, 0, 0)
 	
 	-- draw grid
-	love.graphics.draw(self.Grid9, 0, 0)
+	love.graphics.draw(Textures.Grid9, 0, 0)
 
 	-- draw highlighed square
-	love.graphics.draw(self.Highlighter, Utility:sq_coordinates(self.HighSq))
+	love.graphics.draw(Textures.Highlighter, Utility:sq_coordinates(self.HighSq))
 	
 	-- draw pieces
-	for i=1,self.Gridsize do
-		for j=1,self.Gridsize do
-			if Board.Squares[i][j] == 1 then
-				love.graphics.draw(self.Piece, Utility:sq_coordinates({i,j}))
-			end
-		end
-	end
+	Board:draw_pieces()
 	
 	-- debug print
 	DebugPr:dpad_print(DPAD, 15, 30)
