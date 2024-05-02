@@ -26,12 +26,14 @@ Game = {
 	Background = nil;
 	Highlighter = nil;
 	Piece = nil;
+	Gridsize = nil;
 	SqSize = nil;
-	A1_pos = nil;
+	A1_coord = nil;
 	HighSq = nil;
 	BackMusic = nil;
 	TicSound = nil;
 }
+
 
 function Game:init()
 
@@ -54,11 +56,14 @@ function Game:init()
 	self.BackMusic:play()
 	self.BackMusic:setLooping(true)
 
+	-- set gridsize
+	self.Gridsize = 9
+	
 	-- set size of square in pixels
 	self.SqSize = 24
 	
 	-- set coordinates of A1
-	self.A1_pos = {133,221}
+	self.A1_coord = {133,221}
 	
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}
@@ -105,7 +110,7 @@ end
 
 -- move highlighted square
 function Game:moveHighlighter(dir)
-	if dir == 1 and self.HighSq[2] < Board.Gridsize then
+	if dir == 1 and self.HighSq[2] < self.Gridsize then
 		self.HighSq[2] = self.HighSq[2]+1 -- up
 		self.TicSound:play()
 	elseif dir == 2 and self.HighSq[2] > 1 then
@@ -114,7 +119,7 @@ function Game:moveHighlighter(dir)
 	elseif dir == 3 and self.HighSq[1] > 1 then
 		self.HighSq[1] = self.HighSq[1]-1 -- left
 		self.TicSound:play()
-	elseif dir == 4 and self.HighSq[1] < Board.Gridsize then
+	elseif dir == 4 and self.HighSq[1] < self.Gridsize then
 		self.HighSq[1] = self.HighSq[1]+1 -- right
 		self.TicSound:play()
 	end
@@ -130,13 +135,13 @@ function Game:renderGame()
 	love.graphics.draw(self.Grid9, 0, 0)
 
 	-- draw highlighed square
-	love.graphics.draw(self.Highlighter, self.A1_pos[1]+(self.HighSq[1]-1)*self.SqSize, self.A1_pos[2]-(self.HighSq[2]-1)*self.SqSize)
+	love.graphics.draw(self.Highlighter, Utility:sq_coordinates(self.HighSq))
 	
 	-- draw pieces
-	for i=1,Board.Gridsize do
-		for j=1,Board.Gridsize do
+	for i=1,self.Gridsize do
+		for j=1,self.Gridsize do
 			if Board.Squares[i][j] == 1 then
-				love.graphics.draw(self.Piece, self.A1_pos[1]+(i-1)*self.SqSize, self.A1_pos[2]-(j-1)*self.SqSize)
+				love.graphics.draw(self.Piece, Utility:sq_coordinates({i,j}))
 			end
 		end
 	end

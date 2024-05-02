@@ -1,5 +1,6 @@
 require("game")
 require("board")
+require("utility")
 
 function love.conf(t)
 	t.width = 480
