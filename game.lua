@@ -49,9 +49,6 @@ function Game:init()
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}
 	
-	-- set selected square (default {0,0} and not drawn)
-	self.SelSq = {0,0}
-	
 end
 
 
@@ -89,11 +86,15 @@ function Game:update()
 		end
 	end
 	
-	-- select square
+	-- A button
 	if CUR_A and not A then		-- press down
 		A = true
-		if self.HighSq[1] == self.SelSq[1] and self.HighSq[2] == self.SelSq[2]  then
-			self.SelSq = {0,0}
+		if self.SelSq then
+			if self.HighSq[1] == self.SelSq[1] and self.HighSq[2] == self.SelSq[2]  then
+				self.SelSq = nil
+			else
+				self.SelSq = Utility:deepcopy(self.HighSq)
+			end
 		else
 			self.SelSq = Utility:deepcopy(self.HighSq)
 		end
@@ -141,7 +142,7 @@ function Game:renderGame()
 
 	-- draw highlighed square
 	love.graphics.draw(Textures.Highlighter, Utility:sq_coordinates(self.HighSq))
-	if self.SelSq[1] > 0 then
+	if self.SelSq then
 		love.graphics.draw(Textures.Selected, Utility:sq_coordinates(self.SelSq))
 	end
 	
