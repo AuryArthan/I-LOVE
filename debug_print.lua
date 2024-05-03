@@ -29,6 +29,20 @@ function DebugPr:dpad_print(DPAD, posx, posy)
 	end
 end
 
+-- button pressed print
+function DebugPr:buttons_print(A, B, posx, posy)
+	love.graphics.print("A[", posx, posy)
+	love.graphics.print("]", posx+11, posy)
+	love.graphics.print("B[", posx, posy+10)
+	love.graphics.print("]", posx+11, posy+10)
+	if A == true then
+		love.graphics.print(".", posx+9, posy-2)
+	end
+	if B == true then
+		love.graphics.print(".", posx+9, posy+8)
+	end
+end
+	
 -- ASDelays print
 function DebugPr:asdelays_print(ASDelay, posx, posy)
 	love.graphics.print("ASDelays", posx-20, posy-10)

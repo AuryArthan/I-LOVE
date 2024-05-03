@@ -28,6 +28,7 @@ Game = {
 	SqSize = nil;
 	A1_coord = nil;
 	HighSq = nil;
+	SelSq = nil;
 }
 
 
@@ -85,6 +86,27 @@ function Game:update()
 		end
 	end
 	
+	-- select square
+	if CUR_A and not A then		-- press down
+		A = true
+		if Utility:deepcompare(self.HighSq, self.SelSq) then
+			self.SelSq = false;
+		else
+			self.SelSq = Utility:deepcopy(self.HighSq)
+		end
+	end
+	if not CUR_A and A then		-- press up
+		A = false
+	end
+	
+	-- B button
+	if CUR_B and not B then		-- press down
+		B = true
+	end
+	if not CUR_B and B then		-- press up
+		B = false
+	end
+	
 end
 
 
@@ -116,13 +138,22 @@ function Game:renderGame()
 
 	-- draw highlighed square
 	love.graphics.draw(Textures.Highlighter, Utility:sq_coordinates(self.HighSq))
+	if not self.SelSq == false then
+		love.graphics.draw(Textures.Selected, Utility:sq_coordinates(self.SelSq))
+	end
 	
 	-- draw pieces
 	Board:draw_pieces()
 	
 	-- debug print
 	DebugPr:dpad_print(DPAD, 15, 30)
-	DebugPr:asdelays_print(ASDelay, 75, 30)
+	DebugPr:buttons_print(A, B, 42, 30)
+	DebugPr:asdelays_print(ASDelay, 85, 30)
 	DebugPr:board_print(10, 70)
+	if Utility:deepcompare(self.HighSq, self.SelSq) then
+		love.graphics.print("its same", 20, 220)
+	else
+		love.graphics.print("its NOT same", 20, 220)
+	end
 	
 end

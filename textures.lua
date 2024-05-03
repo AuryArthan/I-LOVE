@@ -19,8 +19,12 @@ function Textures:init()
 	-- load background
 	self.Background = love.graphics.newImage("assets/themes/"..Game.Theme.."/back.png")
 	
-	-- load piece textures
+	-- load highlighters
 	self.Highlighter = love.graphics.newImage("assets/themes/"..Game.Theme.."/highlighter.png")
+	self.Selected = love.graphics.newImage("assets/themes/"..Game.Theme.."/selected.png")
+	self.MoveOption = love.graphics.newImage("assets/themes/"..Game.Theme.."/move_option.png")
+	
+	-- load piece textures
 	self.PieceU = love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_u.png")
 	self.PieceD = love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_d.png")
 	self.PieceL = love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_l.png")
