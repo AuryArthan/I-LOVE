@@ -104,6 +104,10 @@ function Game:update()
 	-- B button
 	if CUR_B and not B then		-- press down
 		B = true
+		if self.SelSq then
+			self.SelSq = nil
+			Sounds.DeSelSound:play()
+		end
 	end
 	if not CUR_B and B then		-- press up
 		B = false
@@ -138,7 +142,7 @@ function Game:renderGame()
 	-- draw grid
 	love.graphics.draw(Textures.Grid, 0, 0)
 
-	-- draw highlighed square
+	-- draw highlighed squares
 	if self.SelSq then
 		love.graphics.draw(Textures.Selected, Utility:sq_coordinates(self.SelSq))
 		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1]+1,self.SelSq[2]}))
