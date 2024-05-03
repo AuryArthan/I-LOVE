@@ -2,12 +2,21 @@
 Utility = {
 }
 
-function Utility:deepcopy(orig)
-    local copy = {}
-    for k, v in pairs(orig) do
-        copy[k] = type(v) == "table" and deepcopy(v) or v
-    end
-    return copy
+function Utility:tuple_copy(t)
+	return {t[1], t[2]}
+end
+
+function Utility:tuple_compare(t1, t2)
+	if t1 and t2 then
+		if t1[1] ~= t2[1] then
+			return false
+		end
+		if t1[2] ~= t2[2] then
+			return false
+		end
+		return true
+	end
+	return false
 end
 
 function Utility:sq_coordinates(pos)

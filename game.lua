@@ -89,14 +89,10 @@ function Game:update()
 	-- A button
 	if CUR_A and not A then		-- press down
 		A = true
-		if self.SelSq then
-			if self.HighSq[1] == self.SelSq[1] and self.HighSq[2] == self.SelSq[2]  then
-				self.SelSq = nil
-			else
-				self.SelSq = Utility:deepcopy(self.HighSq)
-			end
+		if Utility:tuple_compare(self.HighSq, self.SelSq) then
+			self.SelSq = nil
 		else
-			self.SelSq = Utility:deepcopy(self.HighSq)
+			self.SelSq = Utility:tuple_copy(self.HighSq)
 		end
 	end
 	if not CUR_A and A then		-- press up
