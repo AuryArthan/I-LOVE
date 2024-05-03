@@ -23,6 +23,7 @@ RETRO_DEVICE_ID_JOYPAD_R3       = 16
 
 
 Game = {
+	Theme = nil;
 	Gridsize = nil;
 	SqSize = nil;
 	A1_coord = nil;
@@ -32,6 +33,9 @@ Game = {
 
 function Game:init()
 
+	-- set theme
+	self.Theme = "JAP"
+	
 	-- set gridsize
 	self.Gridsize = 9
 	
@@ -108,7 +112,7 @@ function Game:renderGame()
 	love.graphics.draw(Textures.Background, 0, 0)
 	
 	-- draw grid
-	love.graphics.draw(Textures.Grid9, 0, 0)
+	love.graphics.draw(Textures.Grid, 0, 0)
 
 	-- draw highlighed square
 	love.graphics.draw(Textures.Highlighter, Utility:sq_coordinates(self.HighSq))

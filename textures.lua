@@ -1,9 +1,7 @@
 
 Textures = {
 	Background = nil;
-	Grid7 = nil;
-	Grid9 = nil;
-	Grid11 = nil;
+	Grid = nil;
 	Highlighter = nil;
 	PieceU = nil;
 	PieceD = nil;
@@ -19,23 +17,21 @@ function Textures:init()
 	love.graphics.setFont(font)
 	
 	-- load background
-	self.Background = love.graphics.newImage("assets/back.png")
+	self.Background = love.graphics.newImage("assets/themes/"..Game.Theme.."/back.png")
 	
 	-- load piece textures
-	self.Highlighter = love.graphics.newImage("assets/highlighter.png")
-	self.PieceU = love.graphics.newImage("assets/piece_u.png")
-	self.PieceD = love.graphics.newImage("assets/piece_d.png")
-	self.PieceL = love.graphics.newImage("assets/piece_l.png")
-	self.PieceR = love.graphics.newImage("assets/piece_r.png")
-	self.Player1 = love.graphics.newImage("assets/player1.png")
-	self.Player2 = love.graphics.newImage("assets/player2.png")
-	self.Player3 = love.graphics.newImage("assets/player3.png")
-	self.Player4 = love.graphics.newImage("assets/player4.png")
-	self.Goal = love.graphics.newImage("assets/goal.png")
+	self.Highlighter = love.graphics.newImage("assets/themes/"..Game.Theme.."/highlighter.png")
+	self.PieceU = love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_u.png")
+	self.PieceD = love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_d.png")
+	self.PieceL = love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_l.png")
+	self.PieceR = love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_r.png")
+	self.Player1 = love.graphics.newImage("assets/themes/"..Game.Theme.."/player1.png")
+	self.Player2 = love.graphics.newImage("assets/themes/"..Game.Theme.."/player2.png")
+	self.Player3 = love.graphics.newImage("assets/themes/"..Game.Theme.."/player3.png")
+	self.Player4 = love.graphics.newImage("assets/themes/"..Game.Theme.."/player4.png")
+	self.Goal = love.graphics.newImage("assets/themes/"..Game.Theme.."/goal.png")
 	
 	-- load grid
-	self.Grid7 = love.graphics.newImage("assets/grid7.png")
-	self.Grid9 = love.graphics.newImage("assets/grid9.png")
-	self.Grid11 = love.graphics.newImage("assets/grid11.png")
+	self.Grid = love.graphics.newImage("assets/themes/"..Game.Theme.."/grid"..Game.Gridsize..".png")
 	
 end
