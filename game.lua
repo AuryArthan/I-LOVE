@@ -91,8 +91,10 @@ function Game:update()
 		A = true
 		if Utility:tuple_compare(self.HighSq, self.SelSq) then
 			self.SelSq = nil
+			Sounds.DeSelSound:play()
 		else
 			self.SelSq = Utility:tuple_copy(self.HighSq)
+			Sounds.SelSound:play()
 		end
 	end
 	if not CUR_A and A then		-- press up
@@ -137,10 +139,14 @@ function Game:renderGame()
 	love.graphics.draw(Textures.Grid, 0, 0)
 
 	-- draw highlighed square
-	love.graphics.draw(Textures.Highlighter, Utility:sq_coordinates(self.HighSq))
 	if self.SelSq then
 		love.graphics.draw(Textures.Selected, Utility:sq_coordinates(self.SelSq))
+		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1]+1,self.SelSq[2]}))
+		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1]-1,self.SelSq[2]}))
+		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1],self.SelSq[2]+1}))
+		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1],self.SelSq[2]-1}))
 	end
+	love.graphics.draw(Textures.Highlighter, Utility:sq_coordinates(self.HighSq))
 	
 	-- draw pieces
 	Board:draw_pieces()
