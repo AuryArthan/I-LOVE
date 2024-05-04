@@ -1,6 +1,7 @@
 
 Board = {
 	Squares = nil;
+	Attacked = nil;
 }
 
 -- piece numbers
@@ -42,6 +43,28 @@ function Board:init()
 	-- place the goal in the center
 	self.Squares[(Game.Gridsize+1)/2][(Game.Gridsize+1)/2] = 9
     
+    -- initialize attacked squares
+    self.Attacked = {}
+    for i=1,Game.Gridsize do
+		self.Attacked[i] = {}
+		for j=1,Game.Gridsize do
+			self.Attacked[i][j] = 0		-- initialize to 0
+		end
+	end
+	for i=1,Game.Gridsize do
+		for j=1,Game.Gridsize do
+			if self.Squares[i][j] == 1 and j < Game.Gridsize then		-- up attacked
+				self.Attacked[i][j+1] = self.Attacked[i][j+1]+1
+			elseif self.Squares[i][j] == 2 and j > 1 then				-- down attacked
+				self.Attacked[i][j-1] = self.Attacked[i][j-1]+1
+			elseif self.Squares[i][j] == 3 and i > 1 then				-- left attacked
+				self.Attacked[i-1][j] = self.Attacked[i-1][j]+1
+			elseif self.Squares[i][j] == 4 and i < Game.Gridsize then	-- right attacked
+				self.Attacked[i+1][j] = self.Attacked[i+1][j]+1
+			end
+		end
+	end
+	
 end
 
 function Board:move_piece(sq1, sq2)

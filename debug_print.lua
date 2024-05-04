@@ -63,3 +63,13 @@ function DebugPr:board_print(posx, posy)
 	end
 end
 
+-- board attacked print
+function DebugPr:board_attacked_print(posx, posy)
+	love.graphics.print("Attacked", posx, posy)
+	for i=1,Game.Gridsize do
+		for j=1,Game.Gridsize do
+			love.graphics.print(Board.Attacked[i][j], posx+(i-1)*12, posy+(Game.Gridsize-j+1)*12)
+		end
+	end
+end
+

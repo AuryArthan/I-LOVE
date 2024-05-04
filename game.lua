@@ -175,5 +175,6 @@ function Game:renderGame()
 	DebugPr:buttons_print(A, B, 42, 30)
 	DebugPr:asdelays_print(ASDelay, 85, 30)
 	DebugPr:board_print(10, 70)
+	DebugPr:board_attacked_print(370, 70)
 	
 end
