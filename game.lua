@@ -89,12 +89,23 @@ function Game:update()
 	-- A button
 	if CUR_A and not A then		-- press down
 		A = true
-		if Utility:tuple_compare(self.HighSq, self.SelSq) then
+		if Utility:tuple_compare(self.HighSq, self.SelSq) then		-- if you press A on the selected square you deselect it
 			self.SelSq = nil
 			Sounds.DeSelSound:play()
 		else
-			self.SelSq = Utility:tuple_copy(self.HighSq)
-			Sounds.SelSound:play()
+			if self.SelSq then										-- if a move is proposed (stil have to check the legality of the move)
+				if Board:move_legality(self.SelSq, self.HighSq) then	-- if move is legal, make it
+					Board:move_piece(self.SelSq, self.HighSq)
+					Sounds.SnapSound:play()
+					self.SelSq = nil
+				else													-- if move is not legal then select the end square
+					self.SelSq = Utility:tuple_copy(self.HighSq)
+					Sounds.SelSound:play()
+				end
+			else													-- if no square is selected
+				self.SelSq = Utility:tuple_copy(self.HighSq)
+				Sounds.SelSound:play()
+			end
 		end
 	end
 	if not CUR_A and A then		-- press up

@@ -44,6 +44,18 @@ function Board:init()
     
 end
 
+function Board:move_piece(sq1, sq2)
+	Board.Squares[sq2[1]][sq2[2]] = Board.Squares[sq1[1]][sq1[2]]
+	Board.Squares[sq1[1]][sq1[2]] = 0
+end
+
+function Board:move_legality(sq1, sq2)	-- still need to finish this...
+	if Board.Squares[sq1[1]][sq1[2]] ~= 0 and Board.Squares[sq1[1]][sq1[2]] ~= 9 and Board.Squares[sq2[1]][sq2[2]] == 0 then
+		return true
+	end
+	return false
+end
+
 function Board:draw_pieces()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
