@@ -93,18 +93,22 @@ function Game:update()
 			self.SelSq = nil
 			Sounds.DeSelSound:play()
 		else
-			if self.SelSq then										-- if a move is proposed (stil have to check the legality of the move)
+			if self.SelSq then										-- if a move is proposed
 				if Board:move_legality(self.SelSq, self.HighSq) then	-- if move is legal, make it
 					Board:move_piece(self.SelSq, self.HighSq)
 					Sounds.SnapSound:play()
 					self.SelSq = nil
 				else													-- if move is not legal then select the end square
+					if Board:piece_present(self.HighSq) then
+						self.SelSq = Utility:tuple_copy(self.HighSq)
+						Sounds.SelSound:play()
+					end
+				end
+			else													-- if no square is selected
+				if Board:piece_present(self.HighSq) then
 					self.SelSq = Utility:tuple_copy(self.HighSq)
 					Sounds.SelSound:play()
 				end
-			else													-- if no square is selected
-				self.SelSq = Utility:tuple_copy(self.HighSq)
-				Sounds.SelSound:play()
 			end
 		end
 	end
