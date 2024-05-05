@@ -73,3 +73,4 @@ function DebugPr:board_attacked_print(posx, posy)
 	end
 end
 
+

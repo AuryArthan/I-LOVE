@@ -73,17 +73,30 @@ function Board:move_piece(sq1, sq2)
 end
 
 function Board:piece_present(sq)
-	if Board.Squares[sq[1]][sq[2]] ~= 0 and Board.Squares[sq[1]][sq[2]] ~= 9 then
+	if Board.Squares[sq[1]][sq[2]] == 0 or Board.Squares[sq[1]][sq[2]] == 9 then
+		return false
+	end
+	return true
+end
+
+function Board:inbounds(sq)
+	if sq[1] >= 1 and sq[1] <= Game.Gridsize and sq[2] >= 1 and sq[2] <= Game.Gridsize then
 		return true
 	end
 	return false
 end
 
 function Board:move_legality(sq1, sq2)	-- still need to finish this...
-	if Board.Squares[sq2[1]][sq2[2]] == 0 then
-		return true
-	end
-	return false
+	--if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then		-- if the move is not to adjacent square
+	--	return false
+	--end
+	--elseif not Board:inbounds(sq2) then								-- if square is out of bounds
+	--if not Board:inbounds(sq2) then	
+	--	return false
+	--if Board.piece_present(sq2) then									-- if the square is occupied
+	--	return false
+	--end
+	return true
 end
 
 function Board:draw_pieces()

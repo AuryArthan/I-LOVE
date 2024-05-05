@@ -98,7 +98,7 @@ function Game:update()
 					Board:move_piece(self.SelSq, self.HighSq)
 					Sounds.SnapSound:play()
 					self.SelSq = nil
-				else													-- if move is not legal then select the end square
+				else													-- if move is not legal and there is a piece highlighted, then select it
 					if Board:piece_present(self.HighSq) then
 						self.SelSq = Utility:tuple_copy(self.HighSq)
 						Sounds.SelSound:play()
@@ -160,10 +160,13 @@ function Game:renderGame()
 	-- draw highlighed squares
 	if self.SelSq then
 		love.graphics.draw(Textures.Selected, Utility:sq_coordinates(self.SelSq))
-		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1]+1,self.SelSq[2]}))
-		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1]-1,self.SelSq[2]}))
-		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1],self.SelSq[2]+1}))
-		love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1],self.SelSq[2]-1}))
+		for i=-1,1 do
+			for j = -1,1 do
+				if Board:move_legality({self.SelSq[1]+i,self.SelSq[2]+j}) then
+					love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1]+i,self.SelSq[2]+j}))
+				end
+			end
+		end
 	end
 	love.graphics.draw(Textures.Highlighter, Utility:sq_coordinates(self.HighSq))
 	
