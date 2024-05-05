@@ -72,15 +72,15 @@ function Board:move_piece(sq1, sq2)
 	Board.Squares[sq1[1]][sq1[2]] = 0
 end
 
-function Board:piece_present(sq)
-	if Board.Squares[sq[1]][sq[2]] ~= 0 and Board.Squares[sq[1]][sq[2]] ~= 9 then
+function Board:inbounds(sq)
+	if sq[1] >= 1 and sq[1] <= Game.Gridsize and sq[2] >= 1 and sq[2] <= Game.Gridsize then
 		return true
 	end
 	return false
 end
 
-function Board:inbounds(sq)
-	if sq[1] >= 1 and sq[1] <= Game.Gridsize and sq[2] >= 1 and sq[2] <= Game.Gridsize then
+function Board:piece_present(sq)
+	if Board.Squares[sq[1]][sq[2]] ~= 0 and Board.Squares[sq[1]][sq[2]] ~= 9 then
 		return true
 	end
 	return false

@@ -58,7 +58,7 @@ function DebugPr:board_print(posx, posy)
 	love.graphics.print("Board", posx, posy)
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
-			love.graphics.print(Board.Squares[i][j], posx+(i-1)*12, posy+(Game.Gridsize-j+1)*12)
+			love.graphics.print(Board.Squares[i][j], posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
 		end
 	end
 end
@@ -68,7 +68,21 @@ function DebugPr:board_attacked_print(posx, posy)
 	love.graphics.print("Attacked", posx, posy)
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
-			love.graphics.print(Board.Attacked[i][j], posx+(i-1)*12, posy+(Game.Gridsize-j+1)*12)
+			love.graphics.print(Board.Attacked[i][j], posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
+		end
+	end
+end
+
+-- piece_present print
+function DebugPr:piece_present_print(posx, posy)
+	love.graphics.print("piece_present()", posx, posy)
+	for i=1,Game.Gridsize do
+		for j=1,Game.Gridsize do
+			if Board:piece_present({i,j}) then
+				love.graphics.print("1", posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
+			else
+				love.graphics.print("0", posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
+			end
 		end
 	end
 end
