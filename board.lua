@@ -86,16 +86,14 @@ function Board:inbounds(sq)
 	return false
 end
 
-function Board:move_legality(sq1, sq2)	-- still need to finish this...
-	--if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then		-- if the move is not to adjacent square
+function Board:move_legality(sq1, sq2)
+	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then		-- if the move is not to adjacent square
+		return false
+	elseif not Board:inbounds(sq2) then									-- if square is out of bounds
+		return false
+	--elseif Board.piece_present(sq2) then								-- if the square is occupied
 	--	return false
-	--end
-	--elseif not Board:inbounds(sq2) then								-- if square is out of bounds
-	--if not Board:inbounds(sq2) then	
-	--	return false
-	--if Board.piece_present(sq2) then									-- if the square is occupied
-	--	return false
-	--end
+	end
 	return true
 end
 

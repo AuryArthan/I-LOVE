@@ -162,7 +162,7 @@ function Game:renderGame()
 		love.graphics.draw(Textures.Selected, Utility:sq_coordinates(self.SelSq))
 		for i=-1,1 do
 			for j = -1,1 do
-				if Board:move_legality({self.SelSq[1]+i,self.SelSq[2]+j}) then
+				if Board:move_legality(self.SelSq, {self.SelSq[1]+i, self.SelSq[2]+j}) then
 					love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1]+i,self.SelSq[2]+j}))
 				end
 			end
