@@ -14,7 +14,7 @@ function Sounds:init()
 	self.SnapSound = love.audio.newSource("assets/themes/"..Game.Theme.."/snap.wav", "static"); self.SnapSound:setVolume(3)
 	self.SelSound = love.audio.newSource("assets/themes/"..Game.Theme.."/select.wav", "static")
 	self.DeSelSound = love.audio.newSource("assets/themes/"..Game.Theme.."/deselect.wav", "static")
-	self.BackMusic = love.audio.newSource("assets/themes/"..Game.Theme.."/background_music.wav", "stream")
+	self.BackMusic = love.audio.newSource("assets/themes/"..Game.Theme.."/background_music.ogg", "stream")
 	
 	-- set background music
 	self.BackMusic:setVolume(0.4)
