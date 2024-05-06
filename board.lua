@@ -51,6 +51,11 @@ function Board:init()
 			self.Attacked[i][j] = 0		-- initialize to 0
 		end
 	end
+	Board:compute_attacked()
+	
+end
+
+function Board:compute_attacked()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
 			if self.Squares[i][j] == 1 and j < Game.Gridsize then		-- up attacked
@@ -64,7 +69,6 @@ function Board:init()
 			end
 		end
 	end
-	
 end
 
 function Board:move_piece(sq1, sq2)
@@ -87,9 +91,9 @@ function Board:piece_present(sq)
 end
 
 function Board:player_present(sq)
-	--if 5 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 8 then
-	--	return true
-	--end
+	if 5 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 8 then
+		return true
+	end
 	return false
 end
 
@@ -115,8 +119,8 @@ function Board:move_legality(sq1, sq2)
 		return false
 	elseif Board:move_is_backward(sq1, sq2) then								-- if moving backwards
 		return false
-	--elseif Board:player_present(sq1) and Board.Attacked[sq2[1]][sq[2]] then		-- if a player tries to move to an atacked square
-	--	return false
+	elseif Board:player_present(sq1) and self.Attacked[sq2[1]][sq2[2]] > 0 then	-- if a player tries to move to an atacked square
+		return false
 	end
 	return true
 end
