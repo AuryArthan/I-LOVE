@@ -202,3 +202,14 @@ function Board:draw_pieces()
 		end
 	end
 end
+
+function Board:draw_attacked()
+	for i=1,Game.Gridsize do
+		for j=1,Game.Gridsize do
+			if self.Attacked[i][j] > 0 then
+				love.graphics.draw(Textures.Attacked, Utility:sq_coordinates({i,j}))
+			end
+		end
+	end
+end
+

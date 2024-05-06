@@ -172,6 +172,7 @@ function Game:renderGame()
 	
 	-- draw pieces
 	Board:draw_pieces()
+	Board:draw_attacked()
 	
 	-- debug print
 	DebugPr:dpad_print(DPAD, 15, 30)

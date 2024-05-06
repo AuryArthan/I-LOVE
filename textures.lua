@@ -25,6 +25,7 @@ function Textures:init()
 	self.Highlighter = love.graphics.newImage("assets/themes/"..Game.Theme.."/highlighter.png")
 	self.Selected = love.graphics.newImage("assets/themes/"..Game.Theme.."/selected.png")
 	self.MoveOption = love.graphics.newImage("assets/themes/"..Game.Theme.."/move_option.png")
+	self.Attacked = love.graphics.newImage("assets/themes/"..Game.Theme.."/attacked.png")
 	
 	-- load piece textures
 	self.PieceU = love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_u.png")
