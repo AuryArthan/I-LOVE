@@ -68,8 +68,8 @@ function Board:init()
 end
 
 function Board:move_piece(sq1, sq2)
-	Board.Squares[sq2[1]][sq2[2]] = Board.Squares[sq1[1]][sq1[2]]
-	Board.Squares[sq1[1]][sq1[2]] = 0
+	self.Squares[sq2[1]][sq2[2]] = self.Squares[sq1[1]][sq1[2]]
+	self.Squares[sq1[1]][sq1[2]] = 0
 end
 
 function Board:inbounds(sq)
@@ -80,19 +80,43 @@ function Board:inbounds(sq)
 end
 
 function Board:piece_present(sq)
-	if Board.Squares[sq[1]][sq[2]] ~= 0 and Board.Squares[sq[1]][sq[2]] ~= 9 then
+	if self.Squares[sq[1]][sq[2]] ~= 0 and self.Squares[sq[1]][sq[2]] ~= 9 then
+		return true
+	end
+	return false
+end
+
+function Board:player_present(sq)
+	--if 5 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 8 then
+	--	return true
+	--end
+	return false
+end
+
+function Board:move_is_backward(sq1, sq2)
+	if self.Squares[sq1[1]][sq1[2]] == 1 and sq2[2] == sq1[2]-1 then
+		return true
+	elseif self.Squares[sq1[1]][sq1[2]] == 2 and sq2[2] == sq1[2]+1 then
+		return true
+	elseif self.Squares[sq1[1]][sq1[2]] == 3 and sq2[1] == sq1[1]+1 then
+		return true
+	elseif self.Squares[sq1[1]][sq1[2]] == 4 and sq2[1] == sq1[1]-1 then
 		return true
 	end
 	return false
 end
 
 function Board:move_legality(sq1, sq2)
-	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then		-- if the move is not to adjacent square
+	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then				-- if the move is not to adjacent square
 		return false
-	elseif not Board:inbounds(sq2) then									-- if square is out of bounds
+	elseif not Board:inbounds(sq2) then											-- if square is out of bounds
 		return false
-	elseif Board:piece_present(sq2) then								-- if the square is occupied
+	elseif Board:piece_present(sq2) then										-- if the square is occupied
 		return false
+	elseif Board:move_is_backward(sq1, sq2) then								-- if moving backwards
+		return false
+	--elseif Board:player_present(sq1) and Board.Attacked[sq2[1]][sq[2]] then		-- if a player tries to move to an atacked square
+	--	return false
 	end
 	return true
 end
