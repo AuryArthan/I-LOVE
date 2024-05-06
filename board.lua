@@ -79,15 +79,7 @@ function Board:inbounds(sq)
 	return false
 end
 
-function Board:piece_present(sq2)
-	--if Board.Squares[sq[1]][sq[2]] ~= 0 and Board.Squares[sq[1]][sq[2]] ~= 9 then
-	if Board.Squares[sq2[1]][sq2[2]] ~= 0 and Board.Squares[sq2[1]][sq2[2]] ~= 9 then
-		return true
-	end
-	return false
-end
-
-function Board:tmp(sq)
+function Board:piece_present(sq)
 	if Board.Squares[sq[1]][sq[2]] ~= 0 and Board.Squares[sq[1]][sq[2]] ~= 9 then
 		return true
 	end
