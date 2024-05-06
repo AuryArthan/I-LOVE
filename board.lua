@@ -58,31 +58,63 @@ end
 function Board:compute_attacked()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
-			if self.Squares[i][j] == 1 and j < Game.Gridsize then		-- up attacked
-				self.Attacked[i][j+1] = self.Attacked[i][j+1]+1
-			elseif self.Squares[i][j] == 2 and j > 1 then				-- down attacked
-				self.Attacked[i][j-1] = self.Attacked[i][j-1]+1
-			elseif self.Squares[i][j] == 3 and i > 1 then				-- left attacked
-				self.Attacked[i-1][j] = self.Attacked[i-1][j]+1
-			elseif self.Squares[i][j] == 4 and i < Game.Gridsize then	-- right attacked
-				self.Attacked[i+1][j] = self.Attacked[i+1][j]+1
+			piece = self.Squares[i][j]
+			if 1 <= piece and piece <= 4 then
+				ii,jj = Board:piece_attacks({i,j}, piece)
+				self.Attacked[ii][jj] = self.Attacked[ii][jj] + 1
 			end
 		end
 	end
 end
 
+-- which square the piece 'piece' is attacking from square 'sq'
+function Board:piece_attacks(sq, piece)
+	i = sq[1]
+	j = sq[2]
+	if piece == 1 then
+		j = j + 1
+	elseif piece == 2 then
+		j = j - 1
+	elseif piece == 3 then
+		i = i - 1
+	elseif piece == 4 then
+		i = i + 1
+	end
+	return i,j
+end
+
+-- updates the attacked squares caused by a potential move sq1 -> sq2
+function Board:update_attacked(sq1, sq2)
+	if Board:minor_piece_present(sq1) then
+		piece_before = self.Squares[sq1[1]][sq1[2]]
+		piece_after = Board:piece_orientation(sq1, sq2)
+		-- which square to decrease the attacked value
+		i,j = Board:piece_attacks(sq1, piece_before)
+		self.Attacked[i][j] = self.Attacked[i][j] - 1
+		-- which square to increase the attacked value
+		i,j = Board:piece_attacks(sq2, piece_after)
+		self.Attacked[i][j] = self.Attacked[i][j] + 1
+	end
+end
+
+-- returns the orientation of a minor piece after a move sq1 -> sq2
+function Board:piece_orientation(sq1, sq2)
+	if sq2[2] == sq1[2]+1 then
+		return 1				-- up
+	elseif sq2[2] == sq1[2]-1 then
+		return 2				-- down
+	elseif sq2[1] == sq1[1]-1 then
+		return 3				-- left
+	elseif sq2[1] == sq1[1]+1 then
+		return 4				-- right
+	end
+end
+
 function Board:move_piece(sq1, sq2)
+	Board:update_attacked(sq1, sq2)
 	piece = self.Squares[sq1[1]][sq1[2]]
 	if Board:minor_piece_present(sq1) then
-		if sq2[2] == sq1[2]+1 then
-			piece = 1				-- up
-		elseif sq2[2] == sq1[2]-1 then
-			piece = 2				-- down
-		elseif sq2[1] == sq1[1]-1 then
-			piece = 3				-- left
-		elseif sq2[1] == sq1[1]+1 then
-			piece = 4				-- right
-		end
+		piece = Board:piece_orientation(sq1, sq2)
 	end	
 	self.Squares[sq2[1]][sq2[2]] = piece
 	self.Squares[sq1[1]][sq1[2]] = 0
