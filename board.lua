@@ -72,7 +72,19 @@ function Board:compute_attacked()
 end
 
 function Board:move_piece(sq1, sq2)
-	self.Squares[sq2[1]][sq2[2]] = self.Squares[sq1[1]][sq1[2]]
+	piece = self.Squares[sq1[1]][sq1[2]]
+	if Board:minor_piece_present(sq1) then
+		if sq2[2] == sq1[2]+1 then
+			piece = 1				-- up
+		elseif sq2[2] == sq1[2]-1 then
+			piece = 2				-- down
+		elseif sq2[1] == sq1[1]-1 then
+			piece = 3				-- left
+		elseif sq2[1] == sq1[1]+1 then
+			piece = 4				-- right
+		end
+	end	
+	self.Squares[sq2[1]][sq2[2]] = piece
 	self.Squares[sq1[1]][sq1[2]] = 0
 end
 
@@ -83,15 +95,23 @@ function Board:inbounds(sq)
 	return false
 end
 
+function Board:empty_square(sq)
+	return self.Squares[sq[1]][sq[2]] == 0 or self.Squares[sq[1]][sq[2]] == 9
+end
+
 function Board:piece_present(sq)
-	if self.Squares[sq[1]][sq[2]] ~= 0 and self.Squares[sq[1]][sq[2]] ~= 9 then
+	return not Board:empty_square(sq)
+end
+
+function Board:player_present(sq)
+	if 5 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 8 then
 		return true
 	end
 	return false
 end
 
-function Board:player_present(sq)
-	if 5 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 8 then
+function Board:minor_piece_present(sq)
+	if 1 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 4 then
 		return true
 	end
 	return false
