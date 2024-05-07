@@ -41,9 +41,9 @@ function Board:init()
 	end
 	-- arrange player pieces
 	self.Squares[(Game.Gridsize+1)/2][1] = 1
-	self.Squares[(Game.Gridsize+1)/2][Game.Gridsize] = 2
-	self.Squares[1][(Game.Gridsize+1)/2] = 3
-	self.Squares[Game.Gridsize][(Game.Gridsize+1)/2] = 4
+	self.Squares[(Game.Gridsize+1)/2][Game.Gridsize] = 3
+	self.Squares[1][(Game.Gridsize+1)/2] = 4
+	self.Squares[Game.Gridsize][(Game.Gridsize+1)/2] = 2
 	-- place the goal in the center
 	self.Squares[(Game.Gridsize+1)/2][(Game.Gridsize+1)/2] = 9
     
