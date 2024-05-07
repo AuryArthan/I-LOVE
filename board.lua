@@ -120,7 +120,6 @@ end
 
 -- just moves the piece (does not check legality or handle other variables)
 function Board:move_piece(sq1, sq2)
-	Board:update_attacked(sq1, sq2)
 	piece = self.Squares[sq1[1]][sq1[2]]
 	if Board:minor_piece_present(sq1) then
 		piece = Board:piece_orientation(sq1, sq2)
