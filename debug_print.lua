@@ -87,4 +87,8 @@ function DebugPr:piece_present_print(posx, posy)
 	end
 end
 
+-- player turn print
+function DebugPr:player_turn(posx, posy)
+	love.graphics.print("Player turn: " .. Board.Turn, posx, posy)
+end
 

@@ -118,6 +118,7 @@ function Board:piece_orientation(sq1, sq2)
 	end
 end
 
+-- just moves the piece (does not check legality or handle other variables)
 function Board:move_piece(sq1, sq2)
 	Board:update_attacked(sq1, sq2)
 	piece = self.Squares[sq1[1]][sq1[2]]
@@ -128,6 +129,19 @@ function Board:move_piece(sq1, sq2)
 	self.Squares[sq1[1]][sq1[2]] = 0
 end
 
+-- makes the move fully: moves the piece, updates attacked squares and changes player turn (does not check legality)
+function Board:make_move(sq1, sq2)
+	Board:update_attacked(sq1, sq2)
+	Board:move_piece(sq1, sq2)
+	Board:change_turn()
+end
+
+-- changes the player turn
+function Board:change_turn()
+	self.Turn = 1 + self.Turn%4
+end
+
+-- checks if square 'sq' is inbounds
 function Board:inbounds(sq)
 	if sq[1] >= 1 and sq[1] <= Game.Gridsize and sq[2] >= 1 and sq[2] <= Game.Gridsize then
 		return true
@@ -135,14 +149,17 @@ function Board:inbounds(sq)
 	return false
 end
 
+-- checks if square 'sq' is empty
 function Board:empty_square(sq)
 	return self.Squares[sq[1]][sq[2]] == 0 or self.Squares[sq[1]][sq[2]] == 9
 end
 
+-- checks if a piece (any) is present on square 'sq'
 function Board:piece_present(sq)
 	return not Board:empty_square(sq)
 end
 
+-- checks if a player (1-4) is present on square 'sq'
 function Board:player_present(sq)
 	if 1 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 4 then
 		return true
@@ -150,6 +167,7 @@ function Board:player_present(sq)
 	return false
 end
 
+-- checks if a minor piece (5-8) is present on square 'sq'
 function Board:minor_piece_present(sq)
 	if 5 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 8 then
 		return true
@@ -157,6 +175,7 @@ function Board:minor_piece_present(sq)
 	return false
 end
 
+-- checks if the move sq1 -> sq2 is by a minor piece moving backwards
 function Board:move_is_backward(sq1, sq2)
 	if self.Squares[sq1[1]][sq1[2]] == 5 and sq2[2] == sq1[2]-1 then
 		return true
@@ -170,6 +189,7 @@ function Board:move_is_backward(sq1, sq2)
 	return false
 end
 
+-- checks if the move sq1 -> sq2 is legal
 function Board:move_legality(sq1, sq2)
 	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then						-- if the move is not to adjacent square
 		return false

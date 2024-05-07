@@ -125,14 +125,14 @@ end
 -- handle a proposed move
 function Game:move_proposal(sq1, sq2)
 	if Board:move_legality(sq1, sq2) then			-- if move is legal, make it
-		Board:move_piece(sq1, sq2)
+		Board:make_move(sq1, sq2)
 		Sounds.SnapSound:play()
 		self.SelSq = nil
-	else											-- if move is not legal and there is a piece highlighted, then select it
-		if Board:piece_present(sq2) then
+	else
+		if Board:piece_present(sq2) then			-- if move is not legal and there is a piece highlighted, then select it
 			self.SelSq = Utility:tuple_copy(sq2)
 			Sounds.SelSound:play()
-		end
+		end											-- if move is not legal and no piece is highlighted, then do nothing
 	end
 end
 
@@ -187,5 +187,6 @@ function Game:renderGame()
 	DebugPr:board_print(10, 60)
 	DebugPr:board_attacked_print(10, 165)
 	DebugPr:piece_present_print(380, 165)
+	DebugPr:player_turn(375, 30)
 	
 end
