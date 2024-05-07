@@ -2,6 +2,7 @@
 Board = {
 	Squares = nil;
 	Attacked = nil;
+	Turn = nil;
 }
 
 -- piece numbers
@@ -19,6 +20,9 @@ Board = {
 --]]
 
 function Board:init()
+	
+	-- intialize whos turn it is
+	self.Turn = 1
 	
 	-- initialize board squares
 	self.Squares = {}
@@ -167,15 +171,17 @@ function Board:move_is_backward(sq1, sq2)
 end
 
 function Board:move_legality(sq1, sq2)
-	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then				-- if the move is not to adjacent square
+	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then						-- if the move is not to adjacent square
 		return false
-	elseif not Board:inbounds(sq2) then											-- if square is out of bounds
+	elseif not Board:inbounds(sq2) then													-- if square is out of bounds
 		return false
-	elseif Board:piece_present(sq2) then										-- if the square is occupied
+	elseif Board:piece_present(sq2) then												-- if the square is occupied
 		return false
-	elseif Board:move_is_backward(sq1, sq2) then								-- if moving backwards
+	elseif Board:move_is_backward(sq1, sq2) then										-- if moving backwards
 		return false
-	elseif Board:player_present(sq1) and self.Attacked[sq2[1]][sq2[2]] > 0 then	-- if a player tries to move to an atacked square
+	elseif Board:player_present(sq1) and self.Attacked[sq2[1]][sq2[2]] > 0 then			-- if a player tries to move to an atacked square
+		return false
+	elseif Board:minor_piece_present(sq1) and self.Squares[sq2[1]][sq2[2]] == 9 then	-- if a minor piece tries to reach goal
 		return false
 	end
 	return true

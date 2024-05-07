@@ -94,16 +94,7 @@ function Game:update()
 			Sounds.DeSelSound:play()
 		else
 			if self.SelSq then										-- if a move is proposed
-				if Board:move_legality(self.SelSq, self.HighSq) then	-- if move is legal, make it
-					Board:move_piece(self.SelSq, self.HighSq)
-					Sounds.SnapSound:play()
-					self.SelSq = nil
-				else													-- if move is not legal and there is a piece highlighted, then select it
-					if Board:piece_present(self.HighSq) then
-						self.SelSq = Utility:tuple_copy(self.HighSq)
-						Sounds.SelSound:play()
-					end
-				end
+				Game:move_proposal(self.SelSq, self.HighSq)
 			else													-- if no square is selected
 				if Board:piece_present(self.HighSq) then
 					self.SelSq = Utility:tuple_copy(self.HighSq)
@@ -128,6 +119,21 @@ function Game:update()
 		B = false
 	end
 	
+end
+
+
+-- handle a proposed move
+function Game:move_proposal(sq1, sq2)
+	if Board:move_legality(sq1, sq2) then			-- if move is legal, make it
+		Board:move_piece(sq1, sq2)
+		Sounds.SnapSound:play()
+		self.SelSq = nil
+	else											-- if move is not legal and there is a piece highlighted, then select it
+		if Board:piece_present(sq2) then
+			self.SelSq = Utility:tuple_copy(sq2)
+			Sounds.SelSound:play()
+		end
+	end
 end
 
 
