@@ -193,6 +193,16 @@ function Board:move_is_backward(sq1, sq2)
 	return false
 end
 
+-- checks if a square 'sq' is marked
+function Board:marked_square(sq)
+	for i=1,4 do
+		if self.MarkedSqs[i][1] == sq[1] and self.MarkedSqs[i][2] == sq[2] then 
+			return i
+		end
+	end
+	return false
+end
+
 -- checks if the move sq1 -> sq2 is legal
 function Board:move_legality(sq1, sq2)
 	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then						-- if the move is not to adjacent square
@@ -205,7 +215,9 @@ function Board:move_legality(sq1, sq2)
 		return false
 	elseif Board:player_present(sq1) and self.Attacked[sq2[1]][sq2[2]] > 0 then			-- if a player tries to move to an atacked square
 		return false
-	elseif Board:player_present(sq1) and self.Squares[sq1[1]][sq1[2]] ~= self.Turn then	-- if a player tries to move another player
+	elseif Board:player_present(sq1) and self.Squares[sq1[1]][sq1[2]] ~= self.Turn then	-- if a player tries to move another player's piece
+		return false
+	elseif Board:marked_square(sq1) and Board:marked_square(sq1) ~= self.Turn then		-- if a player tries to move a piece that is marked by another player
 		return false
 	elseif Board:minor_piece_present(sq1) and self.Squares[sq2[1]][sq2[2]] == 9 then	-- if a minor piece tries to reach goal
 		return false

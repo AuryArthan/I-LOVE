@@ -182,7 +182,11 @@ function Game:renderGame()
 	
 	-- draw marked squares
 	for i=1,4 do
-		if Board.MarkedSqs[i] then love.graphics.draw(Textures.MarkedSqs[i], Utility:sq_coordinates(Board.MarkedSqs[i])) end
+		if Board.MarkedSqs[i] then
+			if Board.Squares[Board.MarkedSqs[i][1]][Board.MarkedSqs[i][2]] ~= i then
+				love.graphics.draw(Textures.MarkedSqs[i], Utility:sq_coordinates(Board.MarkedSqs[i]))
+			end
+		end
 	end
 	
 	-- debug print
