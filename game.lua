@@ -180,6 +180,11 @@ function Game:renderGame()
 	Board:draw_pieces()
 	Board:draw_attacked()
 	
+	-- draw marked squares
+	for i=1,4 do
+		if Board.MarkedSqs[i] then love.graphics.draw(Textures.MarkedSqs[i], Utility:sq_coordinates(Board.MarkedSqs[i])) end
+	end
+	
 	-- debug print
 	DebugPr:dpad_print(DPAD, 15, 30)
 	DebugPr:buttons_print(A, B, 42, 30)

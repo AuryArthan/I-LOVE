@@ -3,6 +3,7 @@ Board = {
 	Squares = nil;
 	Attacked = nil;
 	Turn = nil;
+	MarkedSqs = nil;
 }
 
 -- piece numbers
@@ -23,6 +24,9 @@ function Board:init()
 	
 	-- intialize whos turn it is
 	self.Turn = 1
+	
+	-- set marked squares
+	self.MarkedSqs = {nil,nil,nil,nil}
 	
 	-- initialize board squares
 	self.Squares = {}
@@ -130,6 +134,7 @@ end
 
 -- makes the move fully: moves the piece, updates attacked squares and changes player turn (does not check legality)
 function Board:make_move(sq1, sq2)
+	Board.MarkedSqs[Board.Turn] = {sq2[1],sq2[2]}
 	Board:update_attacked(sq1, sq2)
 	Board:move_piece(sq1, sq2)
 	Board:change_turn()
