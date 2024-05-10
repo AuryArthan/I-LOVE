@@ -26,7 +26,7 @@ function Board:init()
 	self.Turn = 1
 	
 	-- set marked squares
-	self.MarkedSqs = {nil,nil,nil,nil}
+	self.MarkedSqs = {{(Game.Gridsize+1)/2,1},{1,(Game.Gridsize+1)/2},{(Game.Gridsize+1)/2,Game.Gridsize},{1,(Game.Gridsize+1)/2}}
 	
 	-- initialize board squares
 	self.Squares = {}
@@ -204,6 +204,8 @@ function Board:move_legality(sq1, sq2)
 	elseif Board:move_is_backward(sq1, sq2) then										-- if moving backwards
 		return false
 	elseif Board:player_present(sq1) and self.Attacked[sq2[1]][sq2[2]] > 0 then			-- if a player tries to move to an atacked square
+		return false
+	elseif Board:player_present(sq1) and self.Squares[sq1[1]][sq1[2]] ~= self.Turn then	-- if a player tries to move another player
 		return false
 	elseif Board:minor_piece_present(sq1) and self.Squares[sq2[1]][sq2[2]] == 9 then	-- if a minor piece tries to reach goal
 		return false
