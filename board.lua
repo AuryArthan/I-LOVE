@@ -26,7 +26,7 @@ function Board:init()
 	self.Turn = 1
 	
 	-- set marked squares
-	self.MarkedSqs = {{(Game.Gridsize+1)/2,1},{1,(Game.Gridsize+1)/2},{(Game.Gridsize+1)/2,Game.Gridsize},{1,(Game.Gridsize+1)/2}}
+	self.MarkedSqs = {{(Game.Gridsize+1)/2,1},{Game.Gridsize,(Game.Gridsize+1)/2},{(Game.Gridsize+1)/2,Game.Gridsize},{1,(Game.Gridsize+1)/2}}
 	
 	-- initialize board squares
 	self.Squares = {}
