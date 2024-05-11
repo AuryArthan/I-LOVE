@@ -196,7 +196,7 @@ end
 -- checks if a square 'sq' is marked
 function Board:marked_square(sq)
 	for i=1,4 do
-		if self.MarkedSqs[i][1] == sq[1] and self.MarkedSqs[i][2] == sq[2] then 
+		if Utility:tuple_compare(sq, self.MarkedSqs[i]) then
 			return i
 		end
 	end

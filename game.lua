@@ -96,10 +96,7 @@ function Game:update()
 			if self.SelSq then										-- if a move is proposed
 				Game:move_proposal(self.SelSq, self.HighSq)
 			else													-- if no square is selected
-				if Board:piece_present(self.HighSq) then
-					self.SelSq = Utility:tuple_copy(self.HighSq)
-					Sounds.SelSound:play()
-				end
+				Game:select_proposal(self.HighSq)
 			end
 		end
 	end
@@ -122,6 +119,21 @@ function Game:update()
 end
 
 
+-- handle a proposed square selection
+function Game:select_proposal(sq)
+	if Board:empty_square(sq) then																		-- if the square is empty
+		return
+	elseif Board:player_present(sq) and Board.Squares[sq[1]][sq[2]] ~= Board.Turn then					-- if a player tries to select another players piece
+		return
+	elseif Board:minor_piece_present(sq) then
+		if Board:marked_square(sq) and not Utility:tuple_compare(sq,Board.MarkedSqs[Board.Turn]) then	-- if a player tries to select another player's marked piece
+			return
+		end
+	end
+	self.SelSq = Utility:tuple_copy(sq)
+	Sounds.SelSound:play()
+end
+
 -- handle a proposed move
 function Game:move_proposal(sq1, sq2)
 	if Board:move_legality(sq1, sq2) then			-- if move is legal, make it
@@ -129,10 +141,7 @@ function Game:move_proposal(sq1, sq2)
 		Sounds.SnapSound:play()
 		self.SelSq = nil
 	else
-		if Board:piece_present(sq2) then			-- if move is not legal and there is a piece highlighted, then select it
-			self.SelSq = Utility:tuple_copy(sq2)
-			Sounds.SelSound:play()
-		end											-- if move is not legal and no piece is highlighted, then do nothing
+		Game:select_proposal(sq2)					-- if move is not legal then try to select the end square
 	end
 end
 
