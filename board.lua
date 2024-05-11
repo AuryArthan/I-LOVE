@@ -229,21 +229,21 @@ function Board:draw_pieces()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
 			if self.Squares[i][j] == 5 then		-- up
-				love.graphics.draw(Textures.PieceU, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[1], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 6 then	-- down
-				love.graphics.draw(Textures.PieceD, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[2], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 7 then	-- left
-				love.graphics.draw(Textures.PieceL, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[3], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 8 then	-- right
-				love.graphics.draw(Textures.PieceR, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[4], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 1 then	-- player1
-				love.graphics.draw(Textures.Player1, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[1], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 2 then	-- player2
-				love.graphics.draw(Textures.Player2, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[2], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 3 then	-- player3
-				love.graphics.draw(Textures.Player3, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[3], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 4 then	-- player4
-				love.graphics.draw(Textures.Player4, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[4], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 9 then	--goal
 				love.graphics.draw(Textures.Goal, Utility:sq_coordinates({i,j}))
 			end
