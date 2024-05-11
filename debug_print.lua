@@ -87,6 +87,14 @@ function DebugPr:piece_present_print(posx, posy)
 	end
 end
 
+-- player position print
+function DebugPr:player_pos(posx, posy)
+	love.graphics.print("Player positions", posx, posy)
+	for i=1,4 do
+		love.graphics.print(i .. " : " .. " ( " .. Board.PlayerPos[i][1] .. " , " .. Board.PlayerPos[i][2] .. " ) ", posx+5, posy+12*i)
+	end
+end
+
 -- player turn print
 function DebugPr:player_turn(posx, posy)
 	love.graphics.print("Player turn: " .. Board.Turn, posx, posy)

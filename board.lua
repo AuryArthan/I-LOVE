@@ -4,6 +4,7 @@ Board = {
 	Attacked = nil;
 	Turn = nil;
 	MarkedSqs = nil;
+	PlayerPos = {nil,nil,nil,nil};
 }
 
 -- piece numbers
@@ -50,6 +51,12 @@ function Board:init()
 	self.Squares[Game.Gridsize][(Game.Gridsize+1)/2] = 2
 	-- place the goal in the center
 	self.Squares[(Game.Gridsize+1)/2][(Game.Gridsize+1)/2] = 9
+    
+    -- mark player positions
+    self.PlayerPos[1] = {(Game.Gridsize+1)/2,1}
+    self.PlayerPos[2] = {Game.Gridsize,(Game.Gridsize+1)/2}
+    self.PlayerPos[3] = {(Game.Gridsize+1)/2,Game.Gridsize}
+    self.PlayerPos[4] = {1,(Game.Gridsize+1)/2}
     
     -- initialize attacked squares
     self.Attacked = {}
@@ -137,6 +144,7 @@ function Board:make_move(sq1, sq2)
 	Board.MarkedSqs[Board.Turn] = {sq2[1],sq2[2]}
 	Board:update_attacked(sq1, sq2)
 	Board:move_piece(sq1, sq2)
+	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Utility:tuple_copy(sq2) end
 	Board:change_turn()
 end
 
@@ -244,7 +252,7 @@ function Board:draw_pieces()
 				love.graphics.draw(Textures.Players[3], Utility:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 4 then	-- player4
 				love.graphics.draw(Textures.Players[4], Utility:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 9 then	--goal
+			elseif self.Squares[i][j] == 9 then	-- goal
 				love.graphics.draw(Textures.Goal, Utility:sq_coordinates({i,j}))
 			end
 		end

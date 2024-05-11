@@ -206,5 +206,6 @@ function Game:renderGame()
 	DebugPr:board_attacked_print(10, 165)
 	DebugPr:piece_present_print(380, 165)
 	DebugPr:player_turn(375, 30)
+	DebugPr:player_pos(375, 60)
 	
 end
