@@ -281,6 +281,22 @@ function Board:move_legality(sq1, sq2)
 	return true
 end
 
+-- lists all legal moves
+function Board:list_legal_moves()
+	local moves = {}
+	for i = 1,Game.Gridsize do
+		for j = 1,Game.Gridsize do
+			if Board:piece_present({i,j}) then			-- if a piece is present
+				local prop_sqs = {{i+1,j},{i-1,j},{i,j+1},{i,j-1}}
+				for index,pr in ipairs(prop_sqs) do		-- check adjacent squares for legal moves
+					if Board:move_legality({i,j}, pr) then table.insert(moves, {{i,j},pr}) end
+				end
+			end
+		end
+	end
+	return moves
+end
+
 function Board:draw_pieces()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do

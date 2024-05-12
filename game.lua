@@ -214,5 +214,6 @@ function Game:renderGame()
 	--DebugPr:piece_present_print(380, 165)
 	--DebugPr:player_turn(375, 30)
 	--DebugPr:player_pos(375, 60)
+	DebugPr:legal_moves(375, 10)
 	
 end
