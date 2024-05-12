@@ -163,6 +163,10 @@ function Game:moveHighlighter(dir)
 	end
 end
 
+function Game:renderPlayerTurn(posx, posy)
+	love.graphics.print("PLAYER TURN: " .. Board.Turn, posx, posy)
+	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-8)
+end
 
 function Game:renderGame()
 
@@ -198,14 +202,17 @@ function Game:renderGame()
 		end
 	end
 	
+	-- draw hud
+	Game:renderPlayerTurn(12, 40)
+	
 	-- debug print
-	DebugPr:dpad_print(DPAD, 15, 30)
-	DebugPr:buttons_print(A, B, 42, 30)
-	DebugPr:asdelays_print(ASDelay, 85, 30)
-	DebugPr:board_print(10, 60)
-	DebugPr:board_attacked_print(10, 165)
-	DebugPr:piece_present_print(380, 165)
-	DebugPr:player_turn(375, 30)
-	DebugPr:player_pos(375, 60)
+	--DebugPr:dpad_print(DPAD, 15, 30)
+	--DebugPr:buttons_print(A, B, 42, 30)
+	--DebugPr:asdelays_print(ASDelay, 85, 30)
+	--DebugPr:board_print(10, 60)
+	--DebugPr:board_attacked_print(10, 165)
+	--DebugPr:piece_present_print(380, 165)
+	--DebugPr:player_turn(375, 30)
+	--DebugPr:player_pos(375, 60)
 	
 end
