@@ -70,26 +70,32 @@ function Board:init()
 	
 end
 
+-- coordinates of A1 square in pixels on screen
 function Board:sq_coordinates(sq)
 	return Game.A1_coord[1]+(sq[1]-1)*Game.SqSize, Game.A1_coord[2]-(sq[2]-1)*Game.SqSize
 end
 
+-- checks if square 'sq' is attacked
 function Board:attacked(sq)
 	return self.Attacked[sq[1]][sq[2]]
 end
 
+-- returns the value on square 'sq'
 function Board:square_value(sq)
 	return self.Squares[sq[1]][sq[2]]
 end
 
+-- writes value 'val' to square 'sq'
 function Board:write_to_square(sq, val)
 	self.Squares[sq[1]][sq[2]] = val
 end
 
+-- copies square 'sq' and returns the copy
 function Board:square_copy(sq)
 	return {sq[1], sq[2]}
 end
 
+-- compares squares 'sq1' and 'sq2'
 function Board:square_compare(sq1, sq2)
 	if sq1 and sq2 then
 		if sq1[1] ~= sq2[1] then return false end
@@ -99,6 +105,7 @@ function Board:square_compare(sq1, sq2)
 	return false
 end
 
+-- computes the atacked squares by going through the board and checking which piece attacks what
 function Board:compute_attacked()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
@@ -130,7 +137,7 @@ end
 -- updates the attacked squares caused by a potential move sq1 -> sq2
 function Board:update_attacked(sq1, sq2)
 	if Board:minor_piece_present(sq1) then
-		piece_before = Board:square_value(sq1) --self.Squares[sq1[1]][sq1[2]]
+		piece_before = Board:square_value(sq1)
 		piece_after = Board:piece_orientation(sq1, sq2)
 		-- which square to decrease the attacked value
 		i,j = Board:piece_attacks(sq1, piece_before)
@@ -160,7 +167,7 @@ end
 
 -- just moves the piece (does not check legality or handle other variables)
 function Board:move_piece(sq1, sq2)
-	piece = Board:square_value(sq1) --self.Squares[sq1[1]][sq1[2]]
+	piece = Board:square_value(sq1)
 	if Board:minor_piece_present(sq1) then
 		piece = Board:piece_orientation(sq1, sq2)
 	end	
@@ -250,7 +257,7 @@ function Board:move_legality(sq1, sq2)
 		return false
 	elseif Board:move_is_backward(sq1, sq2) then										-- if moving backwards
 		return false
-	elseif Board:player_present(sq1) and Board:attacked(sq2) > 0 then			-- if a player tries to move to an atacked square
+	elseif Board:player_present(sq1) and Board:attacked(sq2) > 0 then					-- if a player tries to move to an atacked square
 		return false
 	elseif Board:player_present(sq1) and Board:square_value(sq1) ~= self.Turn then		-- if a player tries to move another player's piece
 		return false
