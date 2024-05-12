@@ -249,22 +249,34 @@ end
 
 -- checks if the move sq1 -> sq2 is legal
 function Board:move_legality(sq1, sq2)
-	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then						-- if the move is not to adjacent square
+	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then					-- if the move is not to adjacent square
 		return false
-	elseif not Board:inbounds(sq2) then													-- if square is out of bounds
+	elseif not Board:inbounds(sq2) then												-- if square is out of bounds
 		return false
-	elseif Board:piece_present(sq2) then												-- if the square is occupied
+	elseif Board:piece_present(sq2) then											-- if the square is occupied
 		return false
-	elseif Board:move_is_backward(sq1, sq2) then										-- if moving backwards
+	elseif Board:move_is_backward(sq1, sq2) then									-- if moving backwards
 		return false
-	elseif Board:player_present(sq1) and Board:attacked(sq2) > 0 then					-- if a player tries to move to an atacked square
+	elseif Board:player_present(sq1) and Board:attacked(sq2) > 0 then				-- if a player tries to move to an atacked square
 		return false
-	elseif Board:player_present(sq1) and Board:square_value(sq1) ~= self.Turn then		-- if a player tries to move another player's piece
+	elseif Board:player_present(sq1) and Board:square_value(sq1) ~= self.Turn then	-- if a player tries to move another player's piece
 		return false
-	elseif Board:marked_square(sq1) and Board:marked_square(sq1) ~= self.Turn then		-- if a player tries to move a piece that is marked by another player
+	elseif Board:marked_square(sq1) and Board:marked_square(sq1) ~= self.Turn then	-- if a player tries to move a piece that is marked by another player
 		return false
-	elseif Board:minor_piece_present(sq1) and Board:square_value(sq2) == 9 then			-- if a minor piece tries to reach goal
+	elseif Board:minor_piece_present(sq1) and Board:square_value(sq2) == 9 then		-- if a minor piece tries to reach goal
 		return false
+	elseif Board:attacked(self.PlayerPos[self.Turn]) > 0 then 						-- if the player is attacked
+		if not Board:player_present(sq1) then return false end							-- and does not try to move out of attack																					
+	elseif Board:minor_piece_present(sq1) then										-- if the player tries to attack himself
+		for i = 1,2 do
+			if sq2[i] == self.PlayerPos[self.Turn][i] then								-- (if they allign on an axis)
+				for s = -1,1,2 do
+					if sq2[i%2+1] == self.PlayerPos[self.Turn][i%2+1]+s and sq1[i%2+1] == self.PlayerPos[self.Turn][i%2+1]+2*s then
+						return false
+					end
+				end
+			end
+		end
 	end
 	return true
 end
