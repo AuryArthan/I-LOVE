@@ -70,6 +70,35 @@ function Board:init()
 	
 end
 
+function Board:sq_coordinates(sq)
+	return Game.A1_coord[1]+(sq[1]-1)*Game.SqSize, Game.A1_coord[2]-(sq[2]-1)*Game.SqSize
+end
+
+function Board:attacked(sq)
+	return self.Attacked[sq[1]][sq[2]]
+end
+
+function Board:square_value(sq)
+	return self.Squares[sq[1]][sq[2]]
+end
+
+function Board:write_to_square(sq, val)
+	self.Squares[sq[1]][sq[2]] = val
+end
+
+function Board:square_copy(sq)
+	return {sq[1], sq[2]}
+end
+
+function Board:square_compare(sq1, sq2)
+	if sq1 and sq2 then
+		if sq1[1] ~= sq2[1] then return false end
+		if sq1[2] ~= sq2[2] then return false end
+		return true
+	end
+	return false
+end
+
 function Board:compute_attacked()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
@@ -101,7 +130,7 @@ end
 -- updates the attacked squares caused by a potential move sq1 -> sq2
 function Board:update_attacked(sq1, sq2)
 	if Board:minor_piece_present(sq1) then
-		piece_before = self.Squares[sq1[1]][sq1[2]]
+		piece_before = Board:square_value(sq1) --self.Squares[sq1[1]][sq1[2]]
 		piece_after = Board:piece_orientation(sq1, sq2)
 		-- which square to decrease the attacked value
 		i,j = Board:piece_attacks(sq1, piece_before)
@@ -131,12 +160,12 @@ end
 
 -- just moves the piece (does not check legality or handle other variables)
 function Board:move_piece(sq1, sq2)
-	piece = self.Squares[sq1[1]][sq1[2]]
+	piece = Board:square_value(sq1) --self.Squares[sq1[1]][sq1[2]]
 	if Board:minor_piece_present(sq1) then
 		piece = Board:piece_orientation(sq1, sq2)
 	end	
-	self.Squares[sq2[1]][sq2[2]] = piece
-	self.Squares[sq1[1]][sq1[2]] = 0
+	Board:write_to_square(sq2, piece)
+	Board:write_to_square(sq1, 0)
 end
 
 -- makes the move fully: moves the piece, updates attacked squares and changes player turn (does not check legality)
@@ -144,7 +173,7 @@ function Board:make_move(sq1, sq2)
 	Board.MarkedSqs[Board.Turn] = {sq2[1],sq2[2]}
 	Board:update_attacked(sq1, sq2)
 	Board:move_piece(sq1, sq2)
-	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Utility:tuple_copy(sq2) end
+	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Board:square_copy(sq2) end
 	Board:change_turn()
 end
 
@@ -163,7 +192,7 @@ end
 
 -- checks if square 'sq' is empty
 function Board:empty_square(sq)
-	return self.Squares[sq[1]][sq[2]] == 0 or self.Squares[sq[1]][sq[2]] == 9
+	return Board:square_value(sq) == 0 or Board:square_value(sq) == 9
 end
 
 -- checks if a piece (any) is present on square 'sq'
@@ -173,7 +202,7 @@ end
 
 -- checks if a player (1-4) is present on square 'sq'
 function Board:player_present(sq)
-	if 1 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 4 then
+	if 1 <= Board:square_value(sq) and Board:square_value(sq) <= 4 then
 		return true
 	end
 	return false
@@ -181,7 +210,7 @@ end
 
 -- checks if a minor piece (5-8) is present on square 'sq'
 function Board:minor_piece_present(sq)
-	if 5 <= Board.Squares[sq[1]][sq[2]] and Board.Squares[sq[1]][sq[2]] <= 8 then
+	if 5 <= Board:square_value(sq) and Board:square_value(sq) <= 8 then
 		return true
 	end
 	return false
@@ -189,13 +218,13 @@ end
 
 -- checks if the move sq1 -> sq2 is by a minor piece moving backwards
 function Board:move_is_backward(sq1, sq2)
-	if self.Squares[sq1[1]][sq1[2]] == 5 and sq2[2] == sq1[2]-1 then
+	if Board:square_value(sq1) == 5 and sq2[2] == sq1[2]-1 then
 		return true
-	elseif self.Squares[sq1[1]][sq1[2]] == 6 and sq2[2] == sq1[2]+1 then
+	elseif Board:square_value(sq1) == 6 and sq2[2] == sq1[2]+1 then
 		return true
-	elseif self.Squares[sq1[1]][sq1[2]] == 7 and sq2[1] == sq1[1]+1 then
+	elseif Board:square_value(sq1) == 7 and sq2[1] == sq1[1]+1 then
 		return true
-	elseif self.Squares[sq1[1]][sq1[2]] == 8 and sq2[1] == sq1[1]-1 then
+	elseif Board:square_value(sq1) == 8 and sq2[1] == sq1[1]-1 then
 		return true
 	end
 	return false
@@ -204,7 +233,7 @@ end
 -- checks if a square 'sq' is marked
 function Board:marked_square(sq)
 	for i=1,4 do
-		if Utility:tuple_compare(sq, self.MarkedSqs[i]) then
+		if Board:square_compare(sq, self.MarkedSqs[i]) then
 			return i
 		end
 	end
@@ -221,13 +250,13 @@ function Board:move_legality(sq1, sq2)
 		return false
 	elseif Board:move_is_backward(sq1, sq2) then										-- if moving backwards
 		return false
-	elseif Board:player_present(sq1) and self.Attacked[sq2[1]][sq2[2]] > 0 then			-- if a player tries to move to an atacked square
+	elseif Board:player_present(sq1) and Board:attacked(sq2) > 0 then			-- if a player tries to move to an atacked square
 		return false
-	elseif Board:player_present(sq1) and self.Squares[sq1[1]][sq1[2]] ~= self.Turn then	-- if a player tries to move another player's piece
+	elseif Board:player_present(sq1) and Board:square_value(sq1) ~= self.Turn then		-- if a player tries to move another player's piece
 		return false
 	elseif Board:marked_square(sq1) and Board:marked_square(sq1) ~= self.Turn then		-- if a player tries to move a piece that is marked by another player
 		return false
-	elseif Board:minor_piece_present(sq1) and self.Squares[sq2[1]][sq2[2]] == 9 then	-- if a minor piece tries to reach goal
+	elseif Board:minor_piece_present(sq1) and Board:square_value(sq2) == 9 then			-- if a minor piece tries to reach goal
 		return false
 	end
 	return true
@@ -237,23 +266,23 @@ function Board:draw_pieces()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
 			if self.Squares[i][j] == 5 then		-- up
-				love.graphics.draw(Textures.PiecesUDLR[1], Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[1], Board:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 6 then	-- down
-				love.graphics.draw(Textures.PiecesUDLR[2], Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[2], Board:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 7 then	-- left
-				love.graphics.draw(Textures.PiecesUDLR[3], Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[3], Board:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 8 then	-- right
-				love.graphics.draw(Textures.PiecesUDLR[4], Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[4], Board:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 1 then	-- player1
-				love.graphics.draw(Textures.Players[1], Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[1], Board:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 2 then	-- player2
-				love.graphics.draw(Textures.Players[2], Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[2], Board:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 3 then	-- player3
-				love.graphics.draw(Textures.Players[3], Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[3], Board:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 4 then	-- player4
-				love.graphics.draw(Textures.Players[4], Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[4], Board:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 9 then	-- goal
-				love.graphics.draw(Textures.Goal, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Goal, Board:sq_coordinates({i,j}))
 			end
 		end
 	end
@@ -263,7 +292,7 @@ function Board:draw_attacked()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
 			if self.Attacked[i][j] > 0 then
-				love.graphics.draw(Textures.Attacked, Utility:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Attacked, Board:sq_coordinates({i,j}))
 			end
 		end
 	end

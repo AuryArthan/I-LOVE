@@ -89,7 +89,7 @@ function Game:update()
 	-- A button
 	if CUR_A and not A then		-- press down
 		A = true
-		if Utility:tuple_compare(self.HighSq, self.SelSq) then		-- if you press A on the selected square you deselect it
+		if Board:square_compare(self.HighSq, self.SelSq) then		-- if you press A on the selected square you deselect it
 			self.SelSq = nil
 			Sounds.DeSelSound:play()
 		else
@@ -126,11 +126,11 @@ function Game:select_proposal(sq)
 	elseif Board:player_present(sq) and Board.Squares[sq[1]][sq[2]] ~= Board.Turn then					-- if a player tries to select another players piece
 		return
 	elseif Board:minor_piece_present(sq) then
-		if Board:marked_square(sq) and not Utility:tuple_compare(sq,Board.MarkedSqs[Board.Turn]) then	-- if a player tries to select another player's marked piece
+		if Board:marked_square(sq) and not Board:square_compare(sq,Board.MarkedSqs[Board.Turn]) then	-- if a player tries to select another player's marked piece
 			return
 		end
 	end
-	self.SelSq = Utility:tuple_copy(sq)
+	self.SelSq = Board:square_copy(sq)
 	Sounds.SelSound:play()
 end
 
@@ -174,16 +174,16 @@ function Game:renderGame()
 
 	-- draw highlighed squares
 	if self.SelSq then
-		love.graphics.draw(Textures.Selected, Utility:sq_coordinates(self.SelSq))
+		love.graphics.draw(Textures.Selected, Board:sq_coordinates(self.SelSq))
 		for i=-1,1 do
 			for j = -1,1 do
 				if Board:move_legality(self.SelSq, {self.SelSq[1]+i, self.SelSq[2]+j}) then
-					love.graphics.draw(Textures.MoveOption, Utility:sq_coordinates({self.SelSq[1]+i,self.SelSq[2]+j}))
+					love.graphics.draw(Textures.MoveOption, Board:sq_coordinates({self.SelSq[1]+i,self.SelSq[2]+j}))
 				end
 			end
 		end
 	end
-	love.graphics.draw(Textures.Highlighter, Utility:sq_coordinates(self.HighSq))
+	love.graphics.draw(Textures.Highlighter, Board:sq_coordinates(self.HighSq))
 	
 	-- draw pieces
 	Board:draw_pieces()
@@ -193,7 +193,7 @@ function Game:renderGame()
 	for i=1,4 do
 		if Board.MarkedSqs[i] then
 			if Board.Squares[Board.MarkedSqs[i][1]][Board.MarkedSqs[i][2]] ~= i then
-				love.graphics.draw(Textures.MarkedSqs[i], Utility:sq_coordinates(Board.MarkedSqs[i]))
+				love.graphics.draw(Textures.MarkedSqs[i], Board:sq_coordinates(Board.MarkedSqs[i]))
 			end
 		end
 	end
