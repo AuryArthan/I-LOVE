@@ -195,13 +195,26 @@ function Board:death_check()
 	end
 end
 
+-- returns number of live players
+function Board:live_num()
+	local sum = 0
+	for i=1,4 do
+		if Board.PlayerAlive[i] then
+			sum = sum+Board.PlayerAlive[i]
+		end
+	end
+	return sum
+end
+
 -- checks if the player wins
 function Board:win_check()
 	local pos = self.PlayerPos[self.Turn]
 	if pos[1] == (Game.Gridsize+1)/2 and pos[2] == (Game.Gridsize+1)/2 then		-- if the player reached the goal
 		return true
+	elseif Board:live_num() == 1 then											-- or if all other players are dead
+		return true
 	end
-	-- ... and also check if all other players died
+	return false
 end
 
 -- makes the move fully: moves the piece, updates attacked squares and changes player turn (does not check legality)
@@ -210,7 +223,7 @@ function Board:make_move(sq1, sq2)
 	Board:update_attacked(sq1, sq2)																-- update attacked values
 	Board:move_piece(sq1, sq2)																	-- move the piece
 	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Board:square_copy(sq2) end	-- track player position
-	Board:win_check()																			-- check if anyone won
+	Board:win_check()																			-- check if a player won
 	Board:change_turn()																			-- change turn
 	Board:death_check()																			-- check if the next turn player dies
 end
