@@ -123,6 +123,8 @@ end
 function Game:select_proposal(sq)
 	if Board:empty_square(sq) then																		-- if the square is empty
 		return
+	elseif Board:square_value(sq) == -1 then															-- if the square hosts a dead player
+		return
 	elseif Board:player_present(sq) and Board.Squares[sq[1]][sq[2]] ~= Board.Turn then					-- if a player tries to select another players piece
 		return
 	elseif Board:minor_piece_present(sq) then
@@ -196,7 +198,7 @@ function Game:renderGame()
 	-- draw marked squares
 	for i=1,4 do
 		if Board.MarkedSqs[i] then
-			if Board.Squares[Board.MarkedSqs[i][1]][Board.MarkedSqs[i][2]] ~= i then
+			if Board:square_value(Board.MarkedSqs[i]) ~= i and Board:square_value(Board.MarkedSqs[i]) ~= -1 then	-- do not plot mark on the players themselves (even if dead)
 				love.graphics.draw(Textures.MarkedSqs[i], Board:sq_coordinates(Board.MarkedSqs[i]))
 			end
 		end

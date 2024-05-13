@@ -7,6 +7,7 @@ Textures = {
 	MoveOption = nil;
 	PiecesUDLR = {nil,nil,nil,nil};
 	Players = {nil,nil,nil,nil};
+	PlayerDead = nil;
 	MarkedSqs = {nil,nil,nil,nil};
 	Goal = nil;
 }
@@ -30,6 +31,7 @@ function Textures:init()
 	-- load piece textures
 	self.PiecesUDLR = {love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_u.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_d.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_l.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_r.png")}
 	self.Players = {love.graphics.newImage("assets/themes/"..Game.Theme.."/player1.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player2.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player3.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player4.png")}
+	self.PlayerDead = love.graphics.newImage("assets/themes/"..Game.Theme.."/player_dead.png")
 	self.Goal = love.graphics.newImage("assets/themes/"..Game.Theme.."/goal.png")
 	
 	-- load grid

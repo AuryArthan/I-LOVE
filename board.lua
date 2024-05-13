@@ -5,6 +5,7 @@ Board = {
 	Turn = nil;
 	MarkedSqs = nil;
 	PlayerPos = {nil,nil,nil,nil};
+	PlayerAlive = {nil,nil,nil,nil};
 }
 
 -- piece numbers
@@ -58,6 +59,11 @@ function Board:init()
     self.PlayerPos[3] = {(Game.Gridsize+1)/2,Game.Gridsize}
     self.PlayerPos[4] = {1,(Game.Gridsize+1)/2}
     
+    -- mark that players are alive
+    for i=1,4 do
+		self.PlayerAlive[i] = 1
+	end
+	
     -- initialize attacked squares
     self.Attacked = {}
     for i=1,Game.Gridsize do
@@ -175,18 +181,45 @@ function Board:move_piece(sq1, sq2)
 	Board:write_to_square(sq1, 0)
 end
 
+-- checks if the player dies
+function Board:death_check()
+	local pos = self.PlayerPos[self.Turn]
+	if Board:attacked(pos) then					-- if the player is attacked
+		moves = Board:list_legal_moves()
+		if #moves == 0 then 					-- and has no legal moves
+			self.PlayerAlive[self.Turn] = 0 
+			self.Squares[pos[1]][pos[2]] = -1
+			self.MarkedSqs[self.Turn] = pos		-- mark the square so the dead player cannot be moved by other players
+			Board:change_turn()	
+		end
+	end
+end
+
+-- checks if the player wins
+function Board:win_check()
+	local pos = self.PlayerPos[self.Turn]
+	if pos[1] == (Game.Gridsize+1)/2 and pos[2] == (Game.Gridsize+1)/2 then		-- if the player reached the goal
+		return true
+	end
+	-- ... and also check if all other players died
+end
+
 -- makes the move fully: moves the piece, updates attacked squares and changes player turn (does not check legality)
 function Board:make_move(sq1, sq2)
-	Board.MarkedSqs[Board.Turn] = {sq2[1],sq2[2]}
-	Board:update_attacked(sq1, sq2)
-	Board:move_piece(sq1, sq2)
-	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Board:square_copy(sq2) end
-	Board:change_turn()
+	Board.MarkedSqs[Board.Turn] = {sq2[1],sq2[2]}												-- mark the moved piece
+	Board:update_attacked(sq1, sq2)																-- update attacked values
+	Board:move_piece(sq1, sq2)																	-- move the piece
+	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Board:square_copy(sq2) end	-- track player position
+	Board:win_check()																			-- check if anyone won
+	Board:change_turn()																			-- change turn
+	Board:death_check()																			-- check if the next turn player dies
 end
 
 -- changes the player turn
 function Board:change_turn()
-	self.Turn = 1 + self.Turn%4
+	repeat
+		self.Turn = 1 + self.Turn%4
+	until Board.PlayerAlive[self.Turn] == 1
 end
 
 -- checks if square 'sq' is inbounds
@@ -300,24 +333,26 @@ end
 function Board:draw_pieces()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
-			if self.Squares[i][j] == 5 then		-- up
+			if self.Squares[i][j] == 5 then			-- up
 				love.graphics.draw(Textures.PiecesUDLR[1], Board:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 6 then	-- down
+			elseif self.Squares[i][j] == 6 then		-- down
 				love.graphics.draw(Textures.PiecesUDLR[2], Board:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 7 then	-- left
+			elseif self.Squares[i][j] == 7 then		-- left
 				love.graphics.draw(Textures.PiecesUDLR[3], Board:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 8 then	-- right
+			elseif self.Squares[i][j] == 8 then		-- right
 				love.graphics.draw(Textures.PiecesUDLR[4], Board:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 1 then	-- player1
+			elseif self.Squares[i][j] == 1 then		-- player1
 				love.graphics.draw(Textures.Players[1], Board:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 2 then	-- player2
+			elseif self.Squares[i][j] == 2 then		-- player2
 				love.graphics.draw(Textures.Players[2], Board:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 3 then	-- player3
+			elseif self.Squares[i][j] == 3 then		-- player3
 				love.graphics.draw(Textures.Players[3], Board:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 4 then	-- player4
+			elseif self.Squares[i][j] == 4 then		-- player4
 				love.graphics.draw(Textures.Players[4], Board:sq_coordinates({i,j}))
-			elseif self.Squares[i][j] == 9 then	-- goal
+			elseif self.Squares[i][j] == 9 then		-- goal
 				love.graphics.draw(Textures.Goal, Board:sq_coordinates({i,j}))
+			elseif self.Squares[i][j] == -1 then	-- dead player
+				love.graphics.draw(Textures.PlayerDead, Board:sq_coordinates({i,j}))
 			end
 		end
 	end
