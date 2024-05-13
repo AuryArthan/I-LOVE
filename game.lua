@@ -44,7 +44,7 @@ function Game:init()
 	self.SqSize = 24 --20
 	
 	-- set coordinates of A1
-	self.A1_coord = {133,221} --{129,225}
+	self.A1_coord = {131,219}--{133,221} --{129,225}
 	
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}
@@ -165,7 +165,7 @@ end
 
 function Game:renderPlayerTurn(posx, posy)
 	love.graphics.print("PLAYER TURN: " .. Board.Turn, posx, posy)
-	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-8)
+	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-10)
 end
 
 function Game:renderGame()
