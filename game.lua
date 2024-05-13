@@ -41,10 +41,10 @@ function Game:init()
 	self.Gridsize = 9
 	
 	-- set size of square in pixels
-	self.SqSize = 24
+	self.SqSize = 24 --20
 	
 	-- set coordinates of A1
-	self.A1_coord = {133,221}
+	self.A1_coord = {133,221} --{129,225}
 	
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}
