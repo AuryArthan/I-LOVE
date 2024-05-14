@@ -45,7 +45,7 @@ function Game:init()
 	self.SqSize = 24 --20
 	
 	-- set coordinates of A1
-	self.A1_coord = {131,219}--{133,221} --{129,225}
+	self.A1_coord = {131,219} --{129,225}
 	
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}

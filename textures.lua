@@ -15,16 +15,16 @@ Textures = {
 function Textures:init()
 
 	-- load font
-	font = love.graphics.newImageFont("assets/font_basic.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()[]&#%\"\'_|")
+	font = love.graphics.newImageFont("assets/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()[]&#%\"\'_|")
 	love.graphics.setFont(font)
 	
 	-- load background
 	self.Background = love.graphics.newImage("assets/themes/"..Game.Theme.."/back.png")
 	
 	-- load highlighters
-	self.Highlighter = love.graphics.newImage("assets/themes/"..Game.Theme.."/highlighter.png")
-	self.Selected = love.graphics.newImage("assets/themes/"..Game.Theme.."/selected.png")
-	self.MoveOption = love.graphics.newImage("assets/themes/"..Game.Theme.."/move_option.png")
+	self.Highlighter = love.graphics.newImage("assets/highlighter.png")
+	self.Selected = love.graphics.newImage("assets/selected.png")
+	self.MoveOption = love.graphics.newImage("assets/move_option.png")
 	self.Attacked = love.graphics.newImage("assets/themes/"..Game.Theme.."/attacked.png")
 	self.MarkedSqs = {love.graphics.newImage("assets/themes/"..Game.Theme.."/marked_p1.png"),love.graphics.newImage("assets/themes/"..Game.Theme.."/marked_p2.png"),love.graphics.newImage("assets/themes/"..Game.Theme.."/marked_p3.png"),love.graphics.newImage("assets/themes/"..Game.Theme.."/marked_p4.png")}
 	
