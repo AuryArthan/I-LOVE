@@ -29,6 +29,7 @@ Game = {
 	A1_coord = nil;
 	HighSq = nil;
 	SelSq = nil;
+	GameOver = nil;
 }
 
 
@@ -48,6 +49,9 @@ function Game:init()
 	
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}
+	
+	-- set game-over variable to 0
+	self.GameOver = 0
 	
 end
 
@@ -118,6 +122,10 @@ function Game:update()
 	
 end
 
+-- handle the game ending
+function Game:end_game()
+	self.GameOver = 1
+end
 
 -- handle a proposed square selection
 function Game:select_proposal(sq)
@@ -165,9 +173,16 @@ function Game:moveHighlighter(dir)
 	end
 end
 
+-- renders player turn
 function Game:renderPlayerTurn(posx, posy)
-	love.graphics.print("PLAYER TURN: " .. Board.Turn, posx, posy)
+	love.graphics.print("PLAYER TURN: ", posx, posy)
 	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-10)
+end
+
+-- renders the winner at the end of the game
+function Game:renderWinner(posx, posy)
+	love.graphics.print("PLAYER      WINS!", posx, posy)
+	love.graphics.draw(Textures.Players[Board.Turn], posx+40, posy-10)
 end
 
 -- coordinates of A1 square in pixels on screen
@@ -210,7 +225,11 @@ function Game:renderGame()
 	end
 	
 	-- draw hud
-	Game:renderPlayerTurn(12, 40)
+	if self.GameOver == 0 then 
+		Game:renderPlayerTurn(11, 45)
+	else
+		Game:renderWinner(11, 45) 
+	end
 	
 	-- debug print
 	--DebugPr:dpad_print(DPAD, 15, 30)

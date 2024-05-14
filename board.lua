@@ -218,7 +218,10 @@ function Board:make_move(sq1, sq2)
 	Board:update_attacked(sq1, sq2)																-- update attacked values
 	Board:move_piece(sq1, sq2)																	-- move the piece
 	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Board:square_copy(sq2) end	-- track player position
-	Board:win_check()																			-- check if a player won
+	if Board:win_check() then 																	-- check if a player won
+		Game:end_game() 
+		return
+	end	
 	Board:change_turn()																			-- change turn
 	Board:death_check()																			-- check if the next turn player dies
 end
