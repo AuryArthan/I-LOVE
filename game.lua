@@ -170,6 +170,11 @@ function Game:renderPlayerTurn(posx, posy)
 	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-10)
 end
 
+-- coordinates of A1 square in pixels on screen
+function Game:sq_coordinates(sq)
+	return self.A1_coord[1]+(sq[1]-1)*self.SqSize, self.A1_coord[2]-(sq[2]-1)*self.SqSize
+end
+
 function Game:renderGame()
 
 	-- draw background
@@ -180,16 +185,16 @@ function Game:renderGame()
 
 	-- draw highlighed squares
 	if self.SelSq then
-		love.graphics.draw(Textures.Selected, Board:sq_coordinates(self.SelSq))
+		love.graphics.draw(Textures.Selected, Game:sq_coordinates(self.SelSq))
 		for i=-1,1 do
 			for j = -1,1 do
 				if Board:move_legality(self.SelSq, {self.SelSq[1]+i, self.SelSq[2]+j}) then
-					love.graphics.draw(Textures.MoveOption, Board:sq_coordinates({self.SelSq[1]+i,self.SelSq[2]+j}))
+					love.graphics.draw(Textures.MoveOption, Game:sq_coordinates({self.SelSq[1]+i,self.SelSq[2]+j}))
 				end
 			end
 		end
 	end
-	love.graphics.draw(Textures.Highlighter, Board:sq_coordinates(self.HighSq))
+	love.graphics.draw(Textures.Highlighter, Game:sq_coordinates(self.HighSq))
 	
 	-- draw pieces
 	Board:draw_pieces()
@@ -199,7 +204,7 @@ function Game:renderGame()
 	for i=1,4 do
 		if Board.MarkedSqs[i] then
 			if Board:square_value(Board.MarkedSqs[i]) ~= i and Board:square_value(Board.MarkedSqs[i]) ~= -1 then	-- do not plot mark on the players themselves (even if dead)
-				love.graphics.draw(Textures.MarkedSqs[i], Board:sq_coordinates(Board.MarkedSqs[i]))
+				love.graphics.draw(Textures.MarkedSqs[i], Game:sq_coordinates(Board.MarkedSqs[i]))
 			end
 		end
 	end

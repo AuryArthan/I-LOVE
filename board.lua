@@ -76,11 +76,6 @@ function Board:init()
 	
 end
 
--- coordinates of A1 square in pixels on screen
-function Board:sq_coordinates(sq)
-	return Game.A1_coord[1]+(sq[1]-1)*Game.SqSize, Game.A1_coord[2]-(sq[2]-1)*Game.SqSize
-end
-
 -- checks if square 'sq' is attacked
 function Board:attacked(sq)
 	return self.Attacked[sq[1]][sq[2]]
@@ -347,25 +342,25 @@ function Board:draw_pieces()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
 			if self.Squares[i][j] == 5 then			-- up
-				love.graphics.draw(Textures.PiecesUDLR[1], Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[1], Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 6 then		-- down
-				love.graphics.draw(Textures.PiecesUDLR[2], Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[2], Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 7 then		-- left
-				love.graphics.draw(Textures.PiecesUDLR[3], Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[3], Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 8 then		-- right
-				love.graphics.draw(Textures.PiecesUDLR[4], Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PiecesUDLR[4], Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 1 then		-- player1
-				love.graphics.draw(Textures.Players[1], Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[1], Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 2 then		-- player2
-				love.graphics.draw(Textures.Players[2], Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[2], Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 3 then		-- player3
-				love.graphics.draw(Textures.Players[3], Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[3], Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 4 then		-- player4
-				love.graphics.draw(Textures.Players[4], Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Players[4], Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == 9 then		-- goal
-				love.graphics.draw(Textures.Goal, Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Goal, Game:sq_coordinates({i,j}))
 			elseif self.Squares[i][j] == -1 then	-- dead player
-				love.graphics.draw(Textures.PlayerDead, Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.PlayerDead, Game:sq_coordinates({i,j}))
 			end
 		end
 	end
@@ -375,7 +370,7 @@ function Board:draw_attacked()
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
 			if self.Attacked[i][j] > 0 then
-				love.graphics.draw(Textures.Attacked, Board:sq_coordinates({i,j}))
+				love.graphics.draw(Textures.Attacked, Game:sq_coordinates({i,j}))
 			end
 		end
 	end
