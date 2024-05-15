@@ -125,6 +125,7 @@ end
 -- handle the game ending
 function Game:end_game()
 	self.GameOver = 1
+	Sounds.WinSound:play()
 end
 
 -- handle a proposed square selection
