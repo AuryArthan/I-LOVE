@@ -3,6 +3,11 @@
 local DAS_INIT_TIME = 12
 local DAS_MOVE_TIME = 3
 
+-- phasing out background music
+local MUSIC_PHASE_OUT = false
+local PHASE_OUT_DURATION = 2
+local PHASE_OUT_TIMER = 0
+
 -- libretro joypad buttons const
 RETRO_DEVICE_ID_JOYPAD_B        = 1
 RETRO_DEVICE_ID_JOYPAD_Y        = 2
@@ -60,10 +65,13 @@ local DPAD = {false,false,false,false} -- U,D,L,R
 local A  = false
 local B  = false
 local ASDelay = {-1,-1,-1,-1} -- autoshift delay for up, down, left, right
-function Game:update()
+function Game:update(dt)
 	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
     local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
     local CUR_B = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
+	
+	-- handle potential phasing out of music
+	Game:phase_out_music(dt)
 	
 	-- DPAD press-down/press-up events
 	for d=1,4 do
@@ -125,7 +133,20 @@ end
 -- handle the game ending
 function Game:end_game()
 	self.GameOver = 1
+	MUSIC_PHASE_OUT = true
+	PHASE_OUT_TIMER = PHASE_OUT_DURATION
 	Sounds.WinSound:play()
+end
+
+-- handle phasing out background music
+function Game:phase_out_music(dt)
+	if MUSIC_PHASE_OUT then
+		PHASE_OUT_TIMER = PHASE_OUT_TIMER-dt
+		if PHASE_OUT_TIMER <= 0 then
+			Sounds.BackMusic:stop()
+			MUSIC_PHASE_OUT = false
+		else Sounds.BackMusic:setVolume(PHASE_OUT_TIMER/PHASE_OUT_DURATION) end
+	end
 end
 
 -- handle a proposed square selection
