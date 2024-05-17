@@ -46,10 +46,10 @@ function Game:init()
 	self.Theme = "JAP"
 	
 	-- set 2-player or 4-player mode
-	self.NumPlayers = 2
+	self.NumPlayers = 4
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, false, false}
+	self.HumanPlayers = {false, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 9
@@ -65,6 +65,9 @@ function Game:init()
 	
 	-- set game-over variable to 0
 	self.GameOver = 0
+	
+	-- random number seed
+	math.randomseed(os.time())
 	
 end
 
