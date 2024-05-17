@@ -11,11 +11,8 @@ function love.conf(t)
 end
 
 function love.load()
-	mainBoard = Board:new()
-	--anotherBoard = Board:new()
 	Game:init()
-	--anotherBoard:init()
-	mainBoard:init()
+	Board:init()
 	Textures:init()
 	Sounds:init()
 end

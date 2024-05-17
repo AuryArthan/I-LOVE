@@ -57,7 +57,7 @@ function DebugPr:board_print(posx, posy)
 	love.graphics.print("Board", posx, posy)
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
-			love.graphics.print(mainBoard.Squares[i][j], posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
+			love.graphics.print(Board.Squares[i][j], posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
 		end
 	end
 end
@@ -67,7 +67,7 @@ function DebugPr:board_attacked_print(posx, posy)
 	love.graphics.print("Attacked", posx, posy)
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
-			love.graphics.print(mainBoard.Attacked[i][j], posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
+			love.graphics.print(Board.Attacked[i][j], posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
 		end
 	end
 end
@@ -77,7 +77,7 @@ function DebugPr:piece_present_print(posx, posy)
 	love.graphics.print("piece_present()", posx, posy)
 	for i=1,Game.Gridsize do
 		for j=1,Game.Gridsize do
-			if mainBoard:piece_present({i,j}) then
+			if Board:piece_present({i,j}) then
 				love.graphics.print("1", posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
 			else
 				love.graphics.print("0", posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
@@ -90,24 +90,24 @@ end
 function DebugPr:player_pos(posx, posy)
 	love.graphics.print("Player positions", posx, posy)
 	for i=1,4 do
-		love.graphics.print(i .. " : " .. " ( " .. mainBoard.PlayerPos[i][1] .. " , " .. mainBoard.PlayerPos[i][2] .. " ) ", posx+5, posy+12*i)
+		love.graphics.print(i .. " : " .. " ( " .. Board.PlayerPos[i][1] .. " , " .. Board.PlayerPos[i][2] .. " ) ", posx+5, posy+12*i)
 	end
 end
 
 -- player turn print
 function DebugPr:player_turn(posx, posy)
-	love.graphics.print("Player turn: " .. BmainBoard.Turn, posx, posy)
+	love.graphics.print("Player turn: " .. Board.Turn, posx, posy)
 end
 
 -- human player print
 function DebugPr:human_player(posx, posy)
-	love.graphics.print("Human turn: " .. tostring(Game.HumanPlayers[mainBoard.Turn]), posx, posy)
+	love.graphics.print("Human turn: " .. tostring(Game.HumanPlayers[Board.Turn]), posx, posy)
 end
 
 -- legal moves print
 function DebugPr:legal_moves(posx, posy)
 	love.graphics.print("Legal moves: ", posx, posy)
-	moves = mainBoard:list_legal_moves()
+	moves = Board:list_legal_moves()
 	for i,m in ipairs(moves) do
 		love.graphics.print(i .. ": ("..moves[i][1][1]..","..moves[i][1][2].. ") - ("..moves[i][2][1]..","..moves[i][2][2]..")", posx+1, posy+7*i)
 	end
