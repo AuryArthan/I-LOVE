@@ -78,21 +78,6 @@ function Board:init()
 	
 end
 
-function deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[deepcopy(orig_key)] = deepcopy(orig_value)
-        end
-        setmetatable(copy, deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
-
 -- copy function
 function Board:copy()
 	local copy = {
@@ -269,7 +254,7 @@ end
 
 -- makes the move fully: moves the piece, updates attacked squares and changes player turn (does not check legality)
 function Board:make_move(sq1, sq2)
-	Board.MarkedSqs[Board.Turn] = {sq2[1],sq2[2]}												-- mark the moved piece
+	self.MarkedSqs[self.Turn] = {sq2[1],sq2[2]}												-- mark the moved piece
 	Board:update_attacked(sq1, sq2)																-- update attacked values
 	Board:move_piece(sq1, sq2)																	-- move the piece
 	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Board:square_copy(sq2) end	-- track player position
