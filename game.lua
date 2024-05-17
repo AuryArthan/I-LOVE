@@ -29,6 +29,7 @@ RETRO_DEVICE_ID_JOYPAD_R3       = 16
 
 Game = {
 	Theme = nil;
+	NumPlayers = nil;
 	Gridsize = nil;
 	SqSize = nil;
 	A1_coord = nil;
@@ -42,6 +43,9 @@ function Game:init()
 
 	-- set theme
 	self.Theme = "JAP"
+	
+	-- set 2-player or 4-player mode
+	self.NumPlayers = 2
 	
 	-- set gridsize
 	self.Gridsize = 9

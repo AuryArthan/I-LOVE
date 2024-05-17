@@ -3,7 +3,7 @@ Board = {
 	Squares = nil;
 	Attacked = nil;
 	Turn = nil;
-	MarkedSqs = nil;
+	MarkedSqs = {nil,nil,nil,nil};
 	PlayerPos = {nil,nil,nil,nil};
 	PlayerAlive = {nil,nil,nil,nil};
 }
@@ -27,9 +27,6 @@ function Board:init()
 	-- intialize whos turn it is
 	self.Turn = 1
 	
-	-- set marked squares
-	self.MarkedSqs = {{(Game.Gridsize+1)/2,1},{Game.Gridsize,(Game.Gridsize+1)/2},{(Game.Gridsize+1)/2,Game.Gridsize},{1,(Game.Gridsize+1)/2}}
-	
 	-- initialize board squares
 	self.Squares = {}
 	for i=1,Game.Gridsize do
@@ -48,19 +45,24 @@ function Board:init()
 	-- arrange player pieces
 	self.Squares[(Game.Gridsize+1)/2][1] = 1
 	self.Squares[(Game.Gridsize+1)/2][Game.Gridsize] = 3
-	self.Squares[1][(Game.Gridsize+1)/2] = 4
-	self.Squares[Game.Gridsize][(Game.Gridsize+1)/2] = 2
+	if Game.NumPlayers == 4 then
+		self.Squares[1][(Game.Gridsize+1)/2] = 4
+		self.Squares[Game.Gridsize][(Game.Gridsize+1)/2] = 2
+	end
 	-- place the goal in the center
 	self.Squares[(Game.Gridsize+1)/2][(Game.Gridsize+1)/2] = 9
     
     -- mark player positions
     self.PlayerPos[1] = {(Game.Gridsize+1)/2,1}
-    self.PlayerPos[2] = {Game.Gridsize,(Game.Gridsize+1)/2}
     self.PlayerPos[3] = {(Game.Gridsize+1)/2,Game.Gridsize}
-    self.PlayerPos[4] = {1,(Game.Gridsize+1)/2}
+    if Game.NumPlayers == 4 then
+		self.PlayerPos[2] = {Game.Gridsize,(Game.Gridsize+1)/2}
+		self.PlayerPos[4] = {1,(Game.Gridsize+1)/2}
+    end
     
     -- mark that players are alive
-    for i=1,4 do
+    for i=1,4 do self.PlayerAlive[i] = 0 end
+    for i=1,4,4/Game.NumPlayers do
 		self.PlayerAlive[i] = 1
 	end
 	
@@ -78,7 +80,7 @@ end
 
 -- checks if square 'sq' is attacked
 function Board:attacked(sq)
-	return self.Attacked[sq[1]][sq[2]]
+	if sq then return self.Attacked[sq[1]][sq[2]] end
 end
 
 -- returns the value on square 'sq'
