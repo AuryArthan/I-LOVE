@@ -7,6 +7,7 @@ Board = {
 	PlayerPos = {nil,nil,nil,nil};
 	PlayerAlive = {nil,nil,nil,nil};
 }
+--Board.__index = Board
 
 -- piece numbers
 --[[
@@ -21,6 +22,60 @@ Board = {
 8	right
 9	goal
 --]]
+
+-- constructor
+function Board:new()
+	--local self = {}
+	--local self = setmetatable({}, Board)
+	self.Squares = nil
+	self.Attacked = nil
+	self.Turn = nil
+	self.MarkedSqs = {nil,nil,nil,nil}
+	self.PlayerPos = {nil,nil,nil,nil}
+	self.PlayerAlive = {nil,nil,nil,nil}
+	return self
+	--[[local o = {
+		Squares = nil;
+		Attacked = nil;
+		Turn = nil;
+		MarkedSqs = {nil,nil,nil,nil};
+		PlayerPos = {nil,nil,nil,nil};
+		PlayerAlive = {nil,nil,nil,nil};
+	}
+	setmetatable(o, Board)
+	return o--]]
+	--o = {}
+	--setmetatable(o, self)
+	--self.__index = self
+	--return o
+end
+
+-- copy function
+function Board:copy()
+	local copy = Board:new()
+	-- copy squares
+	copy.Squares = {}
+	for i=1,Game.Gridsize do
+		copy.Squares[i] = {}
+		for j=1,Game.Gridsize do
+			copy.Squares[i][j] = self.Squares[i][j]
+		end
+	end
+	-- copy attacked
+	copy.Attacked = {}
+	for i=1,Game.Gridsize do
+		copy.Attacked[i] = {}
+		for j=1,Game.Gridsize do
+			copy.Attacked[i][j] = self.Attacked[i][j]
+		end
+	end
+	-- copy other things
+	copy.Turn = self.Turn
+	for i=1,4 do copy.MarkedSqs[i] = self.MarkedSqs[i] end
+	for i=1,4 do copy.PlayerPos[i] = self.PlayerPos[i] end
+	for i=1,4 do copy.PlayerAlive[i] = self.PlayerAlive[i] end
+	return copy
+end
 
 function Board:init()
 	

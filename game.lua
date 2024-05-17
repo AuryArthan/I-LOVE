@@ -78,9 +78,9 @@ local ASDelay = {-1,-1,-1,-1} -- autoshift delay for up, down, left, right
 function Game:update(dt)
 	
 	-- check if its the AI's turn
-	if self.HumanPlayers[Board.Turn] == false then
+	if self.HumanPlayers[mainBoard.Turn] == false then
 		move = Player:recommend_move()
-		Board:make_move(move[1], move[2])
+		mainBoard:make_move(move[1], move[2])
 		Sounds.SnapSound:play()
 	end
 	
@@ -120,7 +120,7 @@ function Game:update(dt)
 	-- A button
 	if CUR_A and not A then		-- press down
 		A = true
-		if Board:square_compare(self.HighSq, self.SelSq) then		-- if you press A on the selected square you deselect it
+		if mainBoard:square_compare(self.HighSq, self.SelSq) then		-- if you press A on the selected square you deselect it
 			self.SelSq = nil
 			Sounds.DeSelSound:play()
 		else
@@ -170,25 +170,25 @@ end
 
 -- handle a proposed square selection
 function Game:select_proposal(sq)
-	if Board:empty_square(sq) then																		-- if the square is empty
+	if mainBoard:empty_square(sq) then																		-- if the square is empty
 		return
-	elseif Board:square_value(sq) == -1 then															-- if the square hosts a dead player
+	elseif mainBoard:square_value(sq) == -1 then															-- if the square hosts a dead player
 		return
-	elseif Board:player_present(sq) and Board.Squares[sq[1]][sq[2]] ~= Board.Turn then					-- if a player tries to select another players piece
+	elseif mainBoard:player_present(sq) and mainBoard.Squares[sq[1]][sq[2]] ~= mainBoard.Turn then					-- if a player tries to select another players piece
 		return
-	elseif Board:minor_piece_present(sq) then
-		if Board:marked_square(sq) and not Board:square_compare(sq,Board.MarkedSqs[Board.Turn]) then	-- if a player tries to select another player's marked piece
+	elseif mainBoard:minor_piece_present(sq) then
+		if mainBoard:marked_square(sq) and not mainBoard:square_compare(sq,mainBoard.MarkedSqs[mainBoard.Turn]) then	-- if a player tries to select another player's marked piece
 			return
 		end
 	end
-	self.SelSq = Board:square_copy(sq)
+	self.SelSq = mainBoard:square_copy(sq)
 	Sounds.SelSound:play()
 end
 
 -- handle a proposed move
 function Game:move_proposal(sq1, sq2)
-	if Board:move_legality(sq1, sq2) then			-- if move is legal, make it
-		Board:make_move(sq1, sq2)
+	if mainBoard:move_legality(sq1, sq2) then			-- if move is legal, make it
+		mainBoard:make_move(sq1, sq2)
 		Sounds.SnapSound:play()
 		self.SelSq = nil
 	else
@@ -217,13 +217,13 @@ end
 -- renders player turn
 function Game:renderPlayerTurn(posx, posy)
 	love.graphics.print("PLAYER TURN: ", posx, posy)
-	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-10)
+	love.graphics.draw(Textures.Players[mainBoard.Turn], posx+72, posy-10)
 end
 
 -- renders the winner at the end of the game
 function Game:renderWinner(posx, posy)
 	love.graphics.print("PLAYER      WINS!", posx, posy)
-	love.graphics.draw(Textures.Players[Board.Turn], posx+40, posy-10)
+	love.graphics.draw(Textures.Players[mainBoard.Turn], posx+40, posy-10)
 end
 
 -- coordinates of A1 square in pixels on screen
@@ -244,7 +244,7 @@ function Game:renderGame()
 		love.graphics.draw(Textures.Selected, Game:sq_coordinates(self.SelSq))
 		for i=-1,1 do
 			for j = -1,1 do
-				if Board:move_legality(self.SelSq, {self.SelSq[1]+i, self.SelSq[2]+j}) then
+				if mainBoard:move_legality(self.SelSq, {self.SelSq[1]+i, self.SelSq[2]+j}) then
 					love.graphics.draw(Textures.MoveOption, Game:sq_coordinates({self.SelSq[1]+i,self.SelSq[2]+j}))
 				end
 			end
@@ -253,14 +253,14 @@ function Game:renderGame()
 	love.graphics.draw(Textures.Highlighter, Game:sq_coordinates(self.HighSq))
 	
 	-- draw pieces
-	Board:draw_pieces()
-	Board:draw_attacked()
+	mainBoard:draw_pieces()
+	mainBoard:draw_attacked()
 	
 	-- draw marked squares
 	for i=1,4 do
-		if Board.MarkedSqs[i] then
-			if Board:square_value(Board.MarkedSqs[i]) ~= -1 then	-- do not plot the mark on dead players
-				love.graphics.draw(Textures.MarkedSqs[i], Game:sq_coordinates(Board.MarkedSqs[i]))
+		if mainBoard.MarkedSqs[i] then
+			if mainBoard:square_value(mainBoard.MarkedSqs[i]) ~= -1 then	-- do not plot the mark on dead players
+				love.graphics.draw(Textures.MarkedSqs[i], Game:sq_coordinates(mainBoard.MarkedSqs[i]))
 			end
 		end
 	end
