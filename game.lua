@@ -256,7 +256,7 @@ function Game:renderGame()
 	-- draw marked squares
 	for i=1,4 do
 		if Board.MarkedSqs[i] then
-			if Board:square_value(Board.MarkedSqs[i]) ~= i and Board:square_value(Board.MarkedSqs[i]) ~= -1 then	-- do not plot mark on the players themselves (even if dead)
+			if Board:square_value(Board.MarkedSqs[i]) ~= -1 then	-- do not plot the mark on dead players
 				love.graphics.draw(Textures.MarkedSqs[i], Game:sq_coordinates(Board.MarkedSqs[i]))
 			end
 		end
