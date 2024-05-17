@@ -74,7 +74,7 @@ function Board:init()
 			self.Attacked[i][j] = 0		-- initialize to 0
 		end
 	end
-	Board:compute_attacked()
+	self:compute_attacked()
 	
 end
 
@@ -149,7 +149,7 @@ function Board:compute_attacked()
 		for j=1,Game.Gridsize do
 			piece = self.Squares[i][j]
 			if 5 <= piece and piece <= 8 then
-				ii,jj = Board:piece_attacks({i,j}, piece)
+				ii,jj = self:piece_attacks({i,j}, piece)
 				self.Attacked[ii][jj] = self.Attacked[ii][jj] + 1
 			end
 		end
@@ -174,17 +174,17 @@ end
 
 -- updates the attacked squares caused by a potential move sq1 -> sq2
 function Board:update_attacked(sq1, sq2)
-	if Board:minor_piece_present(sq1) then
-		piece_before = Board:square_value(sq1)
-		piece_after = Board:piece_orientation(sq1, sq2)
+	if self:minor_piece_present(sq1) then
+		piece_before = self:square_value(sq1)
+		piece_after = self:piece_orientation(sq1, sq2)
 		-- which square to decrease the attacked value
-		i,j = Board:piece_attacks(sq1, piece_before)
-		if Board:inbounds({i,j}) then
+		i,j = self:piece_attacks(sq1, piece_before)
+		if self:inbounds({i,j}) then
 			self.Attacked[i][j] = self.Attacked[i][j] - 1
 		end
 		-- which square to increase the attacked value
-		i,j = Board:piece_attacks(sq2, piece_after)
-		if Board:inbounds({i,j}) then
+		i,j = self:piece_attacks(sq2, piece_after)
+		if self:inbounds({i,j}) then
 			self.Attacked[i][j] = self.Attacked[i][j] + 1
 		end
 	end
@@ -205,27 +205,27 @@ end
 
 -- just moves the piece (does not check legality or handle other variables)
 function Board:move_piece(sq1, sq2)
-	piece = Board:square_value(sq1)
-	if Board:minor_piece_present(sq1) then
-		piece = Board:piece_orientation(sq1, sq2)
+	piece = self:square_value(sq1)
+	if self:minor_piece_present(sq1) then
+		piece = self:piece_orientation(sq1, sq2)
 	end	
-	Board:write_to_square(sq2, piece)
-	Board:write_to_square(sq1, 0)
+	self:write_to_square(sq2, piece)
+	self:write_to_square(sq1, 0)
 end
 
 -- checks if the player dies
 function Board:death_check()
 	local pos = self.PlayerPos[self.Turn]
-	if Board:attacked(pos) then					-- if the player is attacked
-		moves = Board:list_legal_moves()
+	if self:attacked(pos) then					-- if the player is attacked
+		moves = self:list_legal_moves()
 		if #moves == 0 then 					-- and has no legal moves
 			self.PlayerAlive[self.Turn] = 0 
 			self.Squares[pos[1]][pos[2]] = -1
 			self.MarkedSqs[self.Turn] = pos		-- mark the square so the dead player cannot be moved by other players
 			Sounds.DeathSound:play()			-- play death sound
-			Board:change_turn()
-			if Board:win_check() then Game:end_game() end		-- check if the death caused a player to win
-			Board:death_check()									-- or if the next player also dies on the next move
+			self:change_turn()
+			if self:win_check() then Game:end_game() end		-- check if the death caused a player to win
+			self:death_check()									-- or if the next player also dies on the next move
 		end
 	end
 end
@@ -234,8 +234,8 @@ end
 function Board:live_num()
 	local sum = 0
 	for i=1,4 do
-		if Board.PlayerAlive[i] then
-			sum = sum+Board.PlayerAlive[i]
+		if self.PlayerAlive[i] then
+			sum = sum+self.PlayerAlive[i]
 		end
 	end
 	return sum
@@ -246,7 +246,7 @@ function Board:win_check()
 	local pos = self.PlayerPos[self.Turn]
 	if pos[1] == (Game.Gridsize+1)/2 and pos[2] == (Game.Gridsize+1)/2 then		-- if the player reached the goal
 		return true
-	elseif Board:live_num() == 1 then											-- or if all other players are dead
+	elseif self:live_num() == 1 then											-- or if all other players are dead
 		return true
 	end
 	return false
@@ -255,22 +255,22 @@ end
 -- makes the move fully: moves the piece, updates attacked squares and changes player turn (does not check legality)
 function Board:make_move(sq1, sq2)
 	self.MarkedSqs[self.Turn] = {sq2[1],sq2[2]}												-- mark the moved piece
-	Board:update_attacked(sq1, sq2)																-- update attacked values
-	Board:move_piece(sq1, sq2)																	-- move the piece
-	if Board:player_present(sq2) then self.PlayerPos[self.Turn] = Board:square_copy(sq2) end	-- track player position
-	if Board:win_check() then 																	-- check if a player won
+	self:update_attacked(sq1, sq2)																-- update attacked values
+	self:move_piece(sq1, sq2)																	-- move the piece
+	if self:player_present(sq2) then self.PlayerPos[self.Turn] = self:square_copy(sq2) end	-- track player position
+	if self:win_check() then 																	-- check if a player won
 		Game:end_game() 
 		return
 	end	
-	Board:change_turn()																			-- change turn
-	Board:death_check()																			-- check if the next turn player dies
+	self:change_turn()																			-- change turn
+	self:death_check()																			-- check if the next turn player dies
 end
 
 -- changes the player turn
 function Board:change_turn()
 	repeat
 		self.Turn = 1 + self.Turn%4
-	until Board.PlayerAlive[self.Turn] == 1
+	until self.PlayerAlive[self.Turn] == 1
 end
 
 -- checks if square 'sq' is inbounds
@@ -283,17 +283,17 @@ end
 
 -- checks if square 'sq' is empty
 function Board:empty_square(sq)
-	return Board:square_value(sq) == 0 or Board:square_value(sq) == 9
+	return self:square_value(sq) == 0 or self:square_value(sq) == 9
 end
 
 -- checks if a piece (any) is present on square 'sq'
 function Board:piece_present(sq)
-	return not Board:empty_square(sq)
+	return not self:empty_square(sq)
 end
 
 -- checks if a player (1-4) is present on square 'sq'
 function Board:player_present(sq)
-	if 1 <= Board:square_value(sq) and Board:square_value(sq) <= 4 then
+	if 1 <= self:square_value(sq) and self:square_value(sq) <= 4 then
 		return true
 	end
 	return false
@@ -301,7 +301,7 @@ end
 
 -- checks if a minor piece (5-8) is present on square 'sq'
 function Board:minor_piece_present(sq)
-	if 5 <= Board:square_value(sq) and Board:square_value(sq) <= 8 then
+	if 5 <= self:square_value(sq) and self:square_value(sq) <= 8 then
 		return true
 	end
 	return false
@@ -309,13 +309,13 @@ end
 
 -- checks if the move sq1 -> sq2 is by a minor piece moving backwards
 function Board:move_is_backward(sq1, sq2)
-	if Board:square_value(sq1) == 5 and sq2[2] == sq1[2]-1 then
+	if self:square_value(sq1) == 5 and sq2[2] == sq1[2]-1 then
 		return true
-	elseif Board:square_value(sq1) == 6 and sq2[2] == sq1[2]+1 then
+	elseif self:square_value(sq1) == 6 and sq2[2] == sq1[2]+1 then
 		return true
-	elseif Board:square_value(sq1) == 7 and sq2[1] == sq1[1]+1 then
+	elseif self:square_value(sq1) == 7 and sq2[1] == sq1[1]+1 then
 		return true
-	elseif Board:square_value(sq1) == 8 and sq2[1] == sq1[1]-1 then
+	elseif self:square_value(sq1) == 8 and sq2[1] == sq1[1]-1 then
 		return true
 	end
 	return false
@@ -324,7 +324,7 @@ end
 -- checks if a square 'sq' is marked
 function Board:marked_square(sq)
 	for i=1,4 do
-		if Board:square_compare(sq, self.MarkedSqs[i]) then
+		if self:square_compare(sq, self.MarkedSqs[i]) then
 			return i
 		end
 	end
@@ -335,23 +335,23 @@ end
 function Board:move_legality(sq1, sq2)
 	if math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2]) ~= 1 then					-- if the move is not to adjacent square
 		return false
-	elseif not Board:inbounds(sq2) then												-- if square is out of bounds
+	elseif not self:inbounds(sq2) then												-- if square is out of bounds
 		return false
-	elseif Board:piece_present(sq2) then											-- if the square is occupied
+	elseif self:piece_present(sq2) then											-- if the square is occupied
 		return false
-	elseif Board:move_is_backward(sq1, sq2) then									-- if moving backwards
+	elseif self:move_is_backward(sq1, sq2) then									-- if moving backwards
 		return false
-	elseif Board:player_present(sq1) and Board:attacked(sq2) > 0 then				-- if a player tries to move to an atacked square
+	elseif self:player_present(sq1) and self:attacked(sq2) > 0 then				-- if a player tries to move to an atacked square
 		return false
-	elseif Board:player_present(sq1) and Board:square_value(sq1) ~= self.Turn then	-- if a player tries to move another player's piece
+	elseif self:player_present(sq1) and self:square_value(sq1) ~= self.Turn then	-- if a player tries to move another player's piece
 		return false
-	elseif Board:marked_square(sq1) and Board:marked_square(sq1) ~= self.Turn then	-- if a player tries to move a piece that is marked by another player
+	elseif self:marked_square(sq1) and self:marked_square(sq1) ~= self.Turn then	-- if a player tries to move a piece that is marked by another player
 		return false
-	elseif Board:minor_piece_present(sq1) and Board:square_value(sq2) == 9 then		-- if a minor piece tries to reach goal
+	elseif self:minor_piece_present(sq1) and self:square_value(sq2) == 9 then		-- if a minor piece tries to reach goal
 		return false
-	elseif Board:attacked(self.PlayerPos[self.Turn]) > 0 then 						-- if the player is attacked
-		if not Board:player_present(sq1) then return false end							-- and does not try to move out of attack																					
-	elseif Board:minor_piece_present(sq1) then										-- if the player tries to attack himself
+	elseif self:attacked(self.PlayerPos[self.Turn]) > 0 then 						-- if the player is attacked
+		if not self:player_present(sq1) then return false end							-- and does not try to move out of attack																					
+	elseif self:minor_piece_present(sq1) then										-- if the player tries to attack himself
 		for i = 1,2 do
 			if sq2[i] == self.PlayerPos[self.Turn][i] then								-- (if they allign on an axis)
 				for s = -1,1,2 do
@@ -370,10 +370,10 @@ function Board:list_legal_moves()
 	local moves = {}
 	for i = 1,Game.Gridsize do
 		for j = 1,Game.Gridsize do
-			if Board:piece_present({i,j}) then			-- if a piece is present
+			if self:piece_present({i,j}) then			-- if a piece is present
 				local prop_sqs = {{i+1,j},{i-1,j},{i,j+1},{i,j-1}}
 				for index,pr in ipairs(prop_sqs) do		-- check adjacent squares for legal moves
-					if Board:move_legality({i,j}, pr) then table.insert(moves, {{i,j},pr}) end
+					if self:move_legality({i,j}, pr) then table.insert(moves, {{i,j},pr}) end
 				end
 			end
 		end
