@@ -52,7 +52,7 @@ function Game:init()
 	self.HumanPlayers = {true, false, false, false}
 	
 	-- set gridsize
-	self.Gridsize = 9
+	self.Gridsize = 7
 	
 	-- set size of square in pixels
 	self.SqSize = 24 --20
