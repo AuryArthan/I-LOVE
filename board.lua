@@ -78,6 +78,56 @@ function Board:init()
 	
 end
 
+function deepcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+        setmetatable(copy, deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
+
+-- copy function
+function Board:copy()
+	local copy = {
+		Squares = nil;
+		Attacked = nil;
+		Turn = nil;
+		MarkedSqs = {nil,nil,nil,nil};
+		PlayerPos = {nil,nil,nil,nil};
+		PlayerAlive = {nil,nil,nil,nil};
+	}
+	-- copy squares
+	copy.Squares = {}
+	for i=1,Game.Gridsize do
+		copy.Squares[i] = {}
+		for j=1,Game.Gridsize do
+			copy.Squares[i][j] = self.Squares[i][j]
+		end
+	end
+	-- copy attacked
+	copy.Attacked = {}
+	for i=1,Game.Gridsize do
+		copy.Attacked[i] = {}
+		for j=1,Game.Gridsize do
+			copy.Attacked[i][j] = self.Attacked[i][j]
+		end
+	end
+	-- copy other things
+	copy.Turn = self.Turn
+	for i=1,4 do copy.MarkedSqs[i] = self.MarkedSqs[i] end
+	for i=1,4 do copy.PlayerPos[i] = self.PlayerPos[i] end
+	for i=1,4 do copy.PlayerAlive[i] = self.PlayerAlive[i] end
+	setmetatable(copy, { __index = Board })
+	return copy
+end
+
 -- checks if square 'sq' is attacked
 function Board:attacked(sq)
 	if sq then return self.Attacked[sq[1]][sq[2]] end
