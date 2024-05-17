@@ -1,5 +1,6 @@
 require("game")
 require("board")
+require("player")
 require("textures")
 require("sounds")
 require("debug_print")

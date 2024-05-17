@@ -36,6 +36,7 @@ Game = {
 	HighSq = nil;
 	SelSq = nil;
 	GameOver = nil;
+	HumanPlayers = {nil,nil,nil,nil};
 }
 
 
@@ -46,6 +47,9 @@ function Game:init()
 	
 	-- set 2-player or 4-player mode
 	self.NumPlayers = 2
+	
+	-- set which players are human (not AI)
+	self.HumanPlayers = {true, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 9
@@ -64,12 +68,20 @@ function Game:init()
 	
 end
 
-
 local DPAD = {false,false,false,false} -- U,D,L,R
 local A  = false
 local B  = false
 local ASDelay = {-1,-1,-1,-1} -- autoshift delay for up, down, left, right
 function Game:update(dt)
+	
+	-- check if its the AI's turn
+	if self.HumanPlayers[Board.Turn] == false then
+		move = Player:recommend_move()
+		Board:make_move(move[1], move[2])
+		Sounds.SnapSound:play()
+	end
+	
+	-- get the inputs
 	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
     local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
     local CUR_B = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
@@ -266,6 +278,7 @@ function Game:renderGame()
 	--DebugPr:piece_present_print(380, 165)
 	--DebugPr:player_turn(375, 30)
 	--DebugPr:player_pos(375, 60)
+	--DebugPr:human_player(10, 80)
 	DebugPr:legal_moves(375, 10)
 	
 end

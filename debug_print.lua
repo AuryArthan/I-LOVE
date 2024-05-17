@@ -100,6 +100,11 @@ function DebugPr:player_turn(posx, posy)
 	love.graphics.print("Player turn: " .. Board.Turn, posx, posy)
 end
 
+-- human player print
+function DebugPr:human_player(posx, posy)
+	love.graphics.print("Human turn: " .. tostring(Game.HumanPlayers[Board.Turn]), posx, posy)
+end
+
 -- legal moves print
 function DebugPr:legal_moves(posx, posy)
 	love.graphics.print("Legal moves: ", posx, posy)
