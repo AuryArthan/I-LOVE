@@ -80,10 +80,7 @@ function Game:update(dt)
 	-- check if its the AI's turn
 	if self.HumanPlayers[Board.Turn] == false then
 		move = Player:recommend_move()					-- get move from AI
-		Board:make_move(move[1], move[2])				-- make move
-		Sounds.SnapSound:play()							-- play sound
-		if Board:win_check() then Game:end_game() end	-- check if the player won
-		Board:death_check()								-- check if the next turn player dies
+		Game:move_proposal(move[1], move[2])
 	end
 	
 	-- get the inputs
