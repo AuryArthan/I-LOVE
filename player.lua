@@ -30,10 +30,15 @@ end
 
 -- function that evaluates the board state
 function Player:state_score(player, board)
-	--local num_legal_moves = #board:list_legal_moves()	-- number of legal moves
-	return Player:free_adjacent_squares(player, board)
+	local score = 0
+	score = score + Player:free_adjacent_squares(player, board)								-- free squares around the player are good
+	for p=1,4 do
+		if p ~= player and board.PlayerAlive[p] then
+			score = score - Player:free_adjacent_squares(player, board)/board:live_num()	-- free squares around opponents are bad
+		end
+	end
+	return score
 end
-
 
 -- count free adjacent squares
 function Player:free_adjacent_squares(player, board)
