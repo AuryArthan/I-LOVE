@@ -46,10 +46,10 @@ function Game:init()
 	self.Theme = "JAP"
 	
 	-- set 2-player or 4-player mode
-	self.NumPlayers = 2
+	self.NumPlayers = 4
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {false, false, false, false}
+	self.HumanPlayers = {true, true, true, true}
 	
 	-- set gridsize
 	self.Gridsize = 7
@@ -190,8 +190,8 @@ function Game:move_proposal(sq1, sq2)
 		Board:make_move(sq1, sq2)						-- make move
 		Sounds.SnapSound:play()							-- play sound
 		self.SelSq = nil								-- unselect square
+		Board:death_check()								-- check if the next turn player dies (recursively checks also subsequent players)
 		if Board:win_check() then Game:end_game() end	-- check if the player won
-		Board:death_check()								-- check if the next turn player dies
 	else
 		Game:select_proposal(sq2)					-- if move is not legal then try to select the end square
 	end

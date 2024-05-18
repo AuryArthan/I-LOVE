@@ -224,8 +224,7 @@ function Board:death_check()
 			self.MarkedSqs[self.Turn] = pos		-- mark the square so the dead player cannot be moved by other players
 			Sounds.DeathSound:play()			-- play death sound
 			self:change_turn()
-			if self:win_check() then Game:end_game() end		-- check if the death caused a player to win
-			self:death_check()									-- or if the next player also dies on the next move
+			self:death_check()					-- check if the next player also dies on the next move
 		end
 	end
 end
@@ -243,11 +242,16 @@ end
 
 -- checks if the player wins
 function Board:win_check()
-	local pos = self.PlayerPos[self:previous_turn()]
-	if pos[1] == (Game.Gridsize+1)/2 and pos[2] == (Game.Gridsize+1)/2 then		-- if the player reached the goal
+	if self:live_num() == 1 then							-- if all other players are dead
 		return true
-	elseif self:live_num() == 1 then											-- or if all other players are dead
-		return true
+	else
+		for p=1,4 do
+			local pos = self.PlayerPos[p]
+			local center = (Game.Gridsize+1)/2
+			if pos[1] == center and pos[2] == center then	-- if any player reached the goal
+				return true
+			end
+		end
 	end
 	return false
 end
