@@ -49,7 +49,7 @@ function Game:init()
 	self.NumPlayers = 2
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, false, false}
+	self.HumanPlayers = {true, false, true, false}
 	
 	-- set gridsize
 	self.Gridsize = 7
@@ -191,6 +191,8 @@ function Game:move_proposal(sq1, sq2)
 		Board:make_move(sq1, sq2)
 		Sounds.SnapSound:play()
 		self.SelSq = nil
+		if Board:win_check() then Game:end_game() end	-- check if the player won
+		Board:death_check()								-- check if the next turn player dies
 	else
 		Game:select_proposal(sq2)					-- if move is not legal then try to select the end square
 	end

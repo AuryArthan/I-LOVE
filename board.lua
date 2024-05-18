@@ -243,7 +243,7 @@ end
 
 -- checks if the player wins
 function Board:win_check()
-	local pos = self.PlayerPos[self.Turn]
+	local pos = self.PlayerPos[self:previous_turn()]
 	if pos[1] == (Game.Gridsize+1)/2 and pos[2] == (Game.Gridsize+1)/2 then		-- if the player reached the goal
 		return true
 	elseif self:live_num() == 1 then											-- or if all other players are dead
@@ -255,15 +255,10 @@ end
 -- makes the move fully: moves the piece, updates attacked squares and changes player turn (does not check legality)
 function Board:make_move(sq1, sq2)
 	self.MarkedSqs[self.Turn] = {sq2[1],sq2[2]}												-- mark the moved piece
-	self:update_attacked(sq1, sq2)																-- update attacked values
-	self:move_piece(sq1, sq2)																	-- move the piece
+	self:update_attacked(sq1, sq2)															-- update attacked values
+	self:move_piece(sq1, sq2)																-- move the piece
 	if self:player_present(sq2) then self.PlayerPos[self.Turn] = self:square_copy(sq2) end	-- track player position
-	if self:win_check() then 																	-- check if a player won
-		Game:end_game() 
-		return
-	end	
-	self:change_turn()																			-- change turn
-	self:death_check()																			-- check if the next turn player dies
+	self:change_turn()																		-- change turn
 end
 
 -- changes the player turn
@@ -271,6 +266,15 @@ function Board:change_turn()
 	repeat
 		self.Turn = 1 + self.Turn%4
 	until self.PlayerAlive[self.Turn] == 1
+end
+-- computes the previous turn
+function Board:previous_turn()
+	local pr_turn = self.Turn
+	repeat
+		pr_turn = pr_turn-1
+		if pr_turn == 0 then pr_turn = 4 end
+	until self.PlayerAlive[pr_turn] == 1
+	return pr_turn
 end
 
 -- checks if square 'sq' is inbounds
