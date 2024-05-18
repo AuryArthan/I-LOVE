@@ -49,10 +49,10 @@ function Game:init()
 	self.NumPlayers = 4
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, true, true, true}
+	self.HumanPlayers = {false, false, false, false}
 	
 	-- set gridsize
-	self.Gridsize = 7
+	self.Gridsize = 9
 	
 	-- set size of square in pixels
 	self.SqSize = 24 --20
