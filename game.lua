@@ -49,7 +49,7 @@ function Game:init()
 	self.NumPlayers = 2
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, true, false}
+	self.HumanPlayers = {false, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 7
@@ -79,9 +79,11 @@ function Game:update(dt)
 	
 	-- check if its the AI's turn
 	if self.HumanPlayers[Board.Turn] == false then
-		move = Player:recommend_move()
-		Board:make_move(move[1], move[2])
-		Sounds.SnapSound:play()
+		move = Player:recommend_move()					-- get move from AI
+		Board:make_move(move[1], move[2])				-- make move
+		Sounds.SnapSound:play()							-- play sound
+		if Board:win_check() then Game:end_game() end	-- check if the player won
+		Board:death_check()								-- check if the next turn player dies
 	end
 	
 	-- get the inputs
@@ -188,9 +190,9 @@ end
 -- handle a proposed move
 function Game:move_proposal(sq1, sq2)
 	if Board:move_legality(sq1, sq2) then			-- if move is legal, make it
-		Board:make_move(sq1, sq2)
-		Sounds.SnapSound:play()
-		self.SelSq = nil
+		Board:make_move(sq1, sq2)						-- make move
+		Sounds.SnapSound:play()							-- play sound
+		self.SelSq = nil								-- unselect square
 		if Board:win_check() then Game:end_game() end	-- check if the player won
 		Board:death_check()								-- check if the next turn player dies
 	else
