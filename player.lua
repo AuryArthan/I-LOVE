@@ -28,8 +28,9 @@ function Player:recommend_move()
 	return legal_moves[max_index(scores)] 
 end
 
--- function that evaluates the board state
+-- function that evaluates the board state (returns score between -1 and 1)
 function Player:state_score(player, board)
+	if board:win_check() then return 1 end
 	local score = 0
 	score = score + Player:free_adjacent_squares(player, board)								-- free squares around the player are good
 	for p=1,4 do
@@ -44,10 +45,10 @@ end
 function Player:free_adjacent_squares(player, board)
 	local cnt = 0
 	local pos = board.PlayerPos[player]
-	local adjacents = {{pos[1],pos[2]+1}, {pos[1],pos[2]-1}, {pos[1]+1,pos[2]}, {pos[1],pos[2]-1}}
+	local adjacents = {{pos[1],pos[2]+1}, {pos[1],pos[2]-1}, {pos[1]+1,pos[2]}, {pos[1]-1,pos[2]}}
 	for i=1,4 do
 		if board:inbounds(adjacents[i]) then
-			if board:empty_square(adjacents[i]) then cnt = cnt+1 end
+			if board:empty_square(adjacents[i]) and board:attacked(adjacents[i]) == 0 then cnt = cnt+1 end
 		end
 	end
 	return cnt

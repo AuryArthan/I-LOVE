@@ -242,13 +242,13 @@ end
 
 -- checks if the player wins
 function Board:win_check()
-	if self:live_num() == 1 then							-- if all other players are dead
+	if self:live_num() == 1 then									-- if all other players are dead
 		return true
 	else
 		for p=1,4 do
 			local pos = self.PlayerPos[p]
 			local center = (Game.Gridsize+1)/2
-			if pos[1] == center and pos[2] == center then	-- if any player reached the goal
+			if pos and pos[1] == center and pos[2] == center then	-- if any player reached the goal
 				return true
 			end
 		end

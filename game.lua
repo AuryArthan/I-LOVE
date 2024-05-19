@@ -49,7 +49,7 @@ function Game:init()
 	self.NumPlayers = 4
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {false, false, false, false}
+	self.HumanPlayers = {true, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 9
@@ -284,5 +284,6 @@ function Game:renderGame()
 	--DebugPr:player_pos(375, 60)
 	--DebugPr:human_player(10, 80)
 	DebugPr:legal_moves(375, 10)
+	DebugPr:free_adjacents_print(10, 70)
 	
 end
