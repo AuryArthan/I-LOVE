@@ -17,7 +17,7 @@ end
 
 -- function that finds a move to recommend
 function Player:recommend_move()
-	active_player = Board.Turn
+	local active_player = Board.Turn
 	local legal_moves = Board:list_legal_moves()		-- all legal moves
 	local scores = {}
 	for m=1,#legal_moves do								-- loop over them
@@ -32,10 +32,10 @@ end
 function Player:state_score(player, board)
 	if board:win_check() then return 1 end
 	local score = 0
-	score = score + Player:free_adjacent_squares(player, board)								-- free squares around the player are good
+	score = score + Player:free_adjacent_squares(player, board)/4/2						-- free squares around the player are good
 	for p=1,4 do
-		if p ~= player and board.PlayerAlive[p] then
-			score = score - Player:free_adjacent_squares(player, board)/board:live_num()	-- free squares around opponents are bad
+		if p ~= player and board.PlayerAlive[p] == 1 then
+			score = score - Player:free_adjacent_squares(p, board)/4/2/board:live_num()	-- free squares around opponents are bad
 		end
 	end
 	return score

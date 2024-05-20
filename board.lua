@@ -263,6 +263,7 @@ function Board:make_move(sq1, sq2)
 	self:move_piece(sq1, sq2)																-- move the piece
 	if self:player_present(sq2) then self.PlayerPos[self.Turn] = self:square_copy(sq2) end	-- track player position
 	self:change_turn()																		-- change turn
+	self:death_check()																		-- check for deaths
 end
 
 -- changes the player turn

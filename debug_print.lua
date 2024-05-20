@@ -77,7 +77,7 @@ function DebugPr:free_adjacents_print(posx, posy)
 	love.graphics.print("Free adjacents", posx, posy)
 	for p=1,4 do
 		love.graphics.print(" Player "..p..":", posx, posy+p*13)
-		if Board.PlayerAlive[p] then
+		if Board.PlayerAlive[p] == 1 then
 			love.graphics.print(Player:free_adjacent_squares(p, Board), posx+61, posy+p*13)
 		end
 	end
