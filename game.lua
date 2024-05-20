@@ -36,6 +36,7 @@ Game = {
 	HighSq = nil;
 	SelSq = nil;
 	GameOver = nil;
+	MoveLog = nil;
 	HumanPlayers = {nil,nil,nil,nil};
 }
 
@@ -65,6 +66,9 @@ function Game:init()
 	
 	-- set game-over variable to 0
 	self.GameOver = 0
+	
+	-- initialize the move log
+	self.MoveLog = {}
 	
 	-- random number seed
 	math.randomseed(os.time())
@@ -119,13 +123,13 @@ function Game:update(dt)
 	-- A button
 	if CUR_A and not A then		-- press down
 		A = true
-		if Board:square_compare(self.HighSq, self.SelSq) then		-- if you press A on the selected square you deselect it
+		if square_compare(self.HighSq, self.SelSq) then		-- if you press A on the selected square you deselect it
 			self.SelSq = nil
 			Sounds.DeSelSound:play()
 		else
-			if self.SelSq then										-- if a move is proposed
+			if self.SelSq then									-- if a move is proposed
 				Game:move_proposal(self.SelSq, self.HighSq)
-			else													-- if no square is selected
+			else												-- if no square is selected
 				Game:select_proposal(self.HighSq)
 			end
 		end
@@ -169,30 +173,31 @@ end
 
 -- handle a proposed square selection
 function Game:select_proposal(sq)
-	if Board:empty_square(sq) then																		-- if the square is empty
+	if Board:empty_square(sq) then																-- if the square is empty
 		return
-	elseif Board:square_value(sq) == -1 then															-- if the square hosts a dead player
+	elseif Board:square_value(sq) == -1 then													-- if the square hosts a dead player
 		return
-	elseif Board:player_present(sq) and Board.Squares[sq[1]][sq[2]] ~= Board.Turn then					-- if a player tries to select another players piece
+	elseif Board:player_present(sq) and Board.Squares[sq[1]][sq[2]] ~= Board.Turn then			-- if a player tries to select another players piece
 		return
 	elseif Board:minor_piece_present(sq) then
-		if Board:marked_square(sq) and not Board:square_compare(sq,Board.MarkedSqs[Board.Turn]) then	-- if a player tries to select another player's marked piece
+		if Board:marked_square(sq) and not square_compare(sq,Board.MarkedSqs[Board.Turn]) then	-- if a player tries to select another player's marked piece
 			return
 		end
 	end
-	self.SelSq = Board:square_copy(sq)
+	self.SelSq = square_copy(sq)
 	Sounds.SelSound:play()
 end
 
 -- handle a proposed move
 function Game:move_proposal(sq1, sq2)
-	if Board:move_legality(sq1, sq2) then			-- if move is legal, make it
-		Board:make_move(sq1, sq2)						-- make move
-		Sounds.SnapSound:play()							-- play sound
-		self.SelSq = nil								-- unselect square
-		if Board:win_check() then Game:end_game() end	-- check if the player won
+	if Board:move_legality(sq1, sq2) then									-- if move is legal, make it
+		Board:make_move(sq1, sq2)												-- make move
+		self.MoveLog[#self.MoveLog+1] = {square_copy(sq1), square_copy(sq2)}	-- record move in log
+		Sounds.SnapSound:play()													-- play sound
+		self.SelSq = nil														-- unselect square
+		if Board:win_check() then Game:end_game() end							-- check if the player won
 	else
-		Game:select_proposal(sq2)					-- if move is not legal then try to select the end square
+		Game:select_proposal(sq2)											-- if move is not legal then try to select the end square
 	end
 end
 
@@ -282,7 +287,8 @@ function Game:renderGame()
 	--DebugPr:player_turn(375, 30)
 	--DebugPr:player_pos(375, 60)
 	--DebugPr:human_player(10, 80)
-	DebugPr:legal_moves(375, 10)
+	--DebugPr:legal_moves(375, 10)
+	DebugPr:move_log(375, 10)
 	DebugPr:free_adjacents_print(10, 70)
 	
 end

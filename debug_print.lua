@@ -115,6 +115,15 @@ function DebugPr:human_player(posx, posy)
 	love.graphics.print("Human turn: " .. tostring(Game.HumanPlayers[Board.Turn]), posx, posy)
 end
 
+-- move log print
+function DebugPr:move_log(posx, posy)
+	love.graphics.print("Move log: ", posx, posy)
+	love.graphics.print("("..#Game.MoveLog..")", posx+55, posy)
+	for m=1,#Game.MoveLog do
+		love.graphics.print(m .. ": ("..Game.MoveLog[m][1][1]..","..Game.MoveLog[m][1][2]..") - ("..Game.MoveLog[m][2][1]..","..Game.MoveLog[m][2][2]..")", posx+1, posy+7*m)
+	end
+end
+
 -- legal moves print
 function DebugPr:legal_moves(posx, posy)
 	love.graphics.print("Legal moves: ", posx, posy)

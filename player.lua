@@ -47,7 +47,7 @@ function Player:free_adjacent_squares(player, board)
 	local pos = board.PlayerPos[player]
 	local adjacents = {{pos[1],pos[2]+1}, {pos[1],pos[2]-1}, {pos[1]+1,pos[2]}, {pos[1]-1,pos[2]}}
 	for i=1,4 do
-		if board:inbounds(adjacents[i]) then
+		if inbounds(adjacents[i]) then
 			if board:empty_square(adjacents[i]) and board:attacked(adjacents[i]) == 0 then cnt = cnt+1 end
 		end
 	end
