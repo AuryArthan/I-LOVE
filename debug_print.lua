@@ -76,9 +76,9 @@ end
 function DebugPr:free_adjacents_print(posx, posy)
 	love.graphics.print("Free adjacents", posx, posy)
 	for p=1,4 do
-		love.graphics.print(" Player "..p..":", posx, posy+p*13)
+		love.graphics.print(" Player "..p..": ", posx, posy+p*13)
 		if Board.PlayerAlive[p] == 1 then
-			love.graphics.print(Player:free_adjacent_squares(p, Board), posx+61, posy+p*13)
+			love.graphics.print(Player:free_adjacent_squares(p, Board), posx+64, posy+p*13)
 		end
 	end
 end
@@ -113,6 +113,15 @@ end
 -- human player print
 function DebugPr:human_player(posx, posy)
 	love.graphics.print("Human turn: " .. tostring(Game.HumanPlayers[Board.Turn]), posx, posy)
+end
+
+-- player distance to center print
+function DebugPr:distance_center(posx, posy)
+	love.graphics.print("Distance to goal", posx, posy)
+	for p=1,4 do
+		love.graphics.print(" Player "..p..": ", posx, posy+13*p)
+		if Board.PlayerAlive[p] == 1 then love.graphics.print(Player:distance_center(p, Board), posx+64, posy+13*p) end
+	end
 end
 
 -- move log print

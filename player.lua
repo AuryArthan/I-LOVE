@@ -40,3 +40,9 @@ function Player:free_adjacent_squares(player, board)
 	end
 	return cnt
 end
+
+-- distance of the player to the center
+function Player:distance_center(player, board)
+	local pos = board.PlayerPos[player]
+	return math.abs(pos[1]-(Game.Gridsize+1)/2)+math.abs(pos[2]-(Game.Gridsize+1)/2)
+end

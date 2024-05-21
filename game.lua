@@ -298,5 +298,6 @@ function Game:renderGame()
 	--DebugPr:legal_moves(375, 10)
 	DebugPr:move_log(375, 10)
 	DebugPr:free_adjacents_print(10, 70)
+	DebugPr:distance_center(10, 160)
 	
 end
