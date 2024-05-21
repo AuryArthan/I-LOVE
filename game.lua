@@ -296,8 +296,9 @@ function Game:renderGame()
 	--DebugPr:player_pos(375, 60)
 	--DebugPr:human_player(10, 80)
 	--DebugPr:legal_moves(375, 10)
+	--DebugPr:distance_center(10, 160)
 	DebugPr:move_log(375, 10)
 	DebugPr:free_adjacents_print(10, 70)
-	DebugPr:distance_center(10, 160)
+	DebugPr:potential_attacks_print(10, 160)
 	
 end

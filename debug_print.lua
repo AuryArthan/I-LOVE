@@ -83,6 +83,17 @@ function DebugPr:free_adjacents_print(posx, posy)
 	end
 end
 
+-- potential attacks print
+function DebugPr:potential_attacks_print(posx, posy)
+	love.graphics.print("Potential attacks", posx, posy)
+	for p=1,4 do
+		love.graphics.print(" Player "..p..": ", posx, posy+p*13)
+		if Board.PlayerAlive[p] == 1 then
+			love.graphics.print(Player:potential_attacks(p, Board), posx+64, posy+p*13)
+		end
+	end
+end
+
 -- piece_present print
 function DebugPr:piece_present_print(posx, posy)
 	love.graphics.print("piece_present()", posx, posy)

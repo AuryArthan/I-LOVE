@@ -41,6 +41,37 @@ function Player:free_adjacent_squares(player, board)
 	return cnt
 end
 
+-- count free secondary squares (distance 2)
+function Player:free_secondary_squares(player, board)
+	local cnt = 0
+	local pos = board.PlayerPos[player]
+	local secondary = {{pos[1],pos[2]+2}, {pos[1]+1,pos[2]+1}, {pos[1]+2,pos[2]}, {pos[1]+1,pos[2]-1}, {pos[1],pos[2]-2}, {pos[1]-1,pos[2]-1}, {pos[1]-2,pos[2]}, {pos[1]-1,pos[2]+1}}
+	for i=1,8 do
+		if inbounds(secondary[i]) then
+			if board:empty_square(secondary[i]) and board:attacked(secondary[i]) == 0 then cnt = cnt+1 end
+		end
+	end
+	return cnt
+end
+
+-- count potential attacks
+function Player:potential_attacks(player, board)
+	local cnt = 0
+	local pos = board.PlayerPos[player]
+	local p_positions = {{pos[1],pos[2]+2}, {pos[1],pos[2]-2}, {pos[1]-2,pos[2]}, {pos[1]+2,pos[2]}}	-- positions from which the piece can attack (UDLR)
+	local adjacents = {{pos[1],pos[2]+1}, {pos[1],pos[2]-1}, {pos[1]-1,pos[2]}, {pos[1]+1,pos[2]}}		-- adjacent squares (UDLR)
+	for i=1,4 do
+		if inbounds(p_positions[i]) then
+			if board:minor_piece_present(p_positions[i]) then											-- if there is a minor piece in the right position
+				if board:empty_square(adjacents[i]) then												-- if the square in between is empty
+					if board:square_value(p_positions[i]) ~= i+4 then cnt = cnt+1 end					-- if the pices is not facing outward
+				end
+			end
+		end
+	end
+	return cnt
+end
+
 -- distance of the player to the center
 function Player:distance_center(player, board)
 	local pos = board.PlayerPos[player]
