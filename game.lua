@@ -30,6 +30,7 @@ RETRO_DEVICE_ID_JOYPAD_R3       = 16
 Game = {
 	Theme = nil;
 	NumPlayers = nil;
+	NumLivePlayers = nil;
 	Gridsize = nil;
 	SqSize = nil;
 	A1_coord = nil;
@@ -48,6 +49,9 @@ function Game:init()
 	
 	-- set 2-player or 4-player mode
 	self.NumPlayers = 4
+	
+	-- set number of alive players
+	self.NumLivePlayers = self.NumPlayers
 	
 	-- set which players are human (not AI)
 	self.HumanPlayers = {true, false, false, false}
@@ -195,6 +199,10 @@ function Game:move_proposal(sq1, sq2)
 		self.MoveLog[#self.MoveLog+1] = {square_copy(sq1), square_copy(sq2)}	-- record move in log
 		Sounds.SnapSound:play()													-- play sound
 		self.SelSq = nil														-- unselect square
+		if self.NumLivePlayers ~= sum(Board.PlayerAlive) then					-- check if anyone died
+			Sounds.DeathSound:play()												-- play death sound
+			self.NumLivePlayers = sum(Board.PlayerAlive)
+		end
 		if Board:win_check() then Game:end_game() end							-- check if the player won
 	else
 		Game:select_proposal(sq2)											-- if move is not legal then try to select the end square

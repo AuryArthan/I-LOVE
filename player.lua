@@ -1,19 +1,6 @@
 
 Player = {}
 
--- finds the index of the largest element
-function max_index(lst)
-	if #lst == 0 then return nil end
-	local max = lst[1]
-	local index = 1
-	for i=2,#lst do
-		if lst[i] > max then
-			max = lst[i]
-			index = i 
-		end
-	end
-	return index
-end
 
 -- function that finds a move to recommend
 function Player:recommend_move()
