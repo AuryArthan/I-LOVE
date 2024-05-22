@@ -152,3 +152,17 @@ function DebugPr:legal_moves(posx, posy)
 		love.graphics.print(i .. ": ("..moves[i][1][1]..","..moves[i][1][2].. ") - ("..moves[i][2][1]..","..moves[i][2][2]..")", posx+1, posy+7*i)
 	end
 end
+
+-- shortest path print
+function DebugPr:shortest_path(posx, posy)
+	love.graphics.print("Shortest path", posx, posy)
+	for i=1,Game.Gridsize do
+		for j=1,Game.Gridsize do
+			if Player.ShortestPathlength[i][j] then 
+				love.graphics.print(Player.ShortestPathlength[i][j], posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
+			else
+				love.graphics.print("*", posx+(i-1)*10, posy+(Game.Gridsize-j+1)*10)
+			end
+		end
+	end
+end

@@ -1,5 +1,7 @@
 
-Player = {}
+Player = {
+	ShortestPathlength = nil;
+}
 
 
 -- function that finds a move to recommend
@@ -32,7 +34,7 @@ end
 function Player:free_adjacent_squares(player, board)
 	local cnt = 0
 	local pos = board.PlayerPos[player]
-	local adjacents = {{pos[1],pos[2]+1}, {pos[1],pos[2]-1}, {pos[1]+1,pos[2]}, {pos[1]-1,pos[2]}}
+	local adjacents = neighbors(pos)
 	for i=1,4 do
 		if inbounds(adjacents[i]) then
 			if board:empty_square(adjacents[i]) and board:attacked(adjacents[i]) == 0 then cnt = cnt+1 end
@@ -45,7 +47,7 @@ end
 function Player:free_secondary_squares(player, board)
 	local cnt = 0
 	local pos = board.PlayerPos[player]
-	local secondary = {{pos[1],pos[2]+2}, {pos[1]+1,pos[2]+1}, {pos[1]+2,pos[2]}, {pos[1]+1,pos[2]-1}, {pos[1],pos[2]-2}, {pos[1]-1,pos[2]-1}, {pos[1]-2,pos[2]}, {pos[1]-1,pos[2]+1}}
+	local secondary = second_neighbors(pos)
 	for i=1,8 do
 		if inbounds(secondary[i]) then
 			if board:empty_square(secondary[i]) and board:attacked(secondary[i]) == 0 then cnt = cnt+1 end
@@ -58,13 +60,16 @@ end
 function Player:potential_attacks(player, board)
 	local cnt = 0
 	local pos = board.PlayerPos[player]
-	local p_positions = {{pos[1],pos[2]+2}, {pos[1],pos[2]-2}, {pos[1]-2,pos[2]}, {pos[1]+2,pos[2]}}	-- positions from which the piece can attack (UDLR)
-	local adjacents = {{pos[1],pos[2]+1}, {pos[1],pos[2]-1}, {pos[1]-1,pos[2]}, {pos[1]+1,pos[2]}}		-- adjacent squares (UDLR)
+	local adjacents = neighbors(pos)			-- adjacent squares (UDLR)
+	local p_positions = {}
+	for i=1,4 do
+		p_positions[i] = {pos[1]+2*(adjacents[i][1]-pos[1]), pos[2]+2*(adjacents[i][2]-pos[2])}		-- positions from which the piece can attack (UDLR)
+	end
 	for i=1,4 do
 		if inbounds(p_positions[i]) then
-			if board:minor_piece_present(p_positions[i]) then											-- if there is a minor piece in the right position
-				if board:empty_square(adjacents[i]) then												-- if the square in between is empty
-					if board:square_value(p_positions[i]) ~= i+4 then cnt = cnt+1 end					-- if the pices is not facing outward
+			if board:minor_piece_present(p_positions[i]) then										-- if there is a minor piece in the right position
+				if board:empty_square(adjacents[i]) then											-- if the square in between is empty
+					if board:square_value(p_positions[i]) ~= i+4 then cnt = cnt+1 end				-- if the pices is not facing outward
 				end
 			end
 		end
@@ -76,4 +81,37 @@ end
 function Player:distance_center(player, board)
 	local pos = board.PlayerPos[player]
 	return math.abs(pos[1]-(Game.Gridsize+1)/2)+math.abs(pos[2]-(Game.Gridsize+1)/2)
+end
+
+-- auxiliary for shortest_path(), recursively marks the pathlength of neighboring squares
+function Player:mark_neighbors_pathlength(pos, board)
+	local adj = neighbors(pos)								-- adjacent squares (UDLR)
+	local val = self.ShortestPathlength[pos[1]][pos[2]]		-- shortest path at the position
+	for i=1,4 do
+		if inbounds(adj[i]) then
+			if self.ShortestPathlength[adj[i][1]][adj[i][2]] == nil or self.ShortestPathlength[adj[i][1]][adj[i][2]] > val+1 then	-- if the shortes path has not reached that square yet or if the new path is shorter
+				if board:attacked(adj[i]) == 0 then								-- if the square is not attacked
+					if board:square_value(adj[i]) <= 4 then						-- if square is empty or with a player
+						self.ShortestPathlength[adj[i][1]][adj[i][2]] = val+1	-- mark pathlength as one larger
+						if board:square_value(adj[i]) == 0 then
+							Player:mark_neighbors_pathlength(adj[i], board)			-- if square is empty recursively mark neighbors
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+-- for eqch squre computes the shortest unobstructed path to the center (nil if there is no free path)
+function Player:shortest_path(board)
+	self.ShortestPathlength = {}
+	for i=1,Game.Gridsize do
+		self.ShortestPathlength[i] = {}
+		for j=1,Game.Gridsize do
+			self.ShortestPathlength[i][j] = nil	-- initialize squares to nil
+		end
+	end
+	self.ShortestPathlength[(Game.Gridsize+1)/2][(Game.Gridsize+1)/2] = 0				-- set pathlength 0 at the center
+	Player:mark_neighbors_pathlength({(Game.Gridsize+1)/2,(Game.Gridsize+1)/2}, board)	-- recursivelly mark all the squares
 end

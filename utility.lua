@@ -22,6 +22,16 @@ function inbounds(sq)
 	return false
 end
 
+-- returns neighboring squares (does not check whether they are inbounds)
+function neighbors(sq)
+	return {{sq[1],sq[2]+1},{sq[1],sq[2]-1},{sq[1]-1,sq[2]},{sq[1]+1,sq[2]}}	-- UDLR
+end
+
+-- returns second neighboring squares (does not check whether they are inbounds)
+function second_neighbors(sq)
+	return {{sq[1],sq[2]+2}, {sq[1]+1,sq[2]+1}, {sq[1]+2,sq[2]}, {sq[1]+1,sq[2]-1}, {sq[1],sq[2]-2}, {sq[1]-1,sq[2]-1}, {sq[1]-2,sq[2]}, {sq[1]-1,sq[2]+1}}
+end
+
 -- finds the index of the largest element
 function max_index(lst)
 	if #lst == 0 then return nil end

@@ -48,7 +48,7 @@ function Game:init()
 	self.Theme = "JAP"
 	
 	-- set 2-player or 4-player mode
-	self.NumPlayers = 4
+	self.NumPlayers = 2
 	
 	-- set number of alive players
 	self.NumLivePlayers = self.NumPlayers
@@ -297,6 +297,7 @@ function Game:renderGame()
 	--DebugPr:human_player(10, 80)
 	--DebugPr:legal_moves(375, 10)
 	--DebugPr:distance_center(10, 160)
+	Player:shortest_path(Board); DebugPr:shortest_path(380, 165)
 	DebugPr:move_log(375, 10)
 	DebugPr:free_adjacents_print(10, 70)
 	DebugPr:potential_attacks_print(10, 160)
