@@ -57,13 +57,13 @@ function Game:init()
 	self.HumanPlayers = {true, false, false, false}
 	
 	-- set gridsize
-	self.Gridsize = 9
+	self.Gridsize = 7
 	
 	-- set size of square in pixels
-	self.SqSize = 24 --20
+	self.SqSize = 30 --24 --20
 	
 	-- set coordinates of A1
-	self.A1_coord = {131,219} --{129,225}
+	self.A1_coord = {137,213} --{131,219} --{129,225}
 	
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}

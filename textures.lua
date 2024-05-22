@@ -29,8 +29,8 @@ function Textures:init()
 	self.MarkedSqs = {love.graphics.newImage("assets/themes/"..Game.Theme.."/marked_p1.png"),love.graphics.newImage("assets/themes/"..Game.Theme.."/marked_p2.png"),love.graphics.newImage("assets/themes/"..Game.Theme.."/marked_p3.png"),love.graphics.newImage("assets/themes/"..Game.Theme.."/marked_p4.png")}
 	
 	-- load piece textures
-	self.PiecesUDLR = {love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_u.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_d.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_l.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_r.png")}
-	self.Players = {love.graphics.newImage("assets/themes/"..Game.Theme.."/player1.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player2.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player3.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player4.png")}
+	self.PiecesUDLR = {love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_u_7.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_d.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_l.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/piece_r.png")}
+	self.Players = {love.graphics.newImage("assets/themes/"..Game.Theme.."/player1_7.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player2.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player3.png"), love.graphics.newImage("assets/themes/"..Game.Theme.."/player4.png")}
 	self.PlayerDead = love.graphics.newImage("assets/themes/"..Game.Theme.."/player_dead.png")
 	self.Goal = love.graphics.newImage("assets/themes/"..Game.Theme.."/goal.png")
 	
