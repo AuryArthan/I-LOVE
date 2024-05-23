@@ -312,8 +312,9 @@ function Game:renderGame()
 	--DebugPr:distance_center(10, 160)
 	--Player:shortest_path(Board); DebugPr:shortest_path(380, 165)
 	--DebugPr:move_log(375, 10)
+	--DebugPr:free_adjacents_print(10, 70)
+	--DebugPr:potential_attacks_print(10, 160)
 	DebugPr:move_scores(365, 10)
-	DebugPr:free_adjacents_print(10, 70)
-	DebugPr:potential_attacks_print(10, 160)
+	DebugPr:in_between_squares(5, 75)
 	
 end

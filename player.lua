@@ -117,8 +117,7 @@ end
 
 -- distance of the player to the center
 function Player:distance_center(player, board)
-	local pos = board.PlayerPos[player]
-	return math.abs(pos[1]-(Game.Gridsize+1)/2)+math.abs(pos[2]-(Game.Gridsize+1)/2)
+	return distance(board.PlayerPos[player], {(Game.Gridsize+1)/2,(Game.Gridsize+1)/2})
 end
 
 -- auxiliary for shortest_path(), recursively marks the pathlength of neighboring squares

@@ -170,6 +170,21 @@ function DebugPr:move_scores(posx, posy)
 	end
 end
 
+-- in between squares print
+function DebugPr:in_between_squares(posx, posy)
+	local pos = Board.PlayerPos[Board.Turn]
+	local ibs = in_between_squares(pos)
+	love.graphics.print("In between squares", posx, posy)
+	for i=1,Game.Gridsize do
+		for j=1,Game.Gridsize do
+			love.graphics.print("*", posx+i*10, posy+(Game.Gridsize+1-j)*10)
+		end
+	end
+	for i=1,#ibs do
+		love.graphics.print("o", posx+ibs[i][1]*10, posy+(Game.Gridsize+1-ibs[i][2])*10)
+	end
+end
+
 -- shortest path print
 function DebugPr:shortest_path(posx, posy)
 	love.graphics.print("Shortest path", posx, posy)

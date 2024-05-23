@@ -32,6 +32,29 @@ function second_neighbors(sq)
 	return {{sq[1],sq[2]+2}, {sq[1]+1,sq[2]+1}, {sq[1]+2,sq[2]}, {sq[1]+1,sq[2]-1}, {sq[1],sq[2]-2}, {sq[1]-1,sq[2]-1}, {sq[1]-2,sq[2]}, {sq[1]-1,sq[2]+1}}
 end
 
+-- returns the squres that are in between position 'pos' and the goal
+function in_between_squares(pos)
+	local posG = {(Game.Gridsize+1)/2,(Game.Gridsize+1)/2}
+	local squares = {}
+	local index = 1
+	for i=1,Game.Gridsize do
+		for j=1,Game.Gridsize do
+			if distance({i,j},posG) < distance(pos,posG) then
+				if distance({i,j},pos) < distance(pos,posG) then
+					squares[index] = {i,j}
+					index = index+1
+				end
+			end
+		end
+	end
+	return squares
+end
+
+-- distance between two squares (Manhattan)
+function distance(sq1, sq2)
+	return math.abs(sq1[1]-sq2[1])+math.abs(sq1[2]-sq2[2])
+end
+
 -- finds the index of the largest element
 function max_index(lst)
 	if #lst == 0 then return nil end
