@@ -54,3 +54,9 @@ function sum(lst)
     end
     return total
 end
+
+-- caps the value 'val' at threshold 'thr'
+function cap(val, thr)
+	if val > thr then return thr end
+	return val
+end
