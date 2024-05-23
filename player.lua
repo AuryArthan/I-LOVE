@@ -60,6 +60,12 @@ function Player:player_score(player, board)
 	-- number of live players (for 4 player mode)
 	comp[6] = 1-board:live_num()/Game.NumPlayers
 	weight[6] = 3
+	-- number of free 'in between' squares
+	comp[7] = Player:in_between_free(player, board)/#in_between_squares(board.PlayerPos[player])
+	weight[7] = 5
+	-- number of attacked 'in between' squares
+	comp[8] = 1-Player:in_between_attacked(player, board)/#in_between_squares(board.PlayerPos[player])
+	weight[8] = 2
 	-- weighted sum
 	local result = 0
 	for i=1,#comp do
@@ -118,6 +124,26 @@ end
 -- distance of the player to the center
 function Player:distance_center(player, board)
 	return distance(board.PlayerPos[player], {(Game.Gridsize+1)/2,(Game.Gridsize+1)/2})
+end
+
+-- number of free 'in between squares' between the player and the goal
+function Player:in_between_free(player, board)
+	local ibs = in_between_squares(board.PlayerPos[player])
+	local cnt = 0
+	for i=1,#ibs do
+		if board:empty_square(ibs[i]) then cnt=cnt+1 end
+	end
+	return cnt
+end
+
+-- number of attacked 'in between squares' between the player and the goal
+function Player:in_between_attacked(player, board)
+	local ibs = in_between_squares(board.PlayerPos[player])
+	local cnt = 0
+	for i=1,#ibs do
+		if board:attacked(ibs[i]) then cnt=cnt+1 end
+	end
+	return cnt
 end
 
 -- auxiliary for shortest_path(), recursively marks the pathlength of neighboring squares
