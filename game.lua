@@ -55,7 +55,7 @@ function Game:init()
 	self.NumLivePlayers = self.NumPlayers
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {false, false, false, false}
+	self.HumanPlayers = {true, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 7
@@ -310,8 +310,9 @@ function Game:renderGame()
 	--DebugPr:human_player(10, 80)
 	--DebugPr:legal_moves(375, 10)
 	--DebugPr:distance_center(10, 160)
-	Player:shortest_path(Board); DebugPr:shortest_path(380, 165)
-	DebugPr:move_log(375, 10)
+	--Player:shortest_path(Board); DebugPr:shortest_path(380, 165)
+	--DebugPr:move_log(375, 10)
+	DebugPr:move_scores(365, 10)
 	DebugPr:free_adjacents_print(10, 70)
 	DebugPr:potential_attacks_print(10, 160)
 	

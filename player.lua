@@ -12,7 +12,7 @@ function Player:recommend_move()
 	for m=1,#legal_moves do								-- loop over them
 		local testBoard = Board:copy()								-- make a test board copy
 		testBoard:make_move(legal_moves[m][1], legal_moves[m][2])	-- make the move
-		Player:shortest_path(testBoard)									-- compute shortest path (needed for state evaluation)
+		Player:shortest_path(testBoard)								-- compute shortest path (needed for state evaluation)
 		scores[m] = Player:state_score(active_player, testBoard)	-- evaluate the state 	
 	end
 	return legal_moves[max_index(scores)] 
@@ -45,18 +45,21 @@ function Player:player_score(player, board)
 	comp[3] = 1-Player:potential_attacks(player, board)/4
 	weight[3] = 5
 	-- distance to the center
-	comp[4] = 1-Player:distance_center(player, board)/Game.Gridsize
-	weight[4] = 3
+	comp[4] = (1-Player:distance_center(player, board)/Game.Gridsize)^2
+	weight[4] = 4
 	-- shortest unobstructed path
 	local pos = board.PlayerPos[player]
 	local thr = (Game.Gridsize+1)/2
 	local pathlength = Player.ShortestPathlength[pos[1]][pos[2]]
 	if pathlength then
-		comp[5] = 1-cap(Player.ShortestPathlength[pos[1]][pos[2]],thr)/thr
+		comp[5] = (1-cap(Player.ShortestPathlength[pos[1]][pos[2]],thr)/thr)^2
 	else
 		comp[5] = 0
 	end
-	weight[5] = 2
+	weight[5] = 3
+	-- number of live players (for 4 player mode)
+	comp[6] = 1-board:live_num()/Game.NumPlayers
+	weight[6] = 3
 	-- weighted sum
 	local result = 0
 	for i=1,#comp do

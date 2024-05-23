@@ -147,9 +147,26 @@ end
 -- legal moves print
 function DebugPr:legal_moves(posx, posy)
 	love.graphics.print("Legal moves: ", posx, posy)
-	moves = Board:list_legal_moves()
+	local moves = Board:list_legal_moves()
 	for i,m in ipairs(moves) do
 		love.graphics.print(i .. ": ("..moves[i][1][1]..","..moves[i][1][2].. ") - ("..moves[i][2][1]..","..moves[i][2][2]..")", posx+1, posy+7*i)
+	end
+end
+
+-- legal moves print
+function DebugPr:move_scores(posx, posy)
+	love.graphics.print("Move scores: ", posx, posy)
+	local active_player = Board.Turn
+	local moves = Board:list_legal_moves()				-- legal moves
+	local scores = {}
+	for m=1,#moves do									-- loop over them
+		local testBoard = Board:copy()								-- make a test board copy
+		testBoard:make_move(moves[m][1], moves[m][2])				-- make the move
+		Player:shortest_path(testBoard)								-- compute shortest path (needed for state evaluation)
+		scores[m] = Player:state_score(active_player, testBoard)	-- evaluate the state 	
+	end
+	for i,m in ipairs(moves) do
+		love.graphics.print("("..moves[i][1][1]..","..moves[i][1][2].. ")-("..moves[i][2][1]..","..moves[i][2][2].."): "..scores[i], posx, posy+7*i)
 	end
 end
 
