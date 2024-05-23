@@ -46,7 +46,7 @@ function Player:player_score(player, board)
 	weight[3] = 5
 	-- distance to the center
 	comp[4] = (1-Player:distance_center(player, board)/Game.Gridsize)^2
-	weight[4] = 4
+	weight[4] = 6
 	-- shortest unobstructed path
 	local pos = board.PlayerPos[player]
 	local thr = (Game.Gridsize+1)/2
@@ -56,10 +56,10 @@ function Player:player_score(player, board)
 	else
 		comp[5] = 0
 	end
-	weight[5] = 3
+	weight[5] = 4
 	-- number of live players (for 4 player mode)
 	comp[6] = 1-board:live_num()/Game.NumPlayers
-	weight[6] = 3
+	weight[6] = 4
 	-- number of free 'in between' squares
 	comp[7] = Player:in_between_free(player, board)/#in_between_squares(board.PlayerPos[player])
 	weight[7] = 5
