@@ -36,6 +36,7 @@ Game = {
 	A1_coord = nil;
 	HighSq = nil;
 	SelSq = nil;
+	TimeoutTimer = nil;
 	GameOver = nil;
 	MoveLog = nil;
 	HumanPlayers = {nil,nil,nil,nil};
@@ -54,7 +55,7 @@ function Game:init()
 	self.NumLivePlayers = self.NumPlayers
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, false, false}
+	self.HumanPlayers = {false, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 7
@@ -67,6 +68,9 @@ function Game:init()
 	
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}
+	
+	-- set timeout timer to 0
+	self.TimeoutTimer = 0
 	
 	-- set game-over variable to 0
 	self.GameOver = 0
@@ -84,6 +88,12 @@ local A  = false
 local B  = false
 local ASDelay = {-1,-1,-1,-1} -- autoshift delay for up, down, left, right
 function Game:update(dt)
+	
+	-- check if its timeout
+	if Game.TimeoutTimer > 0 then
+		Game.TimeoutTimer = Game.TimeoutTimer-dt
+		return
+	end
 	
 	-- check if its the AI's turn
 	if self.HumanPlayers[Board.Turn] == false then
@@ -154,6 +164,9 @@ function Game:update(dt)
 		B = false
 	end
 	
+	-- if its AI's turn set timeout 1s so it doesnt move too fast
+	if self.HumanPlayers[Board.Turn] == false then self.TimeoutTimer = 1 end
+
 end
 
 -- handle the game ending
