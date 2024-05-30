@@ -55,7 +55,7 @@ function Game:init()
 	self.NumLivePlayers = self.NumPlayers
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {false, false, false, false}
+	self.HumanPlayers = {true, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 7

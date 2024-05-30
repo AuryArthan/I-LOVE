@@ -12,6 +12,7 @@ function Player:recommend_move()
 	for m=1,#legal_moves do								-- loop over them
 		local testBoard = Board:copy()								-- make a test board copy
 		testBoard:make_move(legal_moves[m][1], legal_moves[m][2])	-- make the move
+		if testBoard:win_check() then return legal_moves[m] end		-- if the move wins just do it
 		Player:shortest_path(testBoard)								-- compute shortest path (needed for state evaluation)
 		scores[m] = Player:state_score(active_player, testBoard)	-- evaluate the state 	
 	end
@@ -20,9 +21,9 @@ end
 
 -- function that evaluates the board state (returns score between -1 and 1)
 function Player:state_score(player, board)
-	if board:win_check() then return 1 end
+	if Player:win_guaranteed(player, board) then return 1 end	-- if win is guaranteed just return 1
 	local score = 0
-	score = score + Player:player_score(player, board)		-- player focused score
+	score = score + Player:player_score(player, board)			-- player focused score
 	for p=1,4 do
 		if p ~= player and board.PlayerAlive[p] == 1 then
 			score = score - Player:player_score(p, board)/(board:live_num()-1)	-- other player's score counts negatively
@@ -74,6 +75,31 @@ function Player:player_score(player, board)
 	return result/(sum(weight)+1)
 end
 
+-- checks if win is guaranteed (2 player mode guarantee only)
+function Player:win_guaranteed(player, board)
+	-- if center is not distance 1
+	if Player:distance_center(player, board) ~= 1 then return false end
+	-- if center is attacked
+	local center = {(Game.Gridsize+1)/2,(Game.Gridsize+1)/2}
+	if board:attacked(center) then return false end
+	-- if there are potential attacks on the center
+	local adjacents = neighbors(center)				-- adjacent squares (UDLR)
+	local p_positions = {}
+	for i=1,4 do
+		p_positions[i] = {pos[1]+2*(adjacents[i][1]-pos[1]), pos[2]+2*(adjacents[i][2]-pos[2])}		-- positions from which an attack can come (UDLR)
+	end
+	for i=1,4 do
+		if inbounds(p_positions[i]) then
+			if board:minor_piece_present(p_positions[i]) then										-- if there is a minor piece in the right position
+				if board:empty_square(adjacents[i]) then											-- if the square in between is empty
+					if board:square_value(p_positions[i]) ~= i+4 then return false end				-- if the piece is not facing outward
+				end
+			end
+		end
+	end
+	return true
+end
+
 -- count free adjacent squares
 function Player:free_adjacent_squares(player, board)
 	local cnt = 0
@@ -113,7 +139,7 @@ function Player:potential_attacks(player, board)
 		if inbounds(p_positions[i]) then
 			if board:minor_piece_present(p_positions[i]) then										-- if there is a minor piece in the right position
 				if board:empty_square(adjacents[i]) then											-- if the square in between is empty
-					if board:square_value(p_positions[i]) ~= i+4 then cnt = cnt+1 end				-- if the pices is not facing outward
+					if board:square_value(p_positions[i]) ~= i+4 then cnt = cnt+1 end				-- if the piece is not facing outward
 				end
 			end
 		end
