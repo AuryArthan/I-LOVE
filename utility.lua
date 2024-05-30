@@ -70,23 +70,23 @@ function max_index(lst)
 end
 
 -- find three largest elements and their indices
---[[function three_largest(lst)
+function three_largest(lst)
 	local result = {}
 	for r = 1,3 do
 		local max = -math.huge
 		for i = 1,#lst do
 			if lst[i] > max then
 				for pr = 1,#result do
-					if i == result[pr][1] then goto continue end
+					if i ~= result[1][1] and i ~= result[2][1] and i ~= result[3][1] then
+						max = lst[i]
+						result[r] = {i, lst[i]}
+					end
 				end
-				max = lst[i]
-				result[r] = {i, lst[i]}
 			end
-			::continue::
 		end
 	end
 	return table.unpack(result)
-end--]]
+end
 
 -- sums up the elements of a list
 function sum(lst)
