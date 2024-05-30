@@ -10,11 +10,10 @@ function Player:recommend_move()
 	local legal_moves = Board:list_legal_moves()		-- all legal moves
 	local scores = {}
 	for m=1,#legal_moves do								-- loop over them
-		local testBoard = Board:copy()								-- make a test board copy
-		testBoard:make_move(legal_moves[m][1], legal_moves[m][2])	-- make the move
-		if testBoard:win_check() then return legal_moves[m] end		-- if the move wins just do it
-		Player:shortest_path(testBoard)								-- compute shortest path (needed for state evaluation)
-		scores[m] = Player:state_score(active_player, testBoard)	-- evaluate the state 	
+		local testBoard = Board:copy()									-- make a test board copy
+		testBoard:make_move(legal_moves[m][1], legal_moves[m][2])		-- make the move
+		if testBoard:win_check() then return legal_moves[m] end			-- if the move wins just do it
+		scores[m] = Player:state_score(active_player, testBoard)		-- evaluate the state 	
 	end
 	return legal_moves[max_index(scores)] 
 end
@@ -22,6 +21,7 @@ end
 -- function that evaluates the board state (returns score between -1 and 1)
 function Player:state_score(player, board)
 	if Player:win_guaranteed(player, board) then return 1 end	-- if win is guaranteed just return 1
+	Player:shortest_path(board)			-- compute shortest path (needed for evaluation)
 	local score = 0
 	score = score + Player:player_score(player, board)			-- player focused score
 	for p=1,4 do

@@ -162,7 +162,6 @@ function DebugPr:move_scores(posx, posy)
 	for m=1,#moves do									-- loop over them
 		local testBoard = Board:copy()								-- make a test board copy
 		testBoard:make_move(moves[m][1], moves[m][2])				-- make the move
-		Player:shortest_path(testBoard)								-- compute shortest path (needed for state evaluation)
 		scores[m] = Player:state_score(active_player, testBoard)	-- evaluate the state 	
 	end
 	for i,m in ipairs(moves) do
