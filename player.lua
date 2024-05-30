@@ -7,14 +7,16 @@ Player = {
 -- function that finds a move to recommend
 function Player:recommend_move()
 	local active_player = Board.Turn
-	local legal_moves = Board:list_legal_moves()		-- all legal moves
+	local base_score = Player:state_score(active_player, Board)		-- score of the current state
+	local legal_moves = Board:list_legal_moves()					-- all legal moves
 	local scores = {}
-	for m=1,#legal_moves do								-- loop over them
+	for m=1,#legal_moves do											-- loop over them
 		local testBoard = Board:copy()									-- make a test board copy
 		testBoard:make_move(legal_moves[m][1], legal_moves[m][2])		-- make the move
 		if testBoard:win_check() then return legal_moves[m] end			-- if the move wins just do it
 		scores[m] = Player:state_score(active_player, testBoard)		-- evaluate the state 	
 	end
+	--{m1,sc1},{m2,sc2},{m3,sc3} = three_largest(scores)				-- the three best moves (can be nil if not enough legal moves)
 	return legal_moves[max_index(scores)] 
 end
 
