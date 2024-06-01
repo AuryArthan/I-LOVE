@@ -76,16 +76,18 @@ function three_largest(lst)
 		local max = -math.huge
 		for i = 1,#lst do
 			if lst[i] > max then
+			local ismax = true
 				for pr = 1,#result do
-					if i ~= result[1][1] and i ~= result[2][1] and i ~= result[3][1] then
-						max = lst[i]
-						result[r] = {i, lst[i]}
-					end
+					if i == result[pr][1] then ismax = false end
+				end
+				if ismax then
+					max = lst[i]
+					result[r] = {i, lst[i]}
 				end
 			end
 		end
 	end
-	return table.unpack(result)
+	return result[1], result[2], result[3]
 end
 
 -- sums up the elements of a list

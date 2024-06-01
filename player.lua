@@ -16,7 +16,7 @@ function Player:recommend_move()
 		if testBoard:win_check() then return legal_moves[m] end			-- if the move wins just do it
 		scores[m] = Player:state_score(active_player, testBoard)		-- evaluate the state 	
 	end
-	--{m1,sc1},{m2,sc2},{m3,sc3} = three_largest(scores)				-- the three best moves (can be nil if not enough legal moves)
+	local move1,move2,move3 = three_largest(scores)				-- the three best moves (can be nil if not enough legal moves)
 	return legal_moves[max_index(scores)] 
 end
 
