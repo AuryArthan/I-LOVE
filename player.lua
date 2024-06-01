@@ -16,8 +16,41 @@ function Player:recommend_move()
 		if testBoard:win_check() then return legal_moves[m] end			-- if the move wins just do it
 		scores[m] = Player:state_score(active_player, testBoard)		-- evaluate the state 	
 	end
-	local move1,move2,move3 = three_largest(scores)				-- the three best moves (can be nil if not enough legal moves)
-	return legal_moves[max_index(scores)] 
+	local best = three_largest(scores)								-- the three best moves (can be nil if not enough legal moves)
+	if best[1][2] == 1 then return legal_moves[best[1][1]] end		-- if the score is 1 then win is guaranteed so just do it
+	for b = 1,#best do best[b][2] = best[b][2]-base_score end		-- substract base score so they represent relative improvements
+	if best[1][2] <= 0 then return legal_moves[best[1][1]] end		-- if none of the moves improve the state (strange), then choose the best of them (no probabilities)
+	local chosen_move = Player:prob_choose(best)					-- probabilistically choose one based on their score
+	return legal_moves[best[chosen_move][1]]
+end
+
+-- function that probabilistically chooses one move based on their scores
+function Player:prob_choose(best)
+	for b = 1,#best do				-- cube the values (so a move that is a bit better is much more likely to be chosen)
+		best[b][2] = best[b][2]^3
+	end
+	local sum_pos = 0				-- sum of all positive moves
+	for b = 1,#best do
+		if best[b][2] > 0 then sum_pos = sum_pos+best[b][2] end
+	end
+	local probability = {}			-- probability of each move
+	for b = 1,#best do
+		if best[b][2] > 0 then 
+			probability[b] = best[b][2]/sum_pos
+		else
+			probability[b] = 0
+		end
+	end
+	local cummulative = {}			-- cummulative values
+	cummulative[1] = probability[1]
+	for b = 2,#best do
+		cummulative[b] = cummulative[b-1]+probability[b]
+	end
+	local rn = math.random()		-- random number
+	for b = 1,#best do
+		if rn <= cummulative[b] then return b end	-- return the chosen index
+	end
+	return nil		-- this should not happen
 end
 
 -- function that evaluates the board state (returns score between -1 and 1)

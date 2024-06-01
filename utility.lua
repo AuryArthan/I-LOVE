@@ -87,7 +87,7 @@ function three_largest(lst)
 			end
 		end
 	end
-	return result[1], result[2], result[3]
+	return result
 end
 
 -- sums up the elements of a list
