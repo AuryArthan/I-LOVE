@@ -1,5 +1,6 @@
 
 Player = {
+	weights = {3,1,5,6,4,4,5,2};	-- need to be positive
 	ShortestPathlength = nil;
 }
 
@@ -70,19 +71,14 @@ end
 -- auxiliary for state_score(), just focuses on one player
 function Player:player_score(player, board)
 	local comp = {}			-- each component has to be between 0 and 1
-	local weight = {}		-- weights can be any positive numbers
 	-- free squares around the player
 	comp[1] = Player:free_adjacent_squares(player, board)/4
-	weight[1] = 3
 	-- free secondary squares
 	comp[2] = Player:free_secondary_squares(player, board)/8
-	weight[2] = 1
 	-- potential attacks
 	comp[3] = 1-Player:potential_attacks(player, board)/4
-	weight[3] = 5
 	-- distance to the center
 	comp[4] = (1-Player:distance_center(player, board)/Game.Gridsize)^2
-	weight[4] = 6
 	-- shortest unobstructed path
 	local pos = board.PlayerPos[player]
 	local thr = (Game.Gridsize+1)/2
@@ -92,22 +88,18 @@ function Player:player_score(player, board)
 	else
 		comp[5] = 0
 	end
-	weight[5] = 4
 	-- number of live players (for 4 player mode)
 	comp[6] = 1-board:live_num()/Game.NumPlayers
-	weight[6] = 4
 	-- number of free 'in between' squares
 	comp[7] = Player:in_between_free(player, board)/#in_between_squares(board.PlayerPos[player])
-	weight[7] = 5
 	-- number of attacked 'in between' squares
 	comp[8] = 1-Player:in_between_attacked(player, board)/#in_between_squares(board.PlayerPos[player])
-	weight[8] = 2
 	-- weighted sum
 	local result = 0
 	for i=1,#comp do
-		result = result + weight[i]*comp[i]
+		result = result + self.weights[i]*comp[i]
 	end
-	return result/(sum(weight)+1)
+	return result/(sum(self.weights)+1)
 end
 
 -- checks if win is guaranteed (2 player mode guarantee only)

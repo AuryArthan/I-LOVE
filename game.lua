@@ -49,13 +49,13 @@ function Game:init()
 	self.Theme = "JAP"
 	
 	-- set 2-player or 4-player mode
-	self.NumPlayers = 4
+	self.NumPlayers = 2
 	
 	-- set number of alive players
 	self.NumLivePlayers = self.NumPlayers
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, false, false}
+	self.HumanPlayers = {false, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 7
