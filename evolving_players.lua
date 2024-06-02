@@ -7,16 +7,24 @@ N = 300
 -- random seed
 math.randomseed(os.time())
 
+-- mutate player
+function Player:mutate_player()
+	for i = 1,8 do
+		self.weights[i] = self.weights[i]*(1+(math.random()-0.5)/10)
+	end
+end
+
 -- initialize players
 players = {}
 player_scores = {}
 for n = 1,N do
 	players[n] = {weights = {3,1,5,6,4,4,5,2}; ShortestPathlength = nil;}
+	setmetatable(players[n], { __index = Player })
+	players[n]:mutate_player()
 	player_scores[n] = 0
 end
 
 Game = {NumPlayers = nil; NumLivePlayers = nil; Gridsize = nil; HumanPlayers = {nil,nil,nil,nil};}
-
 -- minimal game init
 function Game:init_min()
 	self.NumPlayers = 2
