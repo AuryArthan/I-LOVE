@@ -3,10 +3,22 @@ require("player")
 require("utility")
 
 -- number of players
-N = 10
+N = 6
+-- number of generations
+Ngen = 1
 
 -- random seed
 math.randomseed(os.time())
+
+-- copy player (just weights really)
+function Player:copy()
+	local copy = {weights = {}; ShortestPathlength = nil; score = 0}
+	for i = 1,#self.weights do
+		copy.weights[i] = self.weights[i]
+	end
+	setmetatable(copy, { __index = Player })
+	return copy
+end
 
 -- mutate player
 function Player:mutate_player()
@@ -17,12 +29,10 @@ end
 
 -- initialize players
 players = {}
-player_scores = {}
 for n = 1,N do
-	players[n] = {weights = {3,1,5,6,4,4,5,2}; ShortestPathlength = nil;}
+	players[n] = {weights = {3,1,5,6,4,4,5,2}; ShortestPathlength = nil; score = 0}
 	setmetatable(players[n], { __index = Player })
 	for r = 1,5 do players[n]:mutate_player() end
-	player_scores[n] = 0
 end
 
 Game = {NumPlayers = nil; NumLivePlayers = nil; Gridsize = nil; HumanPlayers = {nil,nil,nil,nil};}
@@ -52,17 +62,36 @@ function play_game(pl1,pl2)
 	return 0	-- if 80 moves nothing happens call it a draw
 end
 
--- each pair of players play two games (one as p1, and one as p2)
-for p1 = 1,N do
-	for p2 = p1+1,N do
-		print("p1,p2 = "..p1..","..p2)
-		local outcome = play_game(players[p1],players[p2])
-		print("\toutcome = "..outcome)
-		player_scores[p1] = player_scores[p1] + outcome
-		player_scores[p2] = player_scores[p2] - outcome
-		outcome = play_game(players[p2],players[p1])
-		player_scores[p2] = player_scores[p2] + outcome
-		player_scores[p1] = player_scores[p1] - outcome
-		print("\toutcome = "..outcome)
+
+for gen = 1,Ngen do
+	-- set player scores to 0
+	for p = 1,N do players[p].score = 0 end
+	-- each pair of players play two games (one as p1, and one as p2)
+	for p1 = 1,N do
+		for p2 = p1+1,N do
+			print("gen "..gen.."\tplayers "..p1..","..p2)
+			local outcome = play_game(players[p1],players[p2])
+			print("\t\toutcome = "..outcome)
+			players[p1].score = players[p1].score + outcome
+			players[p2].score = players[p2].score - outcome
+			outcome = play_game(players[p2],players[p1])
+			players[p2].score = players[p2].score + outcome
+			players[p1].score = players[p1].score - outcome
+			print("\t\toutcome = "..outcome)
+		end
+	end
+	-- sort them
+	table.sort(players, function(a,b) return a.score > b.score end)
+	-- the top 50 reproduce and have 2 mutated offspring each
+	--for p = 1,50 do
+	for p = 1,2 do
+		--players[50+p] = players[p]:copy()
+		--players[100+p] = players[p]:copy()
+		--players[50+p]:mutate_player()							-- 1st offspring single mutation
+		--for r = 1,2 do players[100+p]:mutate_player() end		-- 2nd offspring double mutation
+		players[2+p] = players[p]:copy()
+		players[4+p] = players[p]:copy()
+		players[2+p]:mutate_player()						-- 1st offspring single mutation
+		for r = 1,2 do players[4+p]:mutate_player() end		-- 2nd offspring double mutation
 	end
 end
