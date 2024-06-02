@@ -11,19 +11,23 @@ function Player:recommend_move()
 	local base_score = Player:state_score(active_player, Board)		-- score of the current state
 	local legal_moves = Board:list_legal_moves()					-- all legal moves
 	local scores = {}
+	if #legal_moves == 0 then
+		print("\t\t\t\t\tNO LEGAL MOVES!")
+	end
 	for m=1,#legal_moves do											-- loop over them
 		local testBoard = Board:copy()									-- make a test board copy
 		testBoard:make_move(legal_moves[m][1], legal_moves[m][2])		-- make the move
 		if testBoard:win_check() then return legal_moves[m] end			-- if the move wins just do it
 		scores[m] = Player:state_score(active_player, testBoard)		-- evaluate the state 	
 	end
-	local best = three_largest(scores)								-- the three best moves (can be nil if not enough legal moves)
-	if best[1][2] == 1 then return legal_moves[best[1][1]] end		-- if the score is 1 then win is guaranteed so just do it
-	for b = 1,#best do best[b][2] = best[b][2]-base_score end		-- substract base score so they represent relative improvements
-	if best[1][2] <= 0 then return legal_moves[best[1][1]] end		-- if none of the moves improve the state (strange), then choose the best of them (no probabilities)
-	local chosen_move = Player:prob_choose(best)					-- probabilistically choose one based on their score
-	print("chosen_move = "..chosen_move)
-	return legal_moves[best[chosen_move][1]]
+	--local best = three_largest(scores)								-- the three best moves (can be nil if not enough legal moves)
+	--if best[1][2] == 1 then return legal_moves[best[1][1]] end		-- if the score is 1 then win is guaranteed so just do it
+	--for b = 1,#best do best[b][2] = best[b][2]-base_score end		-- substract base score so they represent relative improvements
+	--if best[1][2] <= 0 then return legal_moves[best[1][1]] end		-- if none of the moves improve the state (strange), then choose the best of them (no probabilities)
+	--local chosen_move = Player:prob_choose(best)					-- probabilistically choose one based on their score
+	--print("chosen_move = "..chosen_move)
+	--return legal_moves[best[chosen_move][1]]
+	return legal_moves[max_index(scores)]
 end
 
 -- function that probabilistically chooses one move based on their scores

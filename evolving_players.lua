@@ -43,10 +43,21 @@ function play_game(pl1,pl2)
 		-- player 1
 		local move = pl1:recommend_move()
 		print("\t\t\trecommended move = "..move[1][1]..","..move[1][2].."-"..move[2][1]..","..move[2][2])
+		if Board:move_legality(move[1], move[2]) then
+			print("\t\t\t\tmove is legal")
+		else
+			print("\t\t\t\tmove illegal!!")
+		end
 		Board:make_move(move[1], move[2])
 		if Board:win_check() then return 1 end
 		-- player 2
 		move = pl2:recommend_move()
+		print("\t\t\trecommended move = "..move[1][1]..","..move[1][2].."-"..move[2][1]..","..move[2][2])
+		if Board:move_legality(move[1], move[2]) then
+			print("\t\t\t\tmove is legal")
+		else
+			print("\t\t\t\tmove illegal!!")
+		end
 		Board:make_move(move[1], move[2])
 		if Board:win_check() then return -1 end
 	end
