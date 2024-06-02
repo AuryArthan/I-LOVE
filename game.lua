@@ -97,7 +97,7 @@ function Game:update(dt)
 	
 	-- check if its the AI's turn
 	if self.HumanPlayers[Board.Turn] == false then
-		move = Player:recommend_move()					-- get move from AI
+		local move = Player:recommend_move()			-- get move from AI
 		Game:move_proposal(move[1], move[2])
 	end
 	

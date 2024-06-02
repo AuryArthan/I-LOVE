@@ -1,5 +1,6 @@
 require("board")
 require("player")
+require("utility")
 
 -- number of players
 N = 300
@@ -37,6 +38,17 @@ end
 function play_game(pl1,pl2)
 	Game:init_min()
 	Board:init()
+	for m = 1,100 do
+		if m%10 == 0 then print("\t\tmove "..m) end
+		-- player 1
+		local move = pl1:recommend_move()
+		Board:make_move(move[1], move[2])
+		if Board:win_check() then return 1 end
+		-- player 2
+		move = pl2:recommend_move()
+		Board:make_move(move[1], move[2])
+		if Board:win_check() then return -1 end
+	end
 	return 0
 end
 
@@ -45,12 +57,15 @@ for p1 = 1,N do
 	print("p1 = "..p1)
 	for p2 = 1,N do
 		if p1 ~= p2 then
+			print("\tp2 = "..p2)
 			local outcome = play_game(players[p1],players[p2])
+			print("\t\t\toutcome = "..outcome)
 			player_scores[p1] = player_scores[p1] + outcome
 			player_scores[p2] = player_scores[p2] - outcome
 			outcome = play_game(players[p2],players[p1])
 			player_scores[p2] = player_scores[p2] + outcome
 			player_scores[p1] = player_scores[p1] - outcome
+			print("\t\t\toutcome = "..outcome)
 		end
 	end
 end
