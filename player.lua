@@ -11,29 +11,24 @@ function Player:recommend_move()
 	local base_score = Player:state_score(active_player, Board)		-- score of the current state
 	local legal_moves = Board:list_legal_moves()					-- all legal moves
 	local scores = {}
-	if #legal_moves == 0 then
-		print("\t\t\t\t\tNO LEGAL MOVES!")
-	end
 	for m=1,#legal_moves do											-- loop over them
 		local testBoard = Board:copy()									-- make a test board copy
 		testBoard:make_move(legal_moves[m][1], legal_moves[m][2])		-- make the move
 		if testBoard:win_check() then return legal_moves[m] end			-- if the move wins just do it
 		scores[m] = Player:state_score(active_player, testBoard)		-- evaluate the state 	
 	end
-	--local best = three_largest(scores)								-- the three best moves (can be nil if not enough legal moves)
-	--if best[1][2] == 1 then return legal_moves[best[1][1]] end		-- if the score is 1 then win is guaranteed so just do it
-	--for b = 1,#best do best[b][2] = best[b][2]-base_score end		-- substract base score so they represent relative improvements
-	--if best[1][2] <= 0 then return legal_moves[best[1][1]] end		-- if none of the moves improve the state (strange), then choose the best of them (no probabilities)
-	--local chosen_move = Player:prob_choose(best)					-- probabilistically choose one based on their score
-	--print("chosen_move = "..chosen_move)
-	--return legal_moves[best[chosen_move][1]]
-	return legal_moves[max_index(scores)]
+	local best = three_largest(scores)								-- the three best moves (can be nil if not enough legal moves)
+	if best[1][2] == 1 then return legal_moves[best[1][1]] end		-- if the score is 1 then win is guaranteed so just do it
+	for b = 1,#best do best[b][2] = best[b][2]-base_score end		-- substract base score so they represent relative improvements
+	if best[1][2] <= 0 then return legal_moves[best[1][1]] end		-- if none of the moves improve the state (strange), then choose the best of them (no probabilities)
+	local chosen_move = Player:prob_choose(best)					-- probabilistically choose one based on their score
+	return legal_moves[best[chosen_move][1]]
 end
 
 -- function that probabilistically chooses one move based on their scores
 function Player:prob_choose(best)
 	for b = 1,#best do				-- cube the values (so a move that is a bit better is much more likely to be chosen)
-		best[b][2] = best[b][2]^3
+		if best[b] then best[b][2] = best[b][2]^3 end
 	end
 	local sum_pos = 0				-- sum of all positive moves
 	for b = 1,#best do
@@ -41,7 +36,7 @@ function Player:prob_choose(best)
 	end
 	local probability = {}			-- probability of each move
 	for b = 1,#best do
-		if best[b][2] > 0 then 
+		if best[b][2] > 0 then
 			probability[b] = best[b][2]/sum_pos
 		else
 			probability[b] = 0
@@ -96,9 +91,9 @@ function Player:player_score(player, board)
 	-- number of live players (for 4 player mode)
 	comp[6] = 1-board:live_num()/Game.NumPlayers
 	-- number of free 'in between' squares
-	comp[7] = Player:in_between_free(player, board)/#in_between_squares(board.PlayerPos[player])
+	comp[7] = (Player:in_between_free(player, board)+0.1)/(#in_between_squares(board.PlayerPos[player])+0.1)		-- +0.1 up and down so that 0/0 is 1
 	-- number of attacked 'in between' squares
-	comp[8] = 1-Player:in_between_attacked(player, board)/#in_between_squares(board.PlayerPos[player])
+	comp[8] = 1-(Player:in_between_attacked(player, board)+0.1)/(#in_between_squares(board.PlayerPos[player])+0.1)	-- +0.1 up and down so that 0/0 is 1
 	-- weighted sum
 	local result = 0
 	for i=1,#comp do

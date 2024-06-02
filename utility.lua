@@ -76,7 +76,7 @@ function three_largest(lst)
 		local max = -math.huge
 		for i = 1,#lst do
 			if lst[i] > max then
-			local ismax = true
+				local ismax = true
 				for pr = 1,#result do
 					if i == result[pr][1] then ismax = false end
 				end
