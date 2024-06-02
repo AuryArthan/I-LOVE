@@ -38,10 +38,11 @@ end
 function play_game(pl1,pl2)
 	Game:init_min()
 	Board:init()
-	for m = 1,100 do
+	for m = 1,80 do
 		if m%10 == 0 then print("\t\tmove "..m) end
 		-- player 1
 		local move = pl1:recommend_move()
+		print("\t\t\trecommended move = "..move[1][1]..","..move[1][2].."-"..move[2][1]..","..move[2][2])
 		Board:make_move(move[1], move[2])
 		if Board:win_check() then return 1 end
 		-- player 2
@@ -49,7 +50,7 @@ function play_game(pl1,pl2)
 		Board:make_move(move[1], move[2])
 		if Board:win_check() then return -1 end
 	end
-	return 0
+	return 0	-- if 80 moves nothing happens call it a draw
 end
 
 -- each pair of players play two games (one as p1, and one as p2)

@@ -22,6 +22,7 @@ function Player:recommend_move()
 	for b = 1,#best do best[b][2] = best[b][2]-base_score end		-- substract base score so they represent relative improvements
 	if best[1][2] <= 0 then return legal_moves[best[1][1]] end		-- if none of the moves improve the state (strange), then choose the best of them (no probabilities)
 	local chosen_move = Player:prob_choose(best)					-- probabilistically choose one based on their score
+	print("chosen_move = "..chosen_move)
 	return legal_moves[best[chosen_move][1]]
 end
 
