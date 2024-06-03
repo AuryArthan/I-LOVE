@@ -23,7 +23,9 @@ end
 -- mutate player
 function Player:mutate_player()
 	for i = 1,8 do
-		self.weights[i] = self.weights[i]*(1+(math.random()-0.5)/20)
+		if math.random() < 0.5 then
+			self.weights[i] = self.weights[i]*(1+(math.random()-0.5)/20)
+		end
 	end
 end
 
