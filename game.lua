@@ -37,6 +37,7 @@ Game = {
 	HighSq = nil;
 	SelSq = nil;
 	TimeoutTimer = nil;
+	Paused = nil;
 	GameOver = nil;
 	MoveLog = nil;
 	HumanPlayers = {nil,nil,nil,nil};
@@ -55,7 +56,7 @@ function Game:init()
 	self.NumLivePlayers = self.NumPlayers
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {false, false, false, false}
+	self.HumanPlayers = {true, false, false, false}
 	
 	-- set gridsize
 	self.Gridsize = 7
@@ -72,8 +73,11 @@ function Game:init()
 	-- set timeout timer to 0
 	self.TimeoutTimer = 0
 	
-	-- set game-over variable to 0
-	self.GameOver = 0
+	-- set paused to false
+	self.Paused = false
+	
+	-- set game-over variable to false
+	self.GameOver = false
 	
 	-- initialize the move log
 	self.MoveLog = {}
@@ -83,10 +87,11 @@ function Game:init()
 	
 end
 
-local DPAD = {false,false,false,false} -- U,D,L,R
-local A  = false
-local B  = false
-local ASDelay = {-1,-1,-1,-1} -- autoshift delay for up, down, left, right
+local DPAD = {false,false,false,false}	-- U,D,L,R
+local ASDelay = {-1,-1,-1,-1}	-- autoshift delay for up, down, left, right
+local A  = false		-- A button
+local B  = false		-- B button
+local startB = false	-- start button
 function Game:update(dt)
 	
 	-- check if its timeout
@@ -105,9 +110,19 @@ function Game:update(dt)
 	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
     local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
     local CUR_B = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
+    local CUR_startB = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_START)
 	
 	-- handle potential phasing out of music
 	Game:phase_out_music(dt)
+	
+	-- start press
+	if CUR_startB and not startB then	-- press-down
+		startB = true
+		self.Paused = not self.Paused
+	end
+	if not CUR_startB and startB then	-- press-up
+		startB = false
+	end
 	
 	-- DPAD press-down/press-up events
 	for d=1,4 do
@@ -171,7 +186,7 @@ end
 
 -- handle the game ending
 function Game:end_game()
-	self.GameOver = 1
+	self.GameOver = true
 	MUSIC_PHASE_OUT = true
 	PHASE_OUT_TIMER = PHASE_OUT_DURATION
 	Sounds.WinSound:play()
@@ -292,10 +307,15 @@ function Game:renderGame()
 	end
 	
 	-- draw hud
-	if self.GameOver == 0 then 
+	if self.GameOver == false then 
 		Game:renderPlayerTurn(11, 45)
 	else
 		Game:renderWinner(11, 45) 
+	end
+	
+	-- if paused over-draw paused background
+	if self.Paused then
+		love.graphics.draw(Textures.Pause_back, 0, 0)
 	end
 	
 	-- debug print
