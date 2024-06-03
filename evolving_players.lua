@@ -3,9 +3,9 @@ require("player")
 require("utility")
 
 -- number of players
-N = 6
+N = 180
 -- number of generations
-Ngen = 1
+Ngen = 50
 
 -- random seed
 math.randomseed(os.time())
@@ -23,7 +23,7 @@ end
 -- mutate player
 function Player:mutate_player()
 	for i = 1,8 do
-		self.weights[i] = self.weights[i]*(1+(math.random()-0.5)/10)
+		self.weights[i] = self.weights[i]*(1+(math.random()-0.5)/20)
 	end
 end
 
@@ -32,7 +32,7 @@ players = {}
 for n = 1,N do
 	players[n] = {weights = {3,1,5,6,4,4,5,2}; ShortestPathlength = nil; score = 0}
 	setmetatable(players[n], { __index = Player })
-	for r = 1,5 do players[n]:mutate_player() end
+	for r = 1,6 do players[n]:mutate_player() end
 end
 
 Game = {NumPlayers = nil; NumLivePlayers = nil; Gridsize = nil; HumanPlayers = {nil,nil,nil,nil};}
@@ -62,7 +62,10 @@ function play_game(pl1,pl2)
 	return 0	-- if 80 moves nothing happens call it a draw
 end
 
-
+-- init output file
+local file = io.open("trained_players/output.txt", "w")
+file:close()
+-- generation loop
 for gen = 1,Ngen do
 	-- set player scores to 0
 	for p = 1,N do players[p].score = 0 end
@@ -82,16 +85,21 @@ for gen = 1,Ngen do
 	end
 	-- sort them
 	table.sort(players, function(a,b) return a.score > b.score end)
-	-- the top 50 reproduce and have 2 mutated offspring each
-	--for p = 1,50 do
-	for p = 1,2 do
-		--players[50+p] = players[p]:copy()
-		--players[100+p] = players[p]:copy()
-		--players[50+p]:mutate_player()							-- 1st offspring single mutation
-		--for r = 1,2 do players[100+p]:mutate_player() end		-- 2nd offspring double mutation
-		players[2+p] = players[p]:copy()
-		players[4+p] = players[p]:copy()
-		players[2+p]:mutate_player()						-- 1st offspring single mutation
-		for r = 1,2 do players[4+p]:mutate_player() end		-- 2nd offspring double mutation
+	-- the top 60 reproduce and have 2 mutated offspring each
+	for p = 1,60 do
+		players[60+p] = players[p]:copy()
+		players[120+p] = players[p]:copy()
+		players[60+p]:mutate_player()							-- 1st offspring single mutation
+		for r = 1,2 do players[120+p]:mutate_player() end		-- 2nd offspring double mutation
 	end
+	-- write the top 60 to a file
+	file = io.open("trained_players/output.txt", "a")
+	for p = 1,60 do
+		file:write("gen "..gen.."  index "..p.."  score "..players[p].score.."  { ")
+		for w = 1,8 do
+			file:write(players[p].weights[w].." ")
+		end
+		file:write("}\n")
+	end
+	file:close()
 end
