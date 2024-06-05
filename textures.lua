@@ -15,7 +15,7 @@ Textures = {
 function Textures:init()
 
 	-- load font
-	font = love.graphics.newImageFont("assets/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/=.,!?:;()[]&#%\"\'_|")
+	font = love.graphics.newImageFont("assets/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/\\=.,!?:;()[]&#%\"\'_|")
 	love.graphics.setFont(font)
 	
 	-- load background
