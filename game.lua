@@ -315,7 +315,7 @@ function Game:renderGame()
 	
 	-- if paused over-draw paused background
 	if self.Paused then
-		love.graphics.draw(Textures.Pause_back, 0, 0)
+		love.graphics.draw(Textures.PauseBackground, 0, 0)
 	end
 	
 	-- debug print
