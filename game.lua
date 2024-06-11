@@ -77,9 +77,6 @@ function Game:init()
 	-- set paused to false
 	self.Paused = false
 	
-	-- set pause highlighted square to 1
-	self.PauseHighSq = 1
-	
 	-- set game-over variable to false
 	self.GameOver = false
 	
@@ -123,6 +120,7 @@ function Game:update(dt)
 	if CUR_startB and not startB then	-- press-down
 		startB = true
 		self.Paused = not self.Paused
+		self.PauseHighSq = 1
 	end
 	if not CUR_startB and startB then	-- press-up
 		startB = false
