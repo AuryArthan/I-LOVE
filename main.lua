@@ -19,6 +19,7 @@ function love.load()
 end
 
 function love.update(dt)
+	if Game.Paused then Game:pause_update() end
 	Game:update(dt)
 end
 

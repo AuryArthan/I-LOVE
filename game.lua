@@ -184,6 +184,26 @@ function Game:update(dt)
 
 end
 
+-- pause update
+function Game:pause_update()
+	
+	-- get the inputs
+	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
+    local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
+    local CUR_B = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
+    local CUR_startB = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_START)
+    
+	-- start press unpauses
+	if CUR_startB and not startB then	-- press-down
+		startB = true
+		self.Paused = not self.Paused
+	end
+	if not CUR_startB and startB then	-- press-up
+		startB = false
+	end
+	
+end
+
 -- handle the game ending
 function Game:end_game()
 	self.GameOver = true
