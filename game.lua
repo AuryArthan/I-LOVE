@@ -207,8 +207,23 @@ function Game:pause_update()
 	end
 	
 	-- DPAD
-	if CUR_DPAD[1] then self.PauseHighSq = 1 end	
-	if CUR_DPAD[2] then self.PauseHighSq = 2 end
+	for d=1,4 do
+		if CUR_DPAD[d] and not DPAD[d] then -- press-down
+			DPAD[d] = true
+			self.PauseHighSq = d
+			Sounds.TicSound:play()
+		end
+		if not CUR_DPAD[d] and DPAD[d] then -- press-up
+			DPAD[d] = false
+		end
+	end
+	
+	-- A press
+	if CUR_A then
+		A = true
+		if self.PauseHighSq == 1 then self.Paused = not self.Paused end
+		if self.PauseHighSq == 2 then  end	-- here reset game
+	end
 	
 end
 
