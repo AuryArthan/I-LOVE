@@ -20,7 +20,6 @@ function Textures:init()
 	
 	-- load background
 	self.Background = love.graphics.newImage("assets/themes/"..Game.Theme.."/back.png")
-	self.PauseBackground = love.graphics.newImage("assets/pause_background.png")
 	
 	-- load highlighters
 	self.Highlighter = love.graphics.newImage("assets/highlighter.png")
@@ -37,5 +36,9 @@ function Textures:init()
 	
 	-- load grid
 	self.Grid = love.graphics.newImage("assets/themes/"..Game.Theme.."/grid"..Game.Gridsize..".png")
+	
+	-- load pause assets
+	self.PauseBackground = love.graphics.newImage("assets/pause_background.png")
+	self.PauseHighlighter = love.graphics.newImage("assets/pause_highlighter.png")
 	
 end

@@ -38,6 +38,7 @@ Game = {
 	SelSq = nil;
 	TimeoutTimer = nil;
 	Paused = nil;
+	PauseHighSq = nil;
 	GameOver = nil;
 	MoveLog = nil;
 	HumanPlayers = {nil,nil,nil,nil};
@@ -75,6 +76,9 @@ function Game:init()
 	
 	-- set paused to false
 	self.Paused = false
+	
+	-- set pause highlighted square to 1
+	self.PauseHighSq = 1
 	
 	-- set game-over variable to false
 	self.GameOver = false
@@ -201,6 +205,10 @@ function Game:pause_update()
 	if not CUR_startB and startB then	-- press-up
 		startB = false
 	end
+	
+	-- DPAD
+	if CUR_DPAD[1] then self.PauseHighSq = 1 end	
+	if CUR_DPAD[2] then self.PauseHighSq = 2 end
 	
 end
 
@@ -333,9 +341,10 @@ function Game:renderGame()
 		Game:renderWinner(11, 45) 
 	end
 	
-	-- if paused over-draw paused background
+	-- if paused over-draw pause menu
 	if self.Paused then
 		love.graphics.draw(Textures.PauseBackground, 0, 0)
+		love.graphics.draw(Textures.PauseHighlighter, 176, 96+36*(self.PauseHighSq-1))
 	end
 	
 	-- debug print
