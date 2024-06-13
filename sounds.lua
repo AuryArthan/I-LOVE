@@ -12,13 +12,13 @@ Sounds = {
 function Sounds:init()
 	
 	-- load sounds and music
-	self.TicSound = love.audio.newSource("assets/tic.wav", "static")
-	self.SelSound = love.audio.newSource("assets/select.wav", "static")
-	self.DeSelSound = love.audio.newSource("assets/deselect.wav", "static")
-	self.SnapSound = love.audio.newSource("assets/themes/"..Game.Theme.."/snap.ogg", "static"); self.SnapSound:setVolume(3)
-	self.DeathSound = love.audio.newSource("assets/themes/"..Game.Theme.."/death.ogg", "static"); 
-	self.WinSound = love.audio.newSource("assets/themes/"..Game.Theme.."/win.ogg", "static"); self.WinSound:setVolume(1.6)
-	self.BackMusic = love.audio.newSource("assets/themes/"..Game.Theme.."/background_music.ogg", "stream")
+	self.TicSound = love.audio.newSource("assets/sounds/tic.wav", "static")
+	self.SelSound = love.audio.newSource("assets/sounds/select.wav", "static")
+	self.DeSelSound = love.audio.newSource("assets/sounds/deselect.wav", "static")
+	self.SnapSound = love.audio.newSource("assets/sounds/snap.ogg", "static"); self.SnapSound:setVolume(3)
+	self.DeathSound = love.audio.newSource("assets/sounds/death.ogg", "static"); 
+	self.WinSound = love.audio.newSource("assets/sounds/win.ogg", "static"); self.WinSound:setVolume(1.6)
+	self.BackMusic = love.audio.newSource("assets/sounds/background_music.ogg", "stream")
 	
 	-- set background music
 	self.BackMusic:setVolume(0.4)
