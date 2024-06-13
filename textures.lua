@@ -23,11 +23,11 @@ function Textures:init()
 	self.PauseBackground = love.graphics.newImage("assets/backgrounds/pause_background.png")
 	
 	-- load highlighters
-	self.Highlighter = love.graphics.newImage("assets/highlighters/highlighter.png")
-	self.Selected = love.graphics.newImage("assets/highlighters/selected.png")
-	self.MoveOption = love.graphics.newImage("assets/highlighters/move_option.png")
-	self.Attacked = love.graphics.newImage("assets/highlighters/attacked.png")
-	self.MarkedSqs = {love.graphics.newImage("assets/highlighters/marked_p1.png"),love.graphics.newImage("assets/highlighters/marked_p2.png"),love.graphics.newImage("assets/highlighters/marked_p3.png"),love.graphics.newImage("assets/highlighters/marked_p4.png")}
+	self.Highlighter = love.graphics.newImage("assets/highlighters/highlighter_"..Game.Gridsize..".png")
+	self.Selected = love.graphics.newImage("assets/highlighters/selected_"..Game.Gridsize..".png")
+	self.MoveOption = love.graphics.newImage("assets/highlighters/move_option_"..Game.Gridsize..".png")
+	self.Attacked = love.graphics.newImage("assets/highlighters/attacked_"..Game.Gridsize..".png")
+	self.MarkedSqs = {love.graphics.newImage("assets/highlighters/marked_p1_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p2_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p3_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p4_"..Game.Gridsize..".png")}
 	self.PauseHighlighter = love.graphics.newImage("assets/highlighters/pause_highlighter.png")
 	
 	-- load piece textures

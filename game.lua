@@ -28,7 +28,6 @@ RETRO_DEVICE_ID_JOYPAD_R3       = 16
 
 
 Game = {
-	Theme = nil;
 	NumPlayers = nil;
 	NumLivePlayers = nil;
 	Gridsize = nil;
@@ -46,9 +45,6 @@ Game = {
 
 
 function Game:init()
-
-	-- set theme
-	self.Theme = "JAP"
 	
 	-- set 2-player or 4-player mode
 	self.NumPlayers = 2
@@ -63,11 +59,15 @@ function Game:init()
 	self.Gridsize = 7
 	
 	-- set size of square in pixels
-	self.SqSize = 30 --24 --20
+	if self.Gridsize == 7 then self.SqSize = 30 end
+	if self.Gridsize == 9 then self.SqSize = 24 end
+	if self.Gridsize == 11 then self.SqSize = 20 end
 	
 	-- set coordinates of A1
-	self.A1_coord = {137,213} --{131,219} --{129,225}
-	
+	if self.Gridsize == 7 then self.A1_coord = {134,210} end
+	if self.Gridsize == 9 then self.A1_coord = {131,219} end
+	if self.Gridsize == 11 then self.A1_coord = {129,225} end
+
 	-- set highlighted square (default A1)
 	self.HighSq = {1,1}
 	
