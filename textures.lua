@@ -31,12 +31,12 @@ function Textures:init()
 	self.PauseHighlighter = love.graphics.newImage("assets/highlighters/pause_highlighter.png")
 	
 	-- load piece textures
-	self.PiecesUDLR = {love.graphics.newImage("assets/pieces/piece_u_7.png"), love.graphics.newImage("assets/pieces/piece_d.png"), love.graphics.newImage("assets/pieces/piece_l.png"), love.graphics.newImage("assets/pieces/piece_r.png")}
-	self.Players = {love.graphics.newImage("assets/pieces/player1_7.png"), love.graphics.newImage("assets/pieces/player2.png"), love.graphics.newImage("assets/pieces/player3.png"), love.graphics.newImage("assets/pieces/player4.png")}
-	self.PlayerDead = love.graphics.newImage("assets/pieces/player_dead.png")
-	self.Goal = love.graphics.newImage("assets/pieces/goal.png")
+	self.PiecesUDLR = {love.graphics.newImage("assets/pieces/piece_u_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_d_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_l_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_r_"..Game.Gridsize..".png")}
+	self.Players = {love.graphics.newImage("assets/pieces/player1_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/player2_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/player3_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/player4_"..Game.Gridsize..".png")}
+	self.PlayerDead = love.graphics.newImage("assets/pieces/player_dead_"..Game.Gridsize..".png")
+	self.Goal = love.graphics.newImage("assets/pieces/goal_"..Game.Gridsize..".png")
 	
 	-- load grid
-	self.Grid = love.graphics.newImage("assets/grids/grid"..Game.Gridsize..".png")
+	self.Grid = love.graphics.newImage("assets/grids/grid_"..Game.Gridsize..".png")
 	
 end
