@@ -37,6 +37,7 @@ Game = {
 	SelSq = nil;
 	TimeoutTimer = nil;
 	Newgame = nil;
+	NewgameHigh = nil;
 	Paused = nil;
 	PauseHighSq = nil;
 	GameOver = nil;
@@ -77,6 +78,9 @@ function Game:init()
 	
 	-- set newgame to true 
 	self.Newgame = true
+	
+	-- set newgame highlighter to (1,1)
+	self.NewgameHigh = {1,1}
 	
 	-- set paused to false
 	self.Paused = false
@@ -188,6 +192,27 @@ function Game:update(dt)
 	-- if its AI's turn set timeout 1s so it doesnt move too fast
 	if self.HumanPlayers[Board.Turn] == false then self.TimeoutTimer = 1 end
 
+end
+
+-- newgame update
+function Game:newgame_update()
+
+	-- get the inputs
+	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
+    local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
+    local CUR_B = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
+    local CUR_startB = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_START)
+    
+    -- start press starts the game
+	if CUR_startB and not startB then	-- press-down
+		startB = true
+		self.Newgame = false
+		Sounds.BellSound:play()
+	end
+	if not CUR_startB and startB then	-- press-up
+		startB = false
+	end
+	
 end
 
 -- pause update

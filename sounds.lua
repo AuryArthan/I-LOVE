@@ -15,6 +15,7 @@ function Sounds:init()
 	self.TicSound = love.audio.newSource("assets/sounds/tic.wav", "static")
 	self.SelSound = love.audio.newSource("assets/sounds/select.wav", "static")
 	self.DeSelSound = love.audio.newSource("assets/sounds/deselect.wav", "static")
+	self.BellSound = love.audio.newSource("assets/sounds/bell.ogg", "static")
 	self.SnapSound = love.audio.newSource("assets/sounds/snap.ogg", "static"); self.SnapSound:setVolume(3)
 	self.DeathSound = love.audio.newSource("assets/sounds/death.ogg", "static"); 
 	self.WinSound = love.audio.newSource("assets/sounds/win.ogg", "static"); self.WinSound:setVolume(1.6)
