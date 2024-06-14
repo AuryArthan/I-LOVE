@@ -317,6 +317,32 @@ function Game:sq_coordinates(sq)
 	return self.A1_coord[1]+(sq[1]-1)*self.SqSize, self.A1_coord[2]-(sq[2]-1)*self.SqSize
 end
 
+-- renders the newgame menu
+function Game:renderNewgameMenu()
+	love.graphics.draw(Textures.NewgameBackground, 0, 0)
+	-- categories
+	love.graphics.print("GridSize", 9, 114)
+	love.graphics.print("Number of Players", 9, 114+40)
+	love.graphics.print("Human Players", 9, 114+2*40)
+	love.graphics.print("Timer", 9, 114+3*40)
+	-- button labels
+	love.graphics.print("7", 34, 132)
+	love.graphics.print("9", 32+27, 132)
+	love.graphics.print("1", 32+2*27-4, 132)
+	love.graphics.print("1", 32+2*27+1, 132)
+	love.graphics.print("2", 45, 132+40)
+	love.graphics.print("4", 45+27, 132+40)
+	love.graphics.print("P1", 18+1, 132+2*40)
+	love.graphics.print("P2", 18+25, 132+2*40)
+	love.graphics.print("P3", 18+2*25, 132+2*40)
+	love.graphics.print("P4", 18+3*25, 132+2*40)
+	love.graphics.print("OFF", 15, 132+3*40)
+	love.graphics.print("1/1", 15+25, 132+3*40)
+	love.graphics.print("3/2", 15+2*25, 132+3*40)
+	love.graphics.print("5/3", 15+3*25, 132+3*40)
+end
+
+-- renders the whole game
 function Game:renderGame()
 
 	-- draw background
@@ -360,7 +386,7 @@ function Game:renderGame()
 	
 	-- if newgame over-draw newgame menu
 	if self.Newgame then
-		love.graphics.draw(Textures.NewgameBackground, 0, 0)
+		Game:renderNewgameMenu()
 	end
 	
 	-- if paused over-draw pause menu
