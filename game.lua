@@ -55,7 +55,7 @@ function Game:init()
 	self.NumLivePlayers = self.NumPlayers
 	
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, false, false}
+	self.HumanPlayers = {true, false, false, true}
 	
 	-- set gridsize
 	self.Gridsize = 7
@@ -307,7 +307,6 @@ function Game:move_proposal(sq1, sq2)
 	end
 end
 
-
 -- move highlighted square
 function Game:moveHighlighter(dir)
 	if dir == 1 and self.HighSq[2] < self.Gridsize then
@@ -365,6 +364,12 @@ function Game:renderNewgameMenu()
 	love.graphics.print("1/1", 15+25, 132+3*40)
 	love.graphics.print("3/2", 15+2*25, 132+3*40)
 	love.graphics.print("5/3", 15+3*25, 132+3*40)
+	-- selected parameters
+	love.graphics.draw(Textures.NewgameMarker, 25+(self.Gridsize-7)/2*25, 123)
+	love.graphics.draw(Textures.NewgameMarker, 36+(self.NumPlayers-2)/2*27, 123+40)
+	for p = 1,4 do
+		if self.HumanPlayers[p] then love.graphics.draw(Textures.NewgameMarker, 12+(p-1)*25, 123+2*40) end
+	end
 end
 
 -- renders the whole game
