@@ -327,7 +327,7 @@ end
 -- renders player turn
 function Game:renderPlayerTurn(posx, posy)
 	love.graphics.print("PLAYER TURN: ", posx, posy)
-	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-10)
+	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-19+self.Gridsize)
 end
 
 -- renders the winner at the end of the game
@@ -356,10 +356,12 @@ function Game:renderNewgameMenu()
 	love.graphics.print("1", 32+2*27+1, 132)
 	love.graphics.print("2", 45, 132+40)
 	love.graphics.print("4", 45+27, 132+40)
-	love.graphics.print("P1", 18+1, 132+2*40)
-	love.graphics.print("P2", 18+25, 132+2*40)
-	love.graphics.print("P3", 18+2*25, 132+2*40)
-	love.graphics.print("P4", 18+3*25, 132+2*40)
+	--love.graphics.print("P1", 18+1, 132+2*40)
+	--love.graphics.print("P2", 18+25, 132+2*40)
+	--love.graphics.print("P3", 18+2*25, 132+2*40)
+	--love.graphics.print("P4", 18+3*25, 132+2*40)
+	for p = 1,4 do love.graphics.draw(Textures.SmallPlayer[p], 12+(p-1)*25, 123+2*40) end
+	if self.NumPlayers == 2 then for p = 2,4,2 do love.graphics.draw(Textures.SmallPlayerDead, 12+(p-1)*25, 123+2*40) end end
 	love.graphics.print("OFF", 15, 132+3*40)
 	love.graphics.print("1/1", 15+25, 132+3*40)
 	love.graphics.print("3/2", 15+2*25, 132+3*40)

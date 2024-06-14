@@ -30,8 +30,6 @@ function Textures:init()
 	self.Attacked = love.graphics.newImage("assets/highlighters/attacked_"..Game.Gridsize..".png")
 	self.MarkedSqs = {love.graphics.newImage("assets/highlighters/marked_p1_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p2_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p3_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p4_"..Game.Gridsize..".png")}
 	self.PauseHighlighter = love.graphics.newImage("assets/highlighters/pause_highlighter.png")
-	self.NewgameHighlighter = love.graphics.newImage("assets/highlighters/highlighter_11.png")
-	self.NewgameMarker = love.graphics.newImage("assets/highlighters/move_option_11.png")
 	
 	-- load piece textures
 	self.PiecesUDLR = {love.graphics.newImage("assets/pieces/piece_u_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_d_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_l_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_r_"..Game.Gridsize..".png")}
@@ -41,5 +39,11 @@ function Textures:init()
 	
 	-- load grid
 	self.Grid = love.graphics.newImage("assets/grids/grid_"..Game.Gridsize..".png")
+	
+	-- aditional textures for the newgame menu
+	self.NewgameHighlighter = love.graphics.newImage("assets/highlighters/highlighter_11.png")
+	self.NewgameMarker = love.graphics.newImage("assets/highlighters/move_option_11.png")
+	self.SmallPlayer = {love.graphics.newImage("assets/pieces/player1_11.png"), love.graphics.newImage("assets/pieces/player2_11.png"), love.graphics.newImage("assets/pieces/player3_11.png"), love.graphics.newImage("assets/pieces/player4_11.png")}
+	self.SmallPlayerDead = love.graphics.newImage("assets/pieces/player_dead_11.png")
 	
 end
