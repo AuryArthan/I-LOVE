@@ -373,15 +373,13 @@ end
 -- renders player turn
 function Game:renderPlayerTurn(posx, posy)
 	love.graphics.print("PLAYER TURN: ", posx, posy)
-	love.graphics.draw(Textures.Players[Board.Turn], posx+72, posy-19+self.Gridsize)
+	love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+72, posy-8)
 end
 
 -- renders the winner at the end of the game
 function Game:renderWinner(posx, posy)
-	if self.Gridsize == 11 then love.graphics.print("PLAYER     WINS!", posx, posy) end
-	if self.Gridsize == 9 then love.graphics.print("PLAYER      WINS!", posx, posy) end
-	if self.Gridsize == 7 then love.graphics.print("PLAYER       WINS!", posx, posy) end
-	love.graphics.draw(Textures.Players[Board.Turn], posx+40, posy-19+self.Gridsize)
+	love.graphics.print("PLAYER     WINS!", posx, posy)
+	love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+40, posy-8)
 end
 
 -- coordinates of A1 square in pixels on screen
