@@ -381,9 +381,9 @@ function Game:renderWinner(posx, posy)
 	love.graphics.print("PLAYER     WINS!", posx, posy)
 	local center_val = Board:square_value({(Game.Gridsize+1)/2,(Game.Gridsize+1)/2})
 	if center_val >= 1 and center_val <= 4 then									-- if the center was reached
-		love.graphics.draw(Textures.SmallPlayer[center_val], posx+40, posy-8)
+		love.graphics.draw(Textures.SmallPlayer[center_val], posx+39, posy-8)
 	else																		-- last one standing
-		love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+40, posy-8)
+		love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+39, posy-8)
 	end
 end
 
@@ -427,7 +427,11 @@ function Game:renderNewgameMenu()
 	local offset = 0; local offset_mul = 0;
 	if self.NewgameHigh[1] == 3 then offset = 24; offset_mul = 2 end
 	if self.NewgameHigh[1] == 4 then offset = 13 end
-	love.graphics.draw(Textures.NewgameHighlighter, 12+(self.NewgameHigh[2]-1)*(25+offset_mul)+offset, 283-self.NewgameHigh[1]*40)
+	if self.NewgameHigh[1] ~= 5 then
+		love.graphics.draw(Textures.NewgameHighlighter, 12+(self.NewgameHigh[2]-1)*(25+offset_mul)+offset, 283-self.NewgameHigh[1]*40)
+	else
+		love.graphics.draw(Textures.NewgameStartGame, 26, 16)
+	end
 end
 
 -- renders the whole game

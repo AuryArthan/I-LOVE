@@ -41,6 +41,7 @@ function Textures:init()
 	self.Grid = love.graphics.newImage("assets/grids/grid_"..Game.Gridsize..".png")
 	
 	-- aditional textures for the newgame menu
+	self.NewgameStartGame = love.graphics.newImage("assets/highlighters/startgame_highlighter.png")
 	self.NewgameHighlighter = love.graphics.newImage("assets/highlighters/highlighter_11.png")
 	self.NewgameMarker = love.graphics.newImage("assets/highlighters/move_option_11.png")
 	self.SmallPlayer = {love.graphics.newImage("assets/pieces/player1_11.png"), love.graphics.newImage("assets/pieces/player2_11.png"), love.graphics.newImage("assets/pieces/player3_11.png"), love.graphics.newImage("assets/pieces/player4_11.png")}
