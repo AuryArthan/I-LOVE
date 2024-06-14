@@ -379,7 +379,12 @@ end
 -- renders the winner at the end of the game
 function Game:renderWinner(posx, posy)
 	love.graphics.print("PLAYER     WINS!", posx, posy)
-	love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+40, posy-8)
+	local center_val = Board:square_value({(Game.Gridsize+1)/2,(Game.Gridsize+1)/2})
+	if center_val >= 1 and center_val <= 4 then									-- if the center was reached
+		love.graphics.draw(Textures.SmallPlayer[center_val], posx+40, posy-8)
+	else																		-- last one standing
+		love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+40, posy-8)
+	end
 end
 
 -- coordinates of A1 square in pixels on screen
