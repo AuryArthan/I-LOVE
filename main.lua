@@ -19,8 +19,13 @@ function love.load()
 end
 
 function love.update(dt)
-	if Game.Paused then Game:pause_update() end
-	if not Game.Paused then Game:update(dt) end
+	if Game.Newgame then
+		Game:newgame_update()
+	elseif Game.Paused then
+		Game:pause_update()
+	else
+		Game:update(dt)
+	end
 end
 
 function love.draw()

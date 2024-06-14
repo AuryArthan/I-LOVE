@@ -36,6 +36,7 @@ Game = {
 	HighSq = nil;
 	SelSq = nil;
 	TimeoutTimer = nil;
+	Newgame = nil;
 	Paused = nil;
 	PauseHighSq = nil;
 	GameOver = nil;
@@ -68,11 +69,14 @@ function Game:init()
 	if self.Gridsize == 9 then self.A1_coord = {131,219} end
 	if self.Gridsize == 11 then self.A1_coord = {129,225} end
 
-	-- set highlighted square (default A1)
-	self.HighSq = {1,1}
+	-- set highlighted square (default center)
+	self.HighSq = {(self.Gridsize+1)/2,(self.Gridsize+1)/2}
 	
 	-- set timeout timer to 0
 	self.TimeoutTimer = 0
+	
+	-- set newgame to true 
+	self.Newgame = true
 	
 	-- set paused to false
 	self.Paused = false
@@ -354,6 +358,11 @@ function Game:renderGame()
 		Game:renderWinner(11, 45) 
 	end
 	
+	-- if newgame over-draw newgame menu
+	if self.Newgame then
+		love.graphics.draw(Textures.NewgameBackground, 0, 0)
+	end
+	
 	-- if paused over-draw pause menu
 	if self.Paused then
 		love.graphics.draw(Textures.PauseBackground, 0, 0)
@@ -376,7 +385,7 @@ function Game:renderGame()
 	--DebugPr:move_log(375, 10)
 	--DebugPr:free_adjacents_print(10, 70)
 	--DebugPr:potential_attacks_print(10, 160)
-	DebugPr:move_scores(365, 10)
-	DebugPr:in_between_squares(5, 75)
+	--DebugPr:move_scores(365, 10)
+	--DebugPr:in_between_squares(5, 75)
 	
 end
