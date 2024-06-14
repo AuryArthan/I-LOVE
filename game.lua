@@ -79,8 +79,8 @@ function Game:init()
 	-- set newgame to true 
 	self.Newgame = true
 	
-	-- set newgame highlighter to (1,1)
-	self.NewgameHigh = {1,1}
+	-- set newgame highlighter to "START GAME"
+	self.NewgameHigh = {5,1}
 	
 	-- set paused to false
 	self.Paused = false
@@ -216,6 +216,49 @@ function Game:newgame_update()
 		startB = false
 	end
 	
+	-- DPAD controlls highlighter
+	for d=1,4 do
+		if CUR_DPAD[d] and not DPAD[d] then -- press-down
+			Game:moveNewgameHighlighter(d)
+			DPAD[d] = true
+			ASDelay[d] = DAS_INIT_TIME
+		end
+		if not CUR_DPAD[d] and DPAD[d] then -- press-up
+			DPAD[d] = false
+			ASDelay[d] = -1
+		end
+	end
+	-- delayed autoshift
+	for d=1,4 do
+		if DPAD[d] then
+			if ASDelay[d] == 0 then
+				Game:moveNewgameHighlighter(d)
+				ASDelay[d] = DAS_MOVE_TIME
+			else
+				ASDelay[d] = ASDelay[d]-1
+			end
+		end
+	end
+	
+end
+
+-- move newgame highlighter
+function Game:moveNewgameHighlighter(dir)
+	if dir == 1 and self.NewgameHigh[1] < 5 then
+		self.NewgameHigh[1] = self.NewgameHigh[1]+1 -- up
+		self.NewgameHigh[2] = 1
+		Sounds.TicSound:play()
+	elseif dir == 2 and self.NewgameHigh[1] > 1 then
+		self.NewgameHigh[1] = self.NewgameHigh[1]-1 -- down 
+		self.NewgameHigh[2] = 1
+		Sounds.TicSound:play()
+	elseif dir == 3 and self.NewgameHigh[2] > 1 then
+		self.NewgameHigh[2] = self.NewgameHigh[2]-1 -- left
+		Sounds.TicSound:play()
+	elseif dir == 4 and self.NewgameHigh[2] < ({4,4,2,3,1})[self.NewgameHigh[1]] then
+		self.NewgameHigh[2] = self.NewgameHigh[2]+1 -- right
+		Sounds.TicSound:play()
+	end
 end
 
 -- pause update
@@ -377,6 +420,11 @@ function Game:renderNewgameMenu()
 	for p = 1,4 do
 		if self.HumanPlayers[p] then love.graphics.draw(Textures.NewgameMarker, 12+(p-1)*25, 123+2*40) end
 	end
+	-- highlighter
+	local offset = 0; local offset_mul = 0;
+	if self.NewgameHigh[1] == 3 then offset = 24; offset_mul = 2 end
+	if self.NewgameHigh[1] == 4 then offset = 13 end
+	love.graphics.draw(Textures.NewgameHighlighter, 12+(self.NewgameHigh[2]-1)*(25+offset_mul)+offset, 283-self.NewgameHigh[1]*40)
 end
 
 -- renders the whole game
@@ -450,5 +498,6 @@ function Game:renderGame()
 	--DebugPr:potential_attacks_print(10, 160)
 	--DebugPr:move_scores(365, 10)
 	--DebugPr:in_between_squares(5, 75)
+	love.graphics.print(self.NewgameHigh[1].." "..self.NewgameHigh[2], 230, 30)
 	
 end
