@@ -109,12 +109,6 @@ function Game:update(dt)
 		return
 	end
 	
-	-- check if its the AI's turn
-	if self.HumanPlayers[Board.Turn] == false then
-		local move = Player:recommend_move()			-- get move from AI
-		Game:move_proposal(move[1], move[2])
-	end
-	
 	-- get the inputs
 	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
     local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
@@ -132,6 +126,15 @@ function Game:update(dt)
 	end
 	if not CUR_startB and startB then	-- press-up
 		startB = false
+	end
+	
+	-- check if the game is over
+	if self.GameOver then return end
+	
+	-- check if its the AI's turn
+	if self.HumanPlayers[Board.Turn] == false then
+		local move = Player:recommend_move()			-- get move from AI
+		Game:move_proposal(move[1], move[2])
 	end
 	
 	-- DPAD press-down/press-up events
