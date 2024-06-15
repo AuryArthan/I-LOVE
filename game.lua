@@ -51,7 +51,7 @@ Game = {
 function Game:init()
 	
 	-- set 2-player or 4-player mode
-	self.NumPlayers = 2
+	self.NumPlayers = 4
 	
 	-- set number of alive players
 	self.NumLivePlayers = self.NumPlayers
@@ -407,6 +407,7 @@ end
 function Game:renderPlayerTurn(posx, posy)
 	for p = 1,self.NumPlayers do
 		love.graphics.draw(Textures.SmallPlayer[1+(p-1)*4/self.NumPlayers], posx, posy+30*(p-1))
+		if Board.PlayerAlive[1+(p-1)*4/self.NumPlayers] == 0 then love.graphics.draw(Textures.SmallPlayerDead, posx, posy+30*(p-1)) end
 		if self.HumanPlayers[1+(p-1)*4/self.NumPlayers] then
 			if self.TimeControl == 0 then
 				love.graphics.print("Human", posx+32, posy+9+30*(p-1))
@@ -423,7 +424,7 @@ function Game:renderPlayerTurn(posx, posy)
 				end
 			end
 		else
-			love.graphics.print("Computer", posx+32, posy+9+30*(p-1))
+			love.graphics.print(" CPU", posx+32, posy+9+30*(p-1))
 		end
 	end
 	love.graphics.draw(Textures.Turn, posx-3, posy-3+30*(Board.Turn-1)*self.NumPlayers/4)
