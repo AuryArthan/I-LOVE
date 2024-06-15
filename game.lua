@@ -70,7 +70,7 @@ function Game:init()
 	if self.Gridsize == 11 then self.A1_coord = {129,225} end
 
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, false, true}
+	self.HumanPlayers = {false, false, false, true}
 	
 	-- set time control (default off)
 	self.TimeControl = 1
@@ -81,8 +81,8 @@ function Game:init()
 	-- set highlighted square (default center)
 	self.HighSq = {(self.Gridsize+1)/2,(self.Gridsize+1)/2}
 	
-	-- set timeout timer to 0
-	self.TimeoutTimer = 0
+	-- set timeout timer to -100
+	self.TimeoutTimer = -100
 	
 	-- set newgame to true 
 	self.Newgame = true
@@ -161,8 +161,13 @@ function Game:update(dt)
 	
 	-- check if its the AI's turn
 	if self.HumanPlayers[Board.Turn] == false then
-		local move = Player:recommend_move()			-- get move from AI
-		Game:move_proposal(move[1], move[2])
+		if self.TimeoutTimer == -100 then
+			self.TimeoutTimer = 1							-- timeout 1 second so AI doesnt move too fast
+		else
+			self.TimeoutTimer = -100						-- reset timeout
+			local move = Player:recommend_move()			-- get move from AI
+			Game:move_proposal(move[1], move[2])
+		end
 	end
 	
 	-- DPAD press-down/press-up events
@@ -220,9 +225,6 @@ function Game:update(dt)
 		B = false
 	end
 	
-	-- if its AI's turn set timeout 1s so it doesnt move too fast
-	if self.HumanPlayers[Board.Turn] == false then self.TimeoutTimer = 1 end
-
 end
 
 -- newgame update
