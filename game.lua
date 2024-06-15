@@ -51,7 +51,7 @@ Game = {
 function Game:init()
 	
 	-- set 2-player or 4-player mode
-	self.NumPlayers = 2
+	self.NumPlayers = 4
 	
 	-- set number of alive players
 	self.NumLivePlayers = self.NumPlayers
@@ -76,7 +76,7 @@ function Game:init()
 	self.TimeControl = 1
 	
 	-- set timers (in seconds)
-	for p = 1,4 do self.Timers[p] = (2*self.TimeControl-1)*60 end
+	for p = 1,4 do self.Timers[p] = (2*self.TimeControl-1)*5 end --60 end
 	
 	-- set highlighted square (default center)
 	self.HighSq = {(self.Gridsize+1)/2,(self.Gridsize+1)/2}
@@ -143,6 +143,16 @@ function Game:update(dt)
 	if self.TimeControl ~= 0 then
 		if self.HumanPlayers[Board.Turn] then
 			self.Timers[Board.Turn] = self.Timers[Board.Turn]-dt
+			if self.Timers[Board.Turn] <= 0 then
+				Sounds.BellSound:play()
+				self.Timers[Board.Turn] = 0
+				-- kill player
+				Board.PlayerAlive[Board.Turn] = 0 
+				local pos = Board.PlayerPos[Board.Turn]
+				Board.Squares[pos[1]][pos[2]] = -1
+				Board.MarkedSqs[Board.Turn] = pos	
+				Board:change_turn()
+			end
 		end
 	end
 	
