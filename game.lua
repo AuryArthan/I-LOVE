@@ -141,7 +141,9 @@ function Game:update(dt)
 	
 	-- update time
 	if self.TimeControl ~= 0 then
-		self.Timers[Board.Turn] = self.Timers[Board.Turn]-dt
+		if self.HumanPlayers[Board.Turn] then
+			self.Timers[Board.Turn] = self.Timers[Board.Turn]-dt
+		end
 	end
 	
 	-- check if its the AI's turn
@@ -352,6 +354,9 @@ end
 -- handle a proposed move
 function Game:move_proposal(sq1, sq2)
 	if Board:move_legality(sq1, sq2) then									-- if move is legal, make it
+		if self.HumanPlayers[Board.Turn] then 
+			self.Timers[Board.Turn] = self.Timers[Board.Turn]+self.TimeControl	-- time increment
+		end
 		Board:make_move(sq1, sq2)												-- make move
 		self.MoveLog[#self.MoveLog+1] = {square_copy(sq1), square_copy(sq2)}	-- record move in log
 		Sounds.SnapSound:play()													-- play sound
