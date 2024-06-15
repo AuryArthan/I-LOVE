@@ -441,6 +441,7 @@ function Game:renderNewgameMenu()
 	for p = 1,4 do
 		if self.HumanPlayers[p] then love.graphics.draw(Textures.NewgameMarker, 12+(p-1)*25, 123+2*40) end
 	end
+	love.graphics.draw(Textures.NewgameMarker, 37+(self.TimeControl-1)*25, 123+3*40)
 	-- highlighter
 	local offset = 0; local offset_mul = 0;
 	if self.NewgameHigh[1] == 3 then offset = 24; offset_mul = 2 end
