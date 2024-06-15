@@ -147,11 +147,14 @@ function Game:update(dt)
 				Sounds.BellSound:play()
 				self.Timers[Board.Turn] = 0
 				-- kill player
+				Sounds.DeathSound:play()
 				Board.PlayerAlive[Board.Turn] = 0 
 				local pos = Board.PlayerPos[Board.Turn]
 				Board.Squares[pos[1]][pos[2]] = -1
 				Board.MarkedSqs[Board.Turn] = pos	
 				Board:change_turn()
+				-- check if its game over
+				if sum(Board.PlayerAlive) == 1 then Game:end_game() end
 			end
 		end
 	end
