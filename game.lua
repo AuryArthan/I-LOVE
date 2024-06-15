@@ -51,7 +51,7 @@ Game = {
 function Game:init()
 	
 	-- set 2-player or 4-player mode
-	self.NumPlayers = 4
+	self.NumPlayers = 2
 	
 	-- set number of alive players
 	self.NumLivePlayers = self.NumPlayers
@@ -70,13 +70,13 @@ function Game:init()
 	if self.Gridsize == 11 then self.A1_coord = {129,225} end
 
 	-- set which players are human (not AI)
-	self.HumanPlayers = {false, false, false, true}
+	self.HumanPlayers = {true, false, false, true}
 	
 	-- set time control (default off)
 	self.TimeControl = 1
 	
 	-- set timers (in seconds)
-	for p = 1,4 do self.Timers[p] = (2*self.TimeControl-1)*5 end --60 end
+	for p = 1,4 do self.Timers[p] = (2*self.TimeControl-1)*60 end
 	
 	-- set highlighted square (default center)
 	self.HighSq = {(self.Gridsize+1)/2,(self.Gridsize+1)/2}
@@ -403,10 +403,30 @@ function Game:moveHighlighter(dir)
 	end
 end
 
--- renders player turn
+-- renders player turn and time
 function Game:renderPlayerTurn(posx, posy)
-	love.graphics.print("Turn: ", posx, posy)
-	love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+32, posy-8)
+	for p = 1,self.NumPlayers do
+		love.graphics.draw(Textures.SmallPlayer[1+(p-1)*4/self.NumPlayers], posx, posy+30*(p-1))
+		if self.HumanPlayers[1+(p-1)*4/self.NumPlayers] then
+			if self.TimeControl == 0 then
+				love.graphics.print("Human", posx+32, posy+9+30*(p-1))
+			else
+				local t = self.Timers[1+(p-1)*4/self.NumPlayers]
+				local minutes = math.floor(t/60)
+				local seconds = math.floor(t-60*math.floor(t/60))
+				love.graphics.print(minutes, posx+38, posy+9+30*(p-1))
+				love.graphics.print(":", posx+44, posy+9+30*(p-1))
+				if seconds < 10 then
+					love.graphics.print("0"..seconds, posx+49, posy+9+30*(p-1))
+				else
+					love.graphics.print(seconds, posx+49, posy+9+30*(p-1))
+				end
+			end
+		else
+			love.graphics.print("Computer", posx+32, posy+9+30*(p-1))
+		end
+	end
+	love.graphics.draw(Textures.Turn, posx-3, posy-3+30*(Board.Turn-1)*self.NumPlayers/4)
 end
 
 -- renders the winner at the end of the game
@@ -504,11 +524,8 @@ function Game:renderGame()
 	end
 	
 	-- draw hud
-	if self.GameOver == false then 
-		Game:renderPlayerTurn(29, 45)
-	else
-		Game:renderWinner(13, 45) 
-	end
+	if self.GameOver then Game:renderWinner(13, 45) end
+	Game:renderPlayerTurn(14, 80)
 	
 	-- if newgame over-draw newgame menu
 	if self.Newgame then

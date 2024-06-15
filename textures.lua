@@ -30,6 +30,7 @@ function Textures:init()
 	self.Attacked = love.graphics.newImage("assets/highlighters/attacked_"..Game.Gridsize..".png")
 	self.MarkedSqs = {love.graphics.newImage("assets/highlighters/marked_p1_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p2_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p3_"..Game.Gridsize..".png"),love.graphics.newImage("assets/highlighters/marked_p4_"..Game.Gridsize..".png")}
 	self.PauseHighlighter = love.graphics.newImage("assets/highlighters/pause_highlighter.png")
+	self.Turn = love.graphics.newImage("assets/highlighters/turn.png")
 	
 	-- load piece textures
 	self.PiecesUDLR = {love.graphics.newImage("assets/pieces/piece_u_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_d_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_l_"..Game.Gridsize..".png"), love.graphics.newImage("assets/pieces/piece_r_"..Game.Gridsize..".png")}
