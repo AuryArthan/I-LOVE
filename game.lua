@@ -372,8 +372,8 @@ end
 
 -- renders player turn
 function Game:renderPlayerTurn(posx, posy)
-	love.graphics.print("PLAYER TURN: ", posx, posy)
-	love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+72, posy-8)
+	love.graphics.print("Turn: ", posx, posy)
+	love.graphics.draw(Textures.SmallPlayer[Board.Turn], posx+32, posy-8)
 end
 
 -- renders the winner at the end of the game
@@ -471,9 +471,9 @@ function Game:renderGame()
 	
 	-- draw hud
 	if self.GameOver == false then 
-		Game:renderPlayerTurn(11, 45)
+		Game:renderPlayerTurn(29, 45)
 	else
-		Game:renderWinner(11, 45) 
+		Game:renderWinner(13, 45) 
 	end
 	
 	-- if newgame over-draw newgame menu
