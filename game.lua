@@ -43,6 +43,8 @@ Game = {
 	GameOver = nil;
 	MoveLog = nil;
 	HumanPlayers = {nil,nil,nil,nil};
+	TimeControl = nil;
+	Timers = {nil,nil,nil,nil};
 }
 
 
@@ -53,9 +55,6 @@ function Game:init()
 	
 	-- set number of alive players
 	self.NumLivePlayers = self.NumPlayers
-	
-	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, false, true}
 	
 	-- set gridsize
 	self.Gridsize = 7
@@ -70,6 +69,15 @@ function Game:init()
 	if self.Gridsize == 9 then self.A1_coord = {131,219} end
 	if self.Gridsize == 11 then self.A1_coord = {129,225} end
 
+	-- set which players are human (not AI)
+	self.HumanPlayers = {true, false, false, true}
+	
+	-- set time control (default off)
+	self.TimeControl = 1
+	
+	-- set timers (in seconds)
+	for p = 1,4 do self.Timers[p] = (2*self.TimeControl-1)*60 end
+	
 	-- set highlighted square (default center)
 	self.HighSq = {(self.Gridsize+1)/2,(self.Gridsize+1)/2}
 	
@@ -130,6 +138,11 @@ function Game:update(dt)
 	
 	-- check if the game is over
 	if self.GameOver then return end
+	
+	-- update time
+	if self.TimeControl ~= 0 then
+		self.Timers[Board.Turn] = self.Timers[Board.Turn]-dt
+	end
 	
 	-- check if its the AI's turn
 	if self.HumanPlayers[Board.Turn] == false then
@@ -506,5 +519,9 @@ function Game:renderGame()
 	--DebugPr:move_scores(365, 10)
 	--DebugPr:in_between_squares(5, 75)
 	love.graphics.print(self.NewgameHigh[1].." "..self.NewgameHigh[2], 230, 30)
+	love.graphics.print(self.Timers[1], 270, 60)
+	love.graphics.print(self.Timers[2], 270, 80)
+	love.graphics.print(self.Timers[3], 270, 100)
+	love.graphics.print(self.Timers[4], 270, 120)
 	
 end
