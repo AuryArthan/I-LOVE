@@ -55,6 +55,9 @@ function Board:init()
 	-- place the goal in the center
 	self.Squares[(Game.Gridsize+1)/2][(Game.Gridsize+1)/2] = 9
     
+    -- reset marked squares
+    self.MarkedSqs = {nil,nil,nil,nil};
+    
     -- mark player positions
     self.PlayerPos[1] = {(Game.Gridsize+1)/2,1}
     self.PlayerPos[3] = {(Game.Gridsize+1)/2,Game.Gridsize}

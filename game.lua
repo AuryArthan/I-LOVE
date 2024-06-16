@@ -104,6 +104,30 @@ function Game:init()
 	
 end
 
+-- reinit when updating options
+function Game:reinit()
+
+	-- set number of alive players
+	self.NumLivePlayers = self.NumPlayers
+	
+	-- set size of square in pixels
+	if self.Gridsize == 7 then self.SqSize = 30 end
+	if self.Gridsize == 9 then self.SqSize = 24 end
+	if self.Gridsize == 11 then self.SqSize = 20 end
+	
+	-- set coordinates of A1
+	if self.Gridsize == 7 then self.A1_coord = {134,210} end
+	if self.Gridsize == 9 then self.A1_coord = {131,219} end
+	if self.Gridsize == 11 then self.A1_coord = {129,225} end
+	
+	-- set timers (in seconds)
+	for p = 1,4 do self.Timers[p] = (2*self.TimeControl-1)*60 end
+	
+	-- set highlighted square (default center)
+	self.HighSq = {(self.Gridsize+1)/2,(self.Gridsize+1)/2}
+	
+end
+
 local DPAD = {false,false,false,false}	-- U,D,L,R
 local ASDelay = {-1,-1,-1,-1}	-- autoshift delay for up, down, left, right
 local A  = false		-- A button
@@ -270,6 +294,38 @@ function Game:newgame_update()
 		end
 	end
 	
+	-- A button
+	if CUR_A and not A then		-- press down
+		A = true
+		Game:newgameA()
+	end
+	if not CUR_A and A then		-- press up
+		A = false
+	end
+	
+end
+
+-- handle A press in the newgame menu
+function Game:newgameA()
+	if self.NewgameHigh[1] == 5 then		-- start game
+		self.Newgame = false
+		Sounds.BellSound:play()
+	end
+	if self.NewgameHigh[1] == 4 then		-- gridsize
+		self.Gridsize = 5+2*self.NewgameHigh[2]
+	end
+	if self.NewgameHigh[1] == 3 then		-- number of player
+		self.NumPlayers = 2*self.NewgameHigh[2]
+	end
+	if self.NewgameHigh[1] == 2 then		-- human players
+		self.HumanPlayers[self.NewgameHigh[2]] = not self.HumanPlayers[self.NewgameHigh[2]]
+	end
+	if self.NewgameHigh[1] == 1 then		-- time control
+		self.TimeControl = self.NewgameHigh[2]-1
+	end
+	Game:reinit()
+	Board:init()
+	Textures:init()
 end
 
 -- move newgame highlighter
@@ -325,7 +381,7 @@ function Game:pause_update()
 	if CUR_A then
 		A = true
 		if self.PauseHighSq == 1 then self.Paused = not self.Paused end
-		if self.PauseHighSq == 2 then self.Paused = false; self.Newgame = true end
+		if self.PauseHighSq == 2 then self.Paused = false; Board:init(); self.Newgame = true end
 	end
 	
 end
@@ -560,6 +616,5 @@ function Game:renderGame()
 	--DebugPr:potential_attacks_print(10, 160)
 	--DebugPr:move_scores(365, 10)
 	--DebugPr:in_between_squares(5, 75)
-	love.graphics.print(self.NewgameHigh[1].." "..self.NewgameHigh[2], 230, 30)
 	
 end
