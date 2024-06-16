@@ -525,8 +525,8 @@ function Game:renderGame()
 	end
 	
 	-- draw hud
-	if self.GameOver then Game:renderWinner(13, 45) end
-	Game:renderPlayerTurn(14, 80)
+	if self.GameOver then Game:renderWinner(374, 47) end
+	Game:renderPlayerTurn(379, 85)
 	
 	-- if newgame over-draw newgame menu
 	if self.Newgame then
@@ -558,9 +558,5 @@ function Game:renderGame()
 	--DebugPr:move_scores(365, 10)
 	--DebugPr:in_between_squares(5, 75)
 	love.graphics.print(self.NewgameHigh[1].." "..self.NewgameHigh[2], 230, 30)
-	love.graphics.print(self.Timers[1], 270, 60)
-	love.graphics.print(self.Timers[2], 270, 80)
-	love.graphics.print(self.Timers[3], 270, 100)
-	love.graphics.print(self.Timers[4], 270, 120)
 	
 end
