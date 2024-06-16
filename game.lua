@@ -51,13 +51,13 @@ Game = {
 function Game:init()
 	
 	-- set 2-player or 4-player mode
-	self.NumPlayers = 4
+	self.NumPlayers = 2
 	
 	-- set number of alive players
 	self.NumLivePlayers = self.NumPlayers
 	
 	-- set gridsize
-	self.Gridsize = 7
+	self.Gridsize = 9
 	
 	-- set size of square in pixels
 	if self.Gridsize == 7 then self.SqSize = 30 end
@@ -70,10 +70,10 @@ function Game:init()
 	if self.Gridsize == 11 then self.A1_coord = {129,225} end
 
 	-- set which players are human (not AI)
-	self.HumanPlayers = {true, false, false, true}
+	self.HumanPlayers = {true, false, false, false}
 	
 	-- set time control (default off)
-	self.TimeControl = 1
+	self.TimeControl = 0
 	
 	-- set timers (in seconds)
 	for p = 1,4 do self.Timers[p] = (2*self.TimeControl-1)*60 end
@@ -314,7 +314,7 @@ function Game:newgameA()
 	if self.NewgameHigh[1] == 4 then		-- gridsize
 		self.Gridsize = 5+2*self.NewgameHigh[2]
 	end
-	if self.NewgameHigh[1] == 3 then		-- number of player
+	if self.NewgameHigh[1] == 3 then		-- number of players
 		self.NumPlayers = 2*self.NewgameHigh[2]
 	end
 	if self.NewgameHigh[1] == 2 then		-- human players
@@ -323,6 +323,7 @@ function Game:newgameA()
 	if self.NewgameHigh[1] == 1 then		-- time control
 		self.TimeControl = self.NewgameHigh[2]-1
 	end
+	if self.NumPlayers == 2 then self.HumanPlayers[2] = false; self.HumanPlayers[4] = false end		-- if 2 player mode then set P2 and P4 human to false 
 	Game:reinit()
 	Board:init()
 	Textures:init()
@@ -469,7 +470,7 @@ function Game:renderPlayerTurn(posx, posy)
 		if Board.PlayerAlive[1+(p-1)*4/self.NumPlayers] == 0 then love.graphics.draw(Textures.SmallPlayerDead, posx, posy+30*(p-1)) end
 		if self.HumanPlayers[1+(p-1)*4/self.NumPlayers] then
 			if self.TimeControl == 0 then
-				love.graphics.print("Human", posx+32, posy+9+30*(p-1))
+				love.graphics.print("Human", posx+33, posy+9+30*(p-1))
 			else
 				local t = self.Timers[1+(p-1)*4/self.NumPlayers]
 				local minutes = math.floor(t/60)
@@ -520,10 +521,6 @@ function Game:renderNewgameMenu()
 	love.graphics.print("1", 32+2*27+1, 132)
 	love.graphics.print("2", 45, 132+40)
 	love.graphics.print("4", 45+27, 132+40)
-	--love.graphics.print("P1", 18+1, 132+2*40)
-	--love.graphics.print("P2", 18+25, 132+2*40)
-	--love.graphics.print("P3", 18+2*25, 132+2*40)
-	--love.graphics.print("P4", 18+3*25, 132+2*40)
 	for p = 1,4 do love.graphics.draw(Textures.SmallPlayer[p], 12+(p-1)*25, 123+2*40) end
 	if self.NumPlayers == 2 then for p = 2,4,2 do love.graphics.draw(Textures.SmallPlayerDead, 12+(p-1)*25, 123+2*40) end end
 	love.graphics.print("OFF", 15, 132+3*40)
