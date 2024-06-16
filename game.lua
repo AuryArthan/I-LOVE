@@ -336,6 +336,9 @@ function Game:end_game()
 	MUSIC_PHASE_OUT = true
 	PHASE_OUT_TIMER = PHASE_OUT_DURATION
 	Sounds.WinSound:play()
+	-- adjust turn back to the winner (if center was reached)
+	local center_val = Board:square_value({(Game.Gridsize+1)/2,(Game.Gridsize+1)/2})
+	if center_val >= 1 and center_val <= 4 then Board.Turn = center_val end
 end
 
 -- handle phasing out background music
