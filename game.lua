@@ -126,6 +126,9 @@ function Game:reinit()
 	-- set highlighted square (default center)
 	self.HighSq = {(self.Gridsize+1)/2,(self.Gridsize+1)/2}
 	
+	-- set game-over variable to false
+	self.GameOver = false
+	
 end
 
 local DPAD = {false,false,false,false}	-- U,D,L,R
@@ -382,7 +385,7 @@ function Game:pause_update()
 	if CUR_A then
 		A = true
 		if self.PauseHighSq == 1 then self.Paused = not self.Paused end
-		if self.PauseHighSq == 2 then self.Paused = false; Board:init(); self.Newgame = true end
+		if self.PauseHighSq == 2 then self.Paused = false; Board:init(); Sounds.BackMusic:stop(); Sounds:init(); self.Newgame = true end
 	end
 	
 end
