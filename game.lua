@@ -385,7 +385,7 @@ function Game:pause_update()
 	if CUR_A then
 		A = true
 		if self.PauseHighSq == 1 then self.Paused = not self.Paused end
-		if self.PauseHighSq == 2 then self.Paused = false; Board:init(); Sounds.BackMusic:stop(); Sounds:init(); self.Newgame = true end
+		if self.PauseHighSq == 2 then self.Paused = false; Game:reinit(); Board:init(); Sounds.BackMusic:stop(); Sounds:init(); self.Newgame = true end
 	end
 	
 end
