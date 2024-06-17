@@ -138,12 +138,6 @@ local B  = false		-- B button
 local startB = false	-- start button
 function Game:update(dt)
 	
-	-- check if its timeout
-	if Game.TimeoutTimer > 0 then
-		Game.TimeoutTimer = Game.TimeoutTimer-dt
-		return
-	end
-	
 	-- get the inputs
 	local CUR_DPAD = {love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_UP),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_DOWN),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT),love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)}
     local CUR_A = love.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_A)
@@ -161,6 +155,12 @@ function Game:update(dt)
 	end
 	if not CUR_startB and startB then	-- press-up
 		startB = false
+	end
+	
+	-- check if its timeout
+	if Game.TimeoutTimer > 0 then
+		Game.TimeoutTimer = Game.TimeoutTimer-dt
+		return
 	end
 	
 	-- check if the game is over
