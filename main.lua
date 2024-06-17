@@ -4,7 +4,6 @@ require("player")
 require("utility")
 require("textures")
 require("sounds")
-require("debug_print")
 
 function love.conf(t)
 	t.width = 480

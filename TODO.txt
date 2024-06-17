@@ -1,2 +1,0 @@
-- move timeout further down so you can pause at any time (no need to wait for AI to move)
-- sound effects on pause and newgame menu

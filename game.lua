@@ -605,23 +605,4 @@ function Game:renderGame()
 	-- signature
 	love.graphics.draw(Textures.Sign, 444, 256)
 	
-	-- debug print
-	--DebugPr:dpad_print(DPAD, 15, 30)
-	--DebugPr:buttons_print(A, B, 42, 30)
-	--DebugPr:asdelays_print(ASDelay, 85, 30)
-	--DebugPr:board_print(10, 60)
-	--DebugPr:board_attacked_print(10, 165)
-	--DebugPr:piece_present_print(380, 165)
-	--DebugPr:player_turn(375, 30)
-	--DebugPr:player_pos(375, 60)
-	--DebugPr:human_player(10, 80)
-	--DebugPr:legal_moves(375, 10)
-	--DebugPr:distance_center(10, 160)
-	--Player:shortest_path(Board); DebugPr:shortest_path(380, 165)
-	--DebugPr:move_log(375, 10)
-	--DebugPr:free_adjacents_print(10, 70)
-	--DebugPr:potential_attacks_print(10, 160)
-	--DebugPr:move_scores(365, 10)
-	--DebugPr:in_between_squares(5, 75)
-	
 end
