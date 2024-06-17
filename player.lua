@@ -1,6 +1,6 @@
 
 Player = {
-	weights = {3,1,5,6,4,4,5,2};	-- need to be positive
+	weights = {3, 1.47, 2.20, 10.0, 2.33, 4.64, 7.38, 2.25};	-- need to be positive
 	ShortestPathlength = nil;
 }
 
