@@ -315,15 +315,19 @@ function Game:newgameA()
 		Sounds.BellSound:play()
 	end
 	if self.NewgameHigh[1] == 4 then		-- gridsize
+		if self.Gridsize ~= 5+2*self.NewgameHigh[2] then Sounds.SelSound:play() end
 		self.Gridsize = 5+2*self.NewgameHigh[2]
 	end
 	if self.NewgameHigh[1] == 3 then		-- number of players
+		if self.NumPlayers ~= 2*self.NewgameHigh[2] then Sounds.SelSound:play() end
 		self.NumPlayers = 2*self.NewgameHigh[2]
 	end
 	if self.NewgameHigh[1] == 2 then		-- human players
+		if self.NumPlayers ~= 2 or self.NewgameHigh[2]%2 ~= 0 then Sounds.SelSound:play() end
 		self.HumanPlayers[self.NewgameHigh[2]] = not self.HumanPlayers[self.NewgameHigh[2]]
 	end
 	if self.NewgameHigh[1] == 1 then		-- time control
+		if self.TimeControl ~= self.NewgameHigh[2]-1 then Sounds.SelSound:play() end
 		self.TimeControl = self.NewgameHigh[2]-1
 	end
 	if self.NumPlayers == 2 then self.HumanPlayers[2] = false; self.HumanPlayers[4] = false end		-- if 2 player mode then set P2 and P4 human to false 
