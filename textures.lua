@@ -48,4 +48,7 @@ function Textures:init()
 	self.SmallPlayer = {love.graphics.newImage("assets/pieces/player1_11.png"), love.graphics.newImage("assets/pieces/player2_11.png"), love.graphics.newImage("assets/pieces/player3_11.png"), love.graphics.newImage("assets/pieces/player4_11.png")}
 	self.SmallPlayerDead = love.graphics.newImage("assets/pieces/player_dead_11.png")
 	
+	-- load signature
+	self.Sign = love.graphics.newImage("assets/sign.png")
+	
 end

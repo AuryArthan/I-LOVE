@@ -602,6 +602,9 @@ function Game:renderGame()
 		love.graphics.draw(Textures.PauseHighlighter, 176, 96+36*(self.PauseHighSq-1))
 	end
 	
+	-- signature
+	love.graphics.draw(Textures.Sign, 444, 256)
+	
 	-- debug print
 	--DebugPr:dpad_print(DPAD, 15, 30)
 	--DebugPr:buttons_print(A, B, 42, 30)
